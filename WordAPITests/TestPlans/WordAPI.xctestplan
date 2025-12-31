@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "A9ADCE60-FB7F-427B-8BF8-064694F5FB14",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Definery.xcodeproj",
+        "identifier" : "92A75F2D2F04C9B7008DC78C",
+        "name" : "WordAPITests"
+      }
+    }
+  ],
+  "version" : 1
+}
