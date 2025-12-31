@@ -1,7 +1,7 @@
 {
   "configurations" : [
     {
-      "id" : "A9ADCE60-FB7F-427B-8BF8-064694F5FB14",
+      "id" : "10EF0CB1-F6EA-4BBA-8D24-5A8676489B53",
       "name" : "Configuration 1",
       "options" : {
 
@@ -17,6 +17,13 @@
         "containerPath" : "container:Definery.xcodeproj",
         "identifier" : "92A75F2D2F04C9B7008DC78C",
         "name" : "WordAPITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Definery.xcodeproj",
+        "identifier" : "92A75F0C2F04C99D008DC78C",
+        "name" : "WordFeatureTests"
       }
     }
   ],
