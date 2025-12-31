@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		924D29AF2F050392007FFEFF /* Definery-iOS.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */; };
 		92A75F0E2F04C99D008DC78C /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
 		92A75F182F04C99D008DC78C /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
 		92A75F192F04C99D008DC78C /* WordFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -111,6 +112,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		924D29AD2F05034A007FFEFF /* Definery-macOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Definery-macOS.xctestplan"; sourceTree = "<group>"; };
+		924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Definery-iOS.xctestplan"; sourceTree = "<group>"; };
 		92A75ED62F04C904008DC78C /* Definery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Definery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75EE32F04C905008DC78C /* DefineryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DefineryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75EED2F04C905008DC78C /* DefineryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DefineryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -220,6 +223,8 @@
 		92A75ECD2F04C904008DC78C = {
 			isa = PBXGroup;
 			children = (
+				924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */,
+				924D29AD2F05034A007FFEFF /* Definery-macOS.xctestplan */,
 				92A75F5F2F04CBF6008DC78C /* README.md */,
 				92A75ED82F04C904008DC78C /* Definery */,
 				92A75EE62F04C905008DC78C /* DefineryTests */,
@@ -467,7 +472,6 @@
 					};
 					92A75F0C2F04C99D008DC78C = {
 						CreatedOnToolsVersion = 26.1.1;
-						TestTargetID = 92A75ED52F04C904008DC78C;
 					};
 					92A75F252F04C9B7008DC78C = {
 						CreatedOnToolsVersion = 26.1.1;
@@ -508,6 +512,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92A75F602F04CBF6008DC78C /* README.md in Resources */,
+				924D29AF2F050392007FFEFF /* Definery-iOS.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1040,7 +1045,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Definery.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Definery";
 				XROS_DEPLOYMENT_TARGET = 26.1;
 			};
 			name = Debug;
@@ -1066,7 +1070,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Definery.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Definery";
 				XROS_DEPLOYMENT_TARGET = 26.1;
 			};
 			name = Release;
