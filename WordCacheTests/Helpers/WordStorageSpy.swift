@@ -1,5 +1,5 @@
 //
-//  WordCacheSpy.swift
+//  WordStorageSpy.swift
 //  WordCacheTests
 //
 //  Created by Anthony on 1/1/26.
@@ -9,7 +9,7 @@ import Foundation
 import WordFeature
 import WordCache
 
-final class WordCacheSpy: WordCacheProtocol, @unchecked Sendable {
+final class WordStorageSpy: WordStorageProtocol, @unchecked Sendable {
 
     enum ReceiveMessage: Equatable {
         case deletion
