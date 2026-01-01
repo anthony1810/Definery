@@ -83,37 +83,4 @@ struct CacheWordUseCaseTests {
         let sut = LocalWordLoader(cache: cache)
         return (sut: sut, cache: cache)
     }
-    
-    final class WordCacheSpy: WordCacheProtocol, @unchecked Sendable {
-        
-        enum ReceiveMessage: Equatable {
-            case deletion
-            case insertion(_ words: [Word])
-        }
-        
-        var receiveMessages: [ReceiveMessage] = []
-        
-        // MARK: - Deletion
-        private var deletionResult: Result<Void, Error>?
-        func deleteCachedWords() async throws {
-            receiveMessages.append(.deletion)
-            
-            return try deletionResult.evaluate()
-        }
-        
-        func completeDeletion(with result: Result<Void, Error>) {
-            self.deletionResult = result
-        }
-        
-        // MARK: - Insertion
-        private var insertionResult: Result<Void, Error>?
-        func insertCache(words: [Word]) async throws {
-            receiveMessages.append(.insertion(words))
-            try insertionResult.evaluate()
-        }
-        
-        func completeInsertion(with result: Result<Void, Error>) {
-            insertionResult = result
-        }
-    }
 }
