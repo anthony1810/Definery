@@ -64,11 +64,11 @@ This project follows **Clean Architecture** principles with separate frameworks 
 │   (Framework)    │    │   (Framework)    │    │      (Framework)         │
 ├──────────────────┤    ├──────────────────┤    ├──────────────────────────┤
 │ • Word (Model)   │◄───│ • RemoteLoader   │    │ • LocalWordLoader        │
-│ • Meaning        │    │ • WordMapper     │    │ • WordStore (Protocol)   │
-│ • WordLoader     │◄───│ • WordsEndpoint  │    │ • LocalWord (Cache DTO)  │
-│   (Protocol)     │    │                  │    │                          │
-│ • WordCache      │    │ Depends on:      │    │ Depends on:              │
-│   (Protocol)     │    │ → WordFeature    │    │ → WordFeature            │
+│ • Meaning        │    │ • WordMapper     │    │ • WordCacheProtocol      │
+│ • WordLoader     │◄───│ • WordsEndpoint  │    │                          │
+│   (Protocol)     │    │                  │    │ Depends on:              │
+│                  │    │ Depends on:      │    │ → WordFeature            │
+│                  │    │ → WordFeature    │    │                          │
 └──────────────────┘    └──────────────────┘    └──────────────────────────┘
                                                             │
                                                             ▼
@@ -142,12 +142,16 @@ Definery/
 │   └── WordsEndpointTests.swift
 │
 ├── WordCache/                        # Cache Layer (Framework)
-│   ├── LocalWordLoader.swift         # Implements WordLoaderProtocol + WordCache
-│   ├── LocalWord.swift               # Cache DTO
-│   └── WordStoreProtocol.swift       # Protocol for store implementations
+│   ├── LocalWordLoader.swift         # Cache use case (save/load)
+│   └── WordCacheProtocol.swift       # Protocol for store implementations
 │
 ├── WordCacheTests/                   # Cache tests
-│   └── LocalWordLoaderTests.swift
+│   ├── CacheWordUseCaseTests.swift   # Save tests
+│   ├── LoadWordFromCacheUseCaseTests.swift  # Load tests
+│   └── Helpers/
+│       ├── WordCacheSpy.swift        # Test double
+│       ├── TestHelpers.swift         # Test utilities
+│       └── Optional+Evaluate.swift   # Result evaluation
 │
 ├── WordCacheInfrastructure/          # Infrastructure Layer (Framework)
 │   ├── SwiftDataWordStore.swift      # SwiftData implementation
@@ -224,19 +228,6 @@ public struct Meaning: Equatable, Hashable {
 }
 ```
 
-### LocalWord (Cache DTO)
-
-```swift
-// In WordCache framework - maps to/from Word
-struct LocalWord {
-    let id: UUID
-    let text: String
-    let language: String
-    let phonetic: String?
-    let meanings: [LocalMeaning]
-}
-```
-
 ---
 
 ## Protocols
@@ -257,13 +248,13 @@ public protocol WordCache {
 }
 ```
 
-### WordStore (Infrastructure)
+### WordCacheProtocol (Cache Layer)
 
 ```swift
-public protocol WordStore {
-    func retrieve() async throws -> [LocalWord]?
-    func insert(_ words: [LocalWord]) async throws
-    func delete() async throws
+public protocol WordCacheProtocol {
+    func deleteCachedWords() async throws
+    func insertCache(words: [Word]) async throws
+    func retrieveWords() async throws -> [Word]
 }
 ```
 
@@ -325,7 +316,6 @@ struct HomeView: View {
 ### Phase 1: Domain Layer
 - [x] Create WordFeature framework
 - [x] Create WordLoaderProtocol
-- [x] Create WordCache protocol
 - [x] Define Word model with properties
 - [x] Define Meaning model
 - [x] Add Equatable/Hashable/Sendable conformance
@@ -341,11 +331,11 @@ struct HomeView: View {
 - [x] Write WordsEndpointTests
 
 ### Phase 3: Cache Layer
-- [ ] Create WordCache framework
-- [ ] Create LocalWordLoader
-- [ ] Create WordStore protocol
-- [ ] Create LocalWord DTO
-- [ ] Write LocalWordLoaderTests
+- [x] Create WordCache framework
+- [x] Create LocalWordLoader (save/load use case)
+- [x] Create WordCacheProtocol
+- [x] Write CacheWordUseCaseTests (6 tests)
+- [x] Write LoadWordFromCacheUseCaseTests (7 tests)
 
 ### Phase 4: Infrastructure Layer
 - [ ] Create WordCacheInfrastructure framework
