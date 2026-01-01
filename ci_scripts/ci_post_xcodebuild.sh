@@ -11,17 +11,19 @@ fi
 
 REPO="anthony1810/Definery"
 
-# Determine which workflow to trigger based on CI_WORKFLOW
-case "$CI_WORKFLOW" in
-    *"Release"*)
+# Determine which workflow to trigger based on CI_WORKFLOW (case-insensitive)
+WORKFLOW_LOWER=$(echo "$CI_WORKFLOW" | tr '[:upper:]' '[:lower:]')
+
+case "$WORKFLOW_LOWER" in
+    *"release"*)
         EVENT_TYPE="xcc-release"
         echo "Triggering release workflow..."
         ;;
-    *"iOS"*)
+    *"ios"*)
         EVENT_TYPE="xcc-test-ios"
         echo "Triggering iOS test workflow..."
         ;;
-    *"macOS"*)
+    *"macos"*)
         EVENT_TYPE="xcc-test-macos"
         echo "Triggering macOS test workflow..."
         ;;
