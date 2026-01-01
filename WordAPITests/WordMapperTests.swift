@@ -142,8 +142,4 @@ struct WordMapperTests {
         let json = ["items": items]
         return try! JSONSerialization.data(withJSONObject: json)
     }
-
-    private func anyData() -> Data {
-        Data("any data".utf8)
-    }
 }

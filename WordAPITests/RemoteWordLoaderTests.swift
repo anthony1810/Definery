@@ -10,81 +10,86 @@ import Foundation
 @testable import WordAPI
 import WordFeature
 
-struct RemoteWordLoaderTests {
+final class RemoteWordLoaderTests {
+    private var sutTracker: MemoryLeakTracker<SUT>?
+
+    deinit {
+        sutTracker?.verify()
+    }
 
     // MARK: - Init Tests
 
     @Test func init_doesNotRequestDataFromURL() async {
-        let (_, client) = makeSUT()
+        let sut = makeSUT()
 
-        #expect(client.requestedURLs.isEmpty)
+        #expect(sut.client.requestedURLs.isEmpty)
     }
 
     // MARK: - Load Tests
 
     @Test func load_requestsDataFromURL() async throws {
         let url = URL(string: "https://a-given-url.com")!
-        let (sut, client) = makeSUT(url: url)
+        let sut = makeSUT(url: url)
 
-        _ = try? await sut.load()
+        _ = try? await sut.loader.load()
 
-        #expect(client.requestedURLs == [url])
+        #expect(sut.client.requestedURLs == [url])
     }
 
     @Test func load_requestsDataFromURLTwice() async throws {
         let url = URL(string: "https://a-given-url.com")!
-        let (sut, client) = makeSUT(url: url)
+        let sut = makeSUT(url: url)
 
-        _ = try? await sut.load()
-        _ = try? await sut.load()
+        _ = try? await sut.loader.load()
+        _ = try? await sut.loader.load()
 
-        #expect(client.requestedURLs == [url, url])
+        #expect(sut.client.requestedURLs == [url, url])
     }
 
     @Test func load_deliversErrorOnClientError() async {
-        let (sut, client) = makeSUT()
-        client.stub = .failure(anyNSError())
+        let sut = makeSUT()
+        sut.client.stub = .failure(anyNSError())
 
         await #expect(throws: RemoteWordLoader.Error.connectivity) {
-            try await sut.load()
+            try await sut.loader.load()
         }
     }
 
     @Test func load_deliversErrorOnNon200HTTPResponse() async {
-        let (sut, client) = makeSUT()
+        let sut = makeSUT()
 
         let samples = [199, 201, 300, 400, 500]
         for statusCode in samples {
-            client.stub = .success((anyData(), HTTPURLResponse(statusCode: statusCode)))
+            sut.client.stub = .success((anyData(), HTTPURLResponse(statusCode: statusCode)))
 
             await #expect(throws: RemoteWordLoader.Error.invalidData) {
-                try await sut.load()
+                try await sut.loader.load()
             }
         }
     }
 
     @Test func load_deliversErrorOn200HTTPResponseWithInvalidJSON() async {
-        let (sut, client) = makeSUT()
+        let sut = makeSUT()
         let invalidJSON = Data("invalid json".utf8)
-        client.stub = .success((invalidJSON, HTTPURLResponse(statusCode: 200)))
+        sut.client.stub = .success((invalidJSON, HTTPURLResponse(statusCode: 200)))
 
         await #expect(throws: RemoteWordLoader.Error.invalidData) {
-            try await sut.load()
+            try await sut.loader.load()
         }
     }
 
     @Test func load_deliversNoItemsOn200HTTPResponseWithEmptyJSONArray() async throws {
-        let (sut, client) = makeSUT()
+        let sut = makeSUT()
         let emptyListJSON = makeItemsJSON([])
-        client.stub = .success((emptyListJSON, HTTPURLResponse(statusCode: 200)))
+        sut.client.stub = .success((emptyListJSON, HTTPURLResponse(statusCode: 200)))
 
-        let result = try await sut.load()
+        let result = try await sut.loader.load()
 
         #expect(result == [])
     }
 
     @Test func load_deliversItemsOn200HTTPResponseWithJSONItems() async throws {
-        let (sut, client) = makeSUT()
+        let sut = makeSUT()
 
         let item1 = makeItem(
             id: UUID(),
@@ -105,21 +110,49 @@ struct RemoteWordLoaderTests {
         )
 
         let json = makeItemsJSON([item1.json, item2.json])
-        client.stub = .success((json, HTTPURLResponse(statusCode: 200)))
+        sut.client.stub = .success((json, HTTPURLResponse(statusCode: 200)))
 
-        let result = try await sut.load()
+        let result = try await sut.loader.load()
 
         #expect(result == [item1.model, item2.model])
     }
+}
 
-    // MARK: - Helpers
+// MARK: - Helpers
+
+extension RemoteWordLoaderTests {
+    final class SUT {
+        let loader: RemoteWordLoader
+        let client: HTTPClientSpy
+
+        init(loader: RemoteWordLoader, client: HTTPClientSpy) {
+            self.loader = loader
+            self.client = client
+        }
+    }
 
     private func makeSUT(
-        url: URL = URL(string: "https://any-url.com")!
-    ) -> (sut: RemoteWordLoader, client: HTTPClientSpy) {
+        url: URL = URL(string: "https://any-url.com")!,
+        fileId: String = #fileID,
+        filePath: String = #filePath,
+        line: Int = #line,
+        column: Int = #column
+    ) -> SUT {
         let client = HTTPClientSpy()
-        let sut = RemoteWordLoader(url: url, client: client)
-        return (sut, client)
+        let loader = RemoteWordLoader(url: url, client: client)
+        let sut = SUT(loader: loader, client: client)
+
+        sutTracker = MemoryLeakTracker(
+            instance: sut,
+            sourceLocation: SourceLocation(
+                fileID: fileId,
+                filePath: filePath,
+                line: line,
+                column: column
+            )
+        )
+
+        return sut
     }
 
     private func makeItem(
@@ -177,14 +210,6 @@ struct RemoteWordLoaderTests {
     private func makeItemsJSON(_ items: [[String: Any]]) -> Data {
         let json = ["items": items]
         return try! JSONSerialization.data(withJSONObject: json)
-    }
-
-    private func anyData() -> Data {
-        Data("any data".utf8)
-    }
-
-    private func anyNSError() -> NSError {
-        NSError(domain: "any error", code: 0)
     }
 }
 
