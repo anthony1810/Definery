@@ -37,6 +37,7 @@ struct CacheWordUseCaseTests {
         let (sut, cacheSpy) = makeSUT()
         
         cacheSpy.completeDeletion(with: .success(()))
+        cacheSpy.completeInsertion(with: .success(()))
         try? await sut.save([])
         
         #expect(cacheSpy.receiveMessages[0] == .deletion)
@@ -57,6 +58,7 @@ struct CacheWordUseCaseTests {
         let words = [uniqueWord(), uniqueWord()]
         
         cacheSpy.completeDeletion(with: .success(()))
+        cacheSpy.completeInsertion(with: .success(()))
         try await sut.save(words)
         
         #expect(cacheSpy.receiveMessages == [.deletion, .insertion(words)])
@@ -72,6 +74,20 @@ struct CacheWordUseCaseTests {
             Issue.record("Expected to throw, but it succeeded")
         } catch {
             #expect(error as NSError? == deletionError)
+        }
+    }
+    
+    @Test func save_failsOnInsertionFailure() async throws {
+        let (sut, cacheSpy) = makeSUT()
+        let insertionError = anyNSError()
+        
+        cacheSpy.completeDeletion(with: .success(()))
+        cacheSpy.completeInsertion(with: .failure(insertionError))
+        do {
+            try await sut.save([])
+            Issue.record("Expected to throw, but it succeeded")
+        } catch {
+            #expect(error as NSError? == insertionError)
         }
     }
     
@@ -104,8 +120,14 @@ struct CacheWordUseCaseTests {
         }
         
         // MARK: - Insertion
+        private var insertionResult: Result<Void, Error>?
         func insertCache(words: [Word]) async throws {
             receiveMessages.append(.insertion(words))
+            try insertionResult.evaluate()
+        }
+        
+        func completeInsertion(with result: Result<Void, Error>) {
+            insertionResult = result
         }
     }
 }
