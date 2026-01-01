@@ -35,7 +35,14 @@ struct LoadWordFromCacheUseCaseTests {
         }
     }
 
-//    @Test func load_deliversNoWordsOnEmptyCache() async {}
+    @Test func load_deliversNoWordsOnEmptyCache() async throws {
+        let (sut, cache) = makeSUT()
+        
+        cache.completeRetrieval(with: .success([]))
+        let result = try await sut.load()
+        
+        #expect(result.isEmpty)
+    }
 
 //    @Test func load_deliversCachedWords() async {}
 
