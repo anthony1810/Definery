@@ -44,7 +44,15 @@ struct LoadWordFromCacheUseCaseTests {
         #expect(result.isEmpty)
     }
 
-//    @Test func load_deliversCachedWords() async {}
+    @Test func load_deliversCachedWords() async throws {
+        let (sut, cache) = makeSUT()
+        let expectedWords: [Word] = [uniqueWord(), uniqueWord()]
+        
+        cache.completeRetrieval(with: .success(expectedWords))
+        let actualResults = try await sut.load()
+        
+        #expect(actualResults == expectedWords)
+    }
 
 //    @Test func load_hasNoSideEffectOnRetrievalError() async {}
 
