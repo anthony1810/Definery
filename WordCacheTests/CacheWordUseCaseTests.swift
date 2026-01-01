@@ -53,17 +53,6 @@ struct CacheWordUseCaseTests {
         #expect(cacheSpy.receiveMessages == [.deletion]) // no insertion signal
     }
     
-    @Test func save_requestCacheInsertionWithWordsOnDeletionSuccess() async throws {
-        let (sut, cacheSpy) = makeSUT()
-        let words = [uniqueWord(), uniqueWord()]
-        
-        cacheSpy.completeDeletion(with: .success(()))
-        cacheSpy.completeInsertion(with: .success(()))
-        try await sut.save(words)
-        
-        #expect(cacheSpy.receiveMessages == [.deletion, .insertion(words)])
-    }
-    
     @Test func save_failsOnDeletionFailure() async throws {
         let (sut, cacheSpy) = makeSUT()
         let deletionError = anyNSError()
@@ -89,6 +78,17 @@ struct CacheWordUseCaseTests {
         } catch {
             #expect(error as NSError? == insertionError)
         }
+    }
+    
+    @Test func save_requestCacheInsertionWithWordsOnDeletionSuccess() async throws {
+        let (sut, cacheSpy) = makeSUT()
+        let words = [uniqueWord(), uniqueWord()]
+        
+        cacheSpy.completeDeletion(with: .success(()))
+        cacheSpy.completeInsertion(with: .success(()))
+        try await sut.save(words)
+        
+        #expect(cacheSpy.receiveMessages == [.deletion, .insertion(words)])
     }
     
     // MARK: - Helpers
