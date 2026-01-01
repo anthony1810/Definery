@@ -11,6 +11,8 @@
 		922E57002F06136D0069C8CC /* WordCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; };
 		922E570A2F06136D0069C8CC /* WordCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; };
 		922E570B2F06136D0069C8CC /* WordCache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		922E57122F061CF90069C8CC /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
+		922E57132F061CF90069C8CC /* WordFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		924D29AF2F050392007FFEFF /* Definery-iOS.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */; };
 		92A75F0E2F04C99D008DC78C /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
 		92A75F182F04C99D008DC78C /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
@@ -44,6 +46,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 922E56F62F06136D0069C8CC;
 			remoteInfo = WordCache;
+		};
+		922E57142F061CF90069C8CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92A75ECE2F04C904008DC78C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92A75F042F04C99C008DC78C;
+			remoteInfo = WordFeature;
 		};
 		92A75EE42F04C905008DC78C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -111,6 +120,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		922E57162F061CF90069C8CC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				922E57132F061CF90069C8CC /* WordFeature.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92A75F1D2F04C99D008DC78C /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -206,6 +226,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				922E57122F061CF90069C8CC /* WordFeature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,10 +383,12 @@
 				922E56F32F06136D0069C8CC /* Sources */,
 				922E56F42F06136D0069C8CC /* Frameworks */,
 				922E56F52F06136D0069C8CC /* Resources */,
+				922E57162F061CF90069C8CC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				922E57152F061CF90069C8CC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				922E56F82F06136D0069C8CC /* WordCache */,
@@ -584,7 +607,6 @@
 					};
 					922E56FE2F06136D0069C8CC = {
 						CreatedOnToolsVersion = 26.1.1;
-						TestTargetID = 92A75ED52F04C904008DC78C;
 					};
 					92A75ED52F04C904008DC78C = {
 						CreatedOnToolsVersion = 26.1.1;
@@ -789,6 +811,11 @@
 			target = 922E56F62F06136D0069C8CC /* WordCache */;
 			targetProxy = 922E57082F06136D0069C8CC /* PBXContainerItemProxy */;
 		};
+		922E57152F061CF90069C8CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 92A75F042F04C99C008DC78C /* WordFeature */;
+			targetProxy = 922E57142F061CF90069C8CC /* PBXContainerItemProxy */;
+		};
 		92A75EE52F04C905008DC78C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 92A75ED52F04C904008DC78C /* Definery */;
@@ -952,7 +979,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Definery.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Definery";
 				XROS_DEPLOYMENT_TARGET = 26.1;
 			};
 			name = Debug;
@@ -978,7 +1004,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Definery.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Definery";
 				XROS_DEPLOYMENT_TARGET = 26.1;
 			};
 			name = Release;
