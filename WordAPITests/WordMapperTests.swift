@@ -16,7 +16,7 @@ struct WordMapperTests {
         let samples = [199, 201, 300, 400, 500]
 
         for statusCode in samples {
-            #expect(throws: RemoteWordLoader.Error.invalidData) {
+            #expect(throws: WordMapper.Error.invalidData) {
                 try WordMapper.map(anyData(), from: HTTPURLResponse(statusCode: statusCode))
             }
         }
@@ -25,7 +25,7 @@ struct WordMapperTests {
     @Test func map_throwsErrorOn200HTTPResponseWithInvalidJSON() {
         let invalidJSON = Data("invalid json".utf8)
 
-        #expect(throws: RemoteWordLoader.Error.invalidData) {
+        #expect(throws: WordMapper.Error.invalidData) {
             try WordMapper.map(invalidJSON, from: HTTPURLResponse(statusCode: 200))
         }
     }
