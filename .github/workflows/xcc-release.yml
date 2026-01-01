@@ -1,0 +1,11 @@
+name: Xcode Cloud Release
+
+on:
+  repository_dispatch:
+    types: [xcc-release]
+
+jobs:
+  release-job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Release to Testflight finished from Xcode Cloud"

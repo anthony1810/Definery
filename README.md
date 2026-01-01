@@ -4,6 +4,14 @@ A word definition and learning iOS app demonstrating **[ScreenStateKit](https://
 
 > This project serves as a real-world demo for [ScreenStateKit](https://github.com/anthony1810/ScreenStateKit), showcasing the Three Pillars pattern (State + ViewModel + View) in a production-like app.
 
+## Build Status
+
+| Workflow | Status |
+|----------|--------|
+| Release to Testflight | ![Release Status](https://github.com/anthony1810/Definery/actions/workflows/xcc-release.yml/badge.svg) |
+| Test Runner iOS | ![iOS Tests](https://github.com/anthony1810/Definery/actions/workflows/xcc-test-ios.yml/badge.svg) |
+| Test Runner macOS | ![macOS Tests](https://github.com/anthony1810/Definery/actions/workflows/xcc-test-macos.yml/badge.svg) |
+
 ## Features
 
 ### Home Screen
