@@ -64,7 +64,7 @@ This project follows **Clean Architecture** principles with separate frameworks 
 │   (Framework)    │    │   (Framework)    │    │      (Framework)         │
 ├──────────────────┤    ├──────────────────┤    ├──────────────────────────┤
 │ • Word (Model)   │◄───│ • RemoteLoader   │    │ • LocalWordLoader        │
-│ • Meaning        │    │ • WordMapper     │    │ • WordCacheProtocol      │
+│ • Meaning        │    │ • WordMapper     │    │ • WordStorageProtocol    │
 │ • WordLoader     │◄───│ • WordsEndpoint  │    │                          │
 │   (Protocol)     │    │                  │    │ Depends on:              │
 │                  │    │ Depends on:      │    │ → WordFeature            │
@@ -143,13 +143,13 @@ Definery/
 │
 ├── WordCache/                        # Cache Layer (Framework)
 │   ├── LocalWordLoader.swift         # Cache use case (save/load)
-│   └── WordCacheProtocol.swift       # Protocol for store implementations
+│   └── WordStorageProtocol.swift     # Protocol for store implementations
 │
 ├── WordCacheTests/                   # Cache tests
 │   ├── CacheWordUseCaseTests.swift   # Save tests
 │   ├── LoadWordFromCacheUseCaseTests.swift  # Load tests
 │   └── Helpers/
-│       ├── WordCacheSpy.swift        # Test double
+│       ├── WordStorageSpy.swift      # Test double
 │       ├── TestHelpers.swift         # Test utilities
 │       └── Optional+Evaluate.swift   # Result evaluation
 │
@@ -248,10 +248,10 @@ public protocol WordCache {
 }
 ```
 
-### WordCacheProtocol (Cache Layer)
+### WordStorageProtocol (Cache Layer)
 
 ```swift
-public protocol WordCacheProtocol {
+public protocol WordStorageProtocol {
     func deleteCachedWords() async throws
     func insertCache(words: [Word]) async throws
     func retrieveWords() async throws -> [Word]
@@ -333,7 +333,7 @@ struct HomeView: View {
 ### Phase 3: Cache Layer
 - [x] Create WordCache framework
 - [x] Create LocalWordLoader (save/load use case)
-- [x] Create WordCacheProtocol
+- [x] Create WordStorageProtocol
 - [x] Write CacheWordUseCaseTests (6 tests)
 - [x] Write LoadWordFromCacheUseCaseTests (7 tests)
 
