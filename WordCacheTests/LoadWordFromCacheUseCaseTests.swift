@@ -22,7 +22,18 @@ struct LoadWordFromCacheUseCaseTests {
         #expect(cache.receiveMessages == [.retrieve])
     }
 
-//    @Test func load_failsOnRetrievalError() async {}
+    @Test func load_failsOnRetrievalError() async {
+        let (sut, cache) = makeSUT()
+        let retrievalError = anyNSError()
+        
+        cache.completeRetrieval(with: .failure(retrievalError))
+        do {
+            _ = try await sut.load()
+            Issue.record("Expect to throw, but succeeded")
+        } catch {
+            #expect(error as NSError? == retrievalError)
+        }
+    }
 
 //    @Test func load_deliversNoWordsOnEmptyCache() async {}
 
