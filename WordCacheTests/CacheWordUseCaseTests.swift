@@ -51,6 +51,16 @@ struct CacheWordUseCaseTests {
         #expect(cacheSpy.receiveMessages == [.deletion]) // no insertion signal
     }
     
+    @Test func save_requestCacheInsertionWithWordsOnDeletionSuccess() async throws {
+        let (sut, cacheSpy) = makeSUT()
+        let words = [uniqueWord(), uniqueWord()]
+        
+        cacheSpy.completeDeletion(with: .success(()))
+        try await sut.save(words)
+        
+        #expect(cacheSpy.receiveMessages == [.deletion, .insertion(words)])
+    }
+    
     
     // MARK: - Helpers
     private func makeSUT() -> (sut: LocalWordLoader, cache: WordCacheSpy) {
@@ -61,9 +71,9 @@ struct CacheWordUseCaseTests {
     
     final class WordCacheSpy: WordCacheProtocol, @unchecked Sendable {
         
-        enum ReceiveMessage {
+        enum ReceiveMessage: Equatable {
             case deletion
-            case insertion
+            case insertion(_ words: [Word])
         }
         
         var receiveMessages: [ReceiveMessage] = []
@@ -82,7 +92,7 @@ struct CacheWordUseCaseTests {
         
         // MARK: - Insertion
         func insertCache(words: [Word]) async throws {
-            receiveMessages.append(.insertion)
+            receiveMessages.append(.insertion(words))
         }
     }
 }
