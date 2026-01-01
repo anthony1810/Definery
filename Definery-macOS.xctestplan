@@ -25,6 +25,13 @@
         "identifier" : "92A75F0C2F04C99D008DC78C",
         "name" : "WordFeatureTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Definery.xcodeproj",
+        "identifier" : "922E56FE2F06136D0069C8CC",
+        "name" : "WordCacheTests"
+      }
     }
   ],
   "version" : 1
