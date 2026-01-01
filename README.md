@@ -422,7 +422,7 @@ func homeView_withWords_matchesSnapshot() {
 ## Tech Stack
 
 - **iOS 17+**
-- **Swift 5.9+**
+- **Swift 6**
 - **SwiftUI**
 - **SwiftData** (persistence)
 - **[ScreenStateKit](https://github.com/anthony1810/ScreenStateKit)** (state management)
