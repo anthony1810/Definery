@@ -142,7 +142,7 @@ Definery/
 │   └── WordsEndpointTests.swift
 │
 ├── WordCache/                        # Cache Layer (Framework)
-│   ├── LocalWordLoader.swift         # Cache use case (save/load)
+│   ├── LocalWordLoader.swift         # Cache use case (implements WordCacheProtocol)
 │   └── WordStorageProtocol.swift     # Protocol for store implementations
 │
 ├── WordCacheTests/                   # Cache tests
@@ -240,18 +240,20 @@ public protocol WordLoaderProtocol {
 }
 ```
 
-### WordCache
+### WordCacheProtocol (Domain Layer)
 
 ```swift
-public protocol WordCache {
+public protocol WordCacheProtocol: Sendable {
     func save(_ words: [Word]) async throws
 }
 ```
 
+**Implemented by:** `LocalWordLoader` in WordCache framework
+
 ### WordStorageProtocol (Cache Layer)
 
 ```swift
-public protocol WordStorageProtocol {
+public protocol WordStorageProtocol: Sendable {
     func deleteCachedWords() async throws
     func insertCache(words: [Word]) async throws
     func retrieveWords() async throws -> [Word]
