@@ -11,20 +11,6 @@ import WordFeature
 
 @testable import WordCache
 
-protocol WordCacheProtocol {
-    func deleteCachedWords() async throws
-    func insertCache(words: [Word]) async throws
-}
-
-struct LocalWordLoader {
-    let cache: WordCacheProtocol
-    
-    func save(_ words: [Word]) async throws {
-        try await cache.deleteCachedWords()
-        try await cache.insertCache(words: words)
-    }
-}
-
 struct CacheWordUseCaseTests {
     
     @Test func init_doesNotMessageCacheUponCreation() {
