@@ -31,6 +31,10 @@ public final class RemoteWordLoader: WordLoaderProtocol, Sendable {
             throw Error.connectivity
         }
 
-        return try WordMapper.map(data, from: response)
+        do {
+            return try WordMapper.map(data, from: response)
+        } catch {
+            throw Error.invalidData
+        }
     }
 }

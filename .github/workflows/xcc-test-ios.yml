@@ -1,0 +1,12 @@
+name: Xcode Cloud Test iOS
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [xcc-test-ios]
+
+jobs:
+  test-ios-job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "iOS tests finished from Xcode Cloud"
