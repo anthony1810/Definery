@@ -13,7 +13,14 @@ import WordFeature
 
 struct LoadWordFromCacheUseCaseTests {
 
-//    @Test func load_requestsCacheRetrieval() async {}
+    @Test func load_requestsCacheRetrieval() async {
+        let (sut, cache) = makeSUT()
+        
+        cache.completeRetrieval(with: .success([]))
+        _ = try? await sut.load()
+        
+        #expect(cache.receiveMessages == [.retrieve])
+    }
 
 //    @Test func load_failsOnRetrievalError() async {}
 
@@ -26,5 +33,11 @@ struct LoadWordFromCacheUseCaseTests {
 //    @Test func load_hasNoSideEffectOnEmptyCache() async {}
 
 //    @Test func load_hasNoSideEffectOnNonEmptyCache() async {}
-
+    
+    // MARK: - Helpers
+    private func makeSUT() -> (sut: LocalWordLoader, cache: WordCacheSpy) {
+        let cache = WordCacheSpy()
+        let sut = LocalWordLoader(cache: cache)
+        return (sut: sut, cache: cache)
+    }
 }
