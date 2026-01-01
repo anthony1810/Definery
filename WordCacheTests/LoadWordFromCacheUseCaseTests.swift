@@ -11,24 +11,29 @@ import WordFeature
 
 @testable import WordCache
 
-struct LoadWordFromCacheUseCaseTests {
+final class LoadWordFromCacheUseCaseTests {
+    private var sutTracker: MemoryLeakTracker<SUT>?
+
+    deinit {
+        sutTracker?.verify()
+    }
 
     @Test func load_requestsCacheRetrieval() async {
-        let (sut, store) = makeSUT()
-        
-        store.completeRetrieval(with: .success([]))
-        _ = try? await sut.load()
-        
-        #expect(store.receiveMessages == [.retrieve])
+        let sut = makeSUT()
+
+        sut.store.completeRetrieval(with: .success([]))
+        _ = try? await sut.loader.load()
+
+        #expect(sut.store.receiveMessages == [.retrieve])
     }
 
     @Test func load_failsOnRetrievalError() async {
-        let (sut, store) = makeSUT()
+        let sut = makeSUT()
         let retrievalError = anyNSError()
-        
-        store.completeRetrieval(with: .failure(retrievalError))
+
+        sut.store.completeRetrieval(with: .failure(retrievalError))
         do {
-            _ = try await sut.load()
+            _ = try await sut.loader.load()
             Issue.record("Expect to throw, but succeeded")
         } catch {
             #expect(error as NSError? == retrievalError)
@@ -36,55 +41,85 @@ struct LoadWordFromCacheUseCaseTests {
     }
 
     @Test func load_deliversNoWordsOnEmptyCache() async throws {
-        let (sut, store) = makeSUT()
-        
-        store.completeRetrieval(with: .success([]))
-        let result = try await sut.load()
-        
+        let sut = makeSUT()
+
+        sut.store.completeRetrieval(with: .success([]))
+        let result = try await sut.loader.load()
+
         #expect(result.isEmpty)
     }
 
     @Test func load_deliversCachedWords() async throws {
-        let (sut, store) = makeSUT()
+        let sut = makeSUT()
         let expectedWords: [Word] = [uniqueWord(), uniqueWord()]
-        
-        store.completeRetrieval(with: .success(expectedWords))
-        let actualResults = try await sut.load()
-        
+
+        sut.store.completeRetrieval(with: .success(expectedWords))
+        let actualResults = try await sut.loader.load()
+
         #expect(actualResults == expectedWords)
     }
 
     @Test func load_hasNoSideEffectOnRetrievalError() async {
-        let (sut, store) = makeSUT()
-        
-        store.completeRetrieval(with: .failure(anyNSError()))
-        let _ = try? await sut.load()
-        
-        #expect(store.receiveMessages == [.retrieve])
+        let sut = makeSUT()
+
+        sut.store.completeRetrieval(with: .failure(anyNSError()))
+        _ = try? await sut.loader.load()
+
+        #expect(sut.store.receiveMessages == [.retrieve])
     }
 
     @Test func load_hasNoSideEffectOnEmptyCache() async {
-        let (sut, store) = makeSUT()
-        
-        store.completeRetrieval(with: .success([]))
-        let _ = try? await sut.load()
-        
-        #expect(store.receiveMessages == [.retrieve])
+        let sut = makeSUT()
+
+        sut.store.completeRetrieval(with: .success([]))
+        _ = try? await sut.loader.load()
+
+        #expect(sut.store.receiveMessages == [.retrieve])
     }
 
     @Test func load_hasNoSideEffectOnNonEmptyCache() async {
-        let (sut, store) = makeSUT()
-        
-        store.completeRetrieval(with: .success([uniqueWord()]))
-        let _ = try? await sut.load()
-        
-        #expect(store.receiveMessages == [.retrieve])
+        let sut = makeSUT()
+
+        sut.store.completeRetrieval(with: .success([uniqueWord()]))
+        _ = try? await sut.loader.load()
+
+        #expect(sut.store.receiveMessages == [.retrieve])
     }
-    
-    // MARK: - Helpers
-    private func makeSUT() -> (sut: LocalWordLoader, store: WordStorageSpy) {
+}
+
+// MARK: - Helpers
+
+extension LoadWordFromCacheUseCaseTests {
+    final class SUT {
+        let loader: LocalWordLoader
+        let store: WordStorageSpy
+
+        init(loader: LocalWordLoader, store: WordStorageSpy) {
+            self.loader = loader
+            self.store = store
+        }
+    }
+
+    private func makeSUT(
+        fileId: String = #fileID,
+        filePath: String = #filePath,
+        line: Int = #line,
+        column: Int = #column
+    ) -> SUT {
         let store = WordStorageSpy()
-        let sut = LocalWordLoader(store: store)
-        return (sut: sut, store: store)
+        let loader = LocalWordLoader(store: store)
+        let sut = SUT(loader: loader, store: store)
+
+        sutTracker = MemoryLeakTracker(
+            instance: sut,
+            sourceLocation: SourceLocation(
+                fileID: fileId,
+                filePath: filePath,
+                line: line,
+                column: column
+            )
+        )
+
+        return sut
     }
 }
