@@ -9,18 +9,18 @@ import Foundation
 import WordFeature
 
 public struct LocalWordLoader {
-    private let cache: WordCacheProtocol
+    private let store: WordStorageProtocol
 
-    public init(cache: WordCacheProtocol) {
-        self.cache = cache
+    public init(store: WordStorageProtocol) {
+        self.store = store
     }
 
     public func save(_ words: [Word]) async throws {
-        try await cache.deleteCachedWords()
-        try await cache.insertCache(words: words)
+        try await store.deleteCachedWords()
+        try await store.insertCache(words: words)
     }
 
     public func load() async throws -> [Word] {
-        try await cache.retrieveWords()
+        try await store.retrieveWords()
     }
 }
