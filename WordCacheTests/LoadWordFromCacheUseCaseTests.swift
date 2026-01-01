@@ -54,11 +54,32 @@ struct LoadWordFromCacheUseCaseTests {
         #expect(actualResults == expectedWords)
     }
 
-//    @Test func load_hasNoSideEffectOnRetrievalError() async {}
+    @Test func load_hasNoSideEffectOnRetrievalError() async {
+        let (sut, cache) = makeSUT()
+        
+        cache.completeRetrieval(with: .failure(anyNSError()))
+        let _ = try? await sut.load()
+        
+        #expect(cache.receiveMessages == [.retrieve])
+    }
 
-//    @Test func load_hasNoSideEffectOnEmptyCache() async {}
+    @Test func load_hasNoSideEffectOnEmptyCache() async {
+        let (sut, cache) = makeSUT()
+        
+        cache.completeRetrieval(with: .success([]))
+        let _ = try? await sut.load()
+        
+        #expect(cache.receiveMessages == [.retrieve])
+    }
 
-//    @Test func load_hasNoSideEffectOnNonEmptyCache() async {}
+    @Test func load_hasNoSideEffectOnNonEmptyCache() async {
+        let (sut, cache) = makeSUT()
+        
+        cache.completeRetrieval(with: .success([uniqueWord()]))
+        let _ = try? await sut.load()
+        
+        #expect(cache.receiveMessages == [.retrieve])
+    }
     
     // MARK: - Helpers
     private func makeSUT() -> (sut: LocalWordLoader, cache: WordCacheSpy) {
