@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "0E94E657-21A6-4A9E-A884-1E7EAE83FA83",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Definery.xcodeproj",
+        "identifier" : "922E56FE2F06136D0069C8CC",
+        "name" : "WordCacheTests"
+      }
+    }
+  ],
+  "version" : 1
+}
