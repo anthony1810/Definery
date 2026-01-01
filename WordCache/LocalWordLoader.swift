@@ -8,7 +8,7 @@
 import Foundation
 import WordFeature
 
-public struct LocalWordLoader {
+public struct LocalWordLoader: WordCacheProtocol {
     private let store: WordStorageProtocol
 
     public init(store: WordStorageProtocol) {
