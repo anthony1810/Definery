@@ -5,6 +5,7 @@
 //  Created by Anthony on 1/1/26.
 //
 
+import Foundation
 import Testing
 import WordFeature
 
@@ -61,6 +62,18 @@ struct CacheWordUseCaseTests {
         #expect(cacheSpy.receiveMessages == [.deletion, .insertion(words)])
     }
     
+    @Test func save_failsOnDeletionFailure() async throws {
+        let (sut, cacheSpy) = makeSUT()
+        let deletionError = anyNSError()
+        
+        cacheSpy.completeDeletion(with: .failure(deletionError))
+        do {
+            try await sut.save([])
+            Issue.record("Expected to throw, but it succeeded")
+        } catch {
+            #expect(error as NSError? == deletionError)
+        }
+    }
     
     // MARK: - Helpers
     private func makeSUT() -> (sut: LocalWordLoader, cache: WordCacheSpy) {
