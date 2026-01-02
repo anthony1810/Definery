@@ -51,9 +51,9 @@ final class LoadWordFromCacheUseCaseTests {
 
     @Test func load_deliversCachedWords() async throws {
         let sut = makeSUT()
-        let expectedWords: [Word] = [uniqueWord(), uniqueWord()]
+        let (expectedWords, localWords) = uniqueWords()
 
-        sut.store.completeRetrieval(with: .success(expectedWords))
+        sut.store.completeRetrieval(with: .success(localWords))
         let actualResults = try await sut.loader.load()
 
         #expect(actualResults == expectedWords)
@@ -80,7 +80,7 @@ final class LoadWordFromCacheUseCaseTests {
     @Test func load_hasNoSideEffectOnNonEmptyCache() async {
         let sut = makeSUT()
 
-        sut.store.completeRetrieval(with: .success([uniqueWord()]))
+        sut.store.completeRetrieval(with: .success([uniqueLocalWord()]))
         _ = try? await sut.loader.load()
 
         #expect(sut.store.receiveMessages == [.retrieve])
