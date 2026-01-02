@@ -73,13 +73,13 @@ final class CacheWordUseCaseTests {
 
     @Test func save_requestCacheInsertionWithWordsOnDeletionSuccess() async throws {
         let sut = makeSUT()
-        let words = [uniqueWord(), uniqueWord()]
+        let (words, localWords) = uniqueWords()
 
         sut.store.completeDeletion(with: .success(()))
         sut.store.completeInsertion(with: .success(()))
         try await sut.loader.save(words)
 
-        #expect(sut.store.receiveMessages == [.deletion, .insertion(words)])
+        #expect(sut.store.receiveMessages == [.deletion, .insertion(localWords)])
     }
 }
 
