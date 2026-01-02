@@ -17,10 +17,56 @@ public struct LocalWordLoader: WordCacheProtocol {
 
     public func save(_ words: [Word]) async throws {
         try await store.deleteCachedWords()
-        try await store.insertCache(words: words)
+        try await store.insertCache(words: words.map { $0.toLocal() })
     }
 
     public func load() async throws -> [Word] {
-        try await store.retrieveWords()
+        try await store.retrieveWords().map { $0.toModel() }
+    }
+}
+
+// MARK: - Mapping
+
+private extension Word {
+    func toLocal() -> LocalWord {
+        LocalWord(
+            id: id,
+            text: text,
+            language: language,
+            phonetic: phonetic,
+            meanings: meanings.map { $0.toLocal() }
+        )
+    }
+}
+
+private extension Meaning {
+    func toLocal() -> LocalMeaning {
+        LocalMeaning(
+            partOfSpeech: partOfSpeech,
+            definition: definition,
+            example: example
+        )
+    }
+}
+
+private extension LocalWord {
+    func toModel() -> Word {
+        Word(
+            id: id,
+            text: text,
+            language: language,
+            phonetic: phonetic,
+            meanings: meanings.map { $0.toModel() }
+        )
+    }
+}
+
+private extension LocalMeaning {
+    func toModel() -> Meaning {
+        Meaning(
+            partOfSpeech: partOfSpeech,
+            definition: definition,
+            example: example
+        )
     }
 }

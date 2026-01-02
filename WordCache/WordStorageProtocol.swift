@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import WordFeature
 
 public protocol WordStorageProtocol: Sendable {
     func deleteCachedWords() async throws
-    func insertCache(words: [Word]) async throws
-    func retrieveWords() async throws -> [Word]
+    func insertCache(words: [LocalWord]) async throws
+    func retrieveWords() async throws -> [LocalWord]
 }
