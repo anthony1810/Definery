@@ -43,11 +43,17 @@ actor HomeViewStore: ScreenActionStore {
         Task {
             do {
                 try await isolatedReceive(action: action)
-            } catch {}
+            } catch {
+                await viewState?.showError(AppError.abnormalState(error.localizedDescription))
+            }
         }
     }
     
     func isolatedReceive(action: Action) async throws {
-        
+        switch action {
+        case .loadWords:
+            let _ = try await loader.load()
+            
+        }
     }
 }
