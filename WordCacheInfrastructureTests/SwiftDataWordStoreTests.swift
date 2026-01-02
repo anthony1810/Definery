@@ -106,6 +106,16 @@ final class SwiftDataWordStoreTests {
         #expect(expectedWords == actualWords)
     }
     
+    @Test func delete_emptiesPreviouslyInsertedCache() async throws {
+        let sut = try makeSUT()
+        
+        try await sut.insertCache(words: uniqueLocalWords())
+        try await sut.deleteCachedWords()
+        
+        let actualWords = try await sut.retrieveWords()
+        #expect(actualWords.isEmpty)
+    }
+    
 }
 // MARK: - Helpers
 
