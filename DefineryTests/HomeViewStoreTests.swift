@@ -5,6 +5,7 @@
 //  Created by Anthony on 2/1/26.
 //
 
+import Foundation
 import Testing
 import WordFeature
 
@@ -23,6 +24,27 @@ final class HomeViewStoreTests {
         let sut = makeSUT()
         
         #expect(sut.loader.loadCallCount == 0)
+    }
+    
+    @Test func loadWords_deliversEmptyWordsOnLoaderEmpty() async throws {
+        let sut = makeSUT()
+        
+        sut.loader.complete(with: .success([]))
+        try await sut.store.isolatedReceive(action: .loadWords)
+        
+        #expect(sut.state.words.isEmpty)
+    }
+    
+    @Test func loadWords_deliversErrorOnLoaderError() async throws {
+        let sut = makeSUT()
+        let expectedError = anyNSError()
+        
+        do {
+            sut.loader.complete(with: .failure(expectedError))
+            try await sut.store.isolatedReceive(action: .loadWords)
+        } catch {
+            #expect(error as NSError? == expectedError)
+        }
     }
 }
 
