@@ -20,6 +20,9 @@ final class RemoteWithLocalFallbackLoader: WordLoaderProtocol {
     }
 
     func load() async throws -> [Word] {
-        try await remote.load()
+        let words = try await remote.load()
+        try? await cache.save(words)
+        
+        return words
     }
 }

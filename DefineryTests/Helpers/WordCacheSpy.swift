@@ -9,9 +9,9 @@ import Foundation
 import WordFeature
 
 final class WordCacheSpy: WordCacheProtocol, @unchecked Sendable {
-    private(set) var savedWords: [[Word]] = []
+    private(set) var savedWords: [Word] = []
 
     func save(_ words: [Word]) async throws {
-        savedWords.append(words)
+        savedWords.append(contentsOf: words)
     }
 }
