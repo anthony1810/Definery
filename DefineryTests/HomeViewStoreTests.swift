@@ -21,13 +21,13 @@ final class HomeViewStoreTests {
     }
     
     @Test func init_doesNotLoadWords() async {
-        let sut = makeSUT()
+        let sut = await makeSUT()
         
         #expect(sut.loader.loadCallCount == 0)
     }
     
     @Test func loadWords_deliversEmptyWordsOnLoaderEmpty() async throws {
-        let sut = makeSUT()
+        let sut = await makeSUT()
         
         sut.loader.complete(with: .success([]))
         try await sut.store.isolatedReceive(action: .loadWords)
@@ -36,14 +36,29 @@ final class HomeViewStoreTests {
     }
     
     @Test func loadWords_deliversErrorOnLoaderError() async throws {
-        let sut = makeSUT()
+        let sut = await makeSUT()
         let expectedError = anyNSError()
         
         do {
             sut.loader.complete(with: .failure(expectedError))
             try await sut.store.isolatedReceive(action: .loadWords)
+            Issue.record("expected to throw, but it didn't")
         } catch {
             #expect(error as NSError? == expectedError)
+        }
+    }
+    
+    @Test func loadWords_deliversWordsOnLoaderSuccess() async throws {
+        let sut = await makeSUT()
+        let expectedWords = [uniqueWord()]
+        
+        do {
+            sut.loader.complete(with: .success(expectedWords))
+            try await sut.store.isolatedReceive(action: .loadWords)
+            
+            #expect(sut.state.words == expectedWords)
+        } catch {
+            Issue.record("expected to succeed, but it failed with error: \(error)")
         }
     }
 }
@@ -69,10 +84,12 @@ extension HomeViewStoreTests {
         filePath: String = #filePath,
         line: Int = #line,
         column: Int = #column
-    ) -> SUT {
+    ) async -> SUT {
         let loader = WordLoaderSpy()
         let state = HomeViewState()
         let store = HomeViewStore(loader: loader)
+        
+        await store.binding(state: state)
         
         let sut = SUT(store: store, loader: loader, state: state)
         
