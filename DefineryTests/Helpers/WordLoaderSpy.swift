@@ -12,7 +12,7 @@ final class WordLoaderSpy: WordLoaderProtocol, @unchecked Sendable {
     private var result: Result<[Word], Error>?
 
     func load() async throws -> [Word] {
-        try result!.get()
+        try result.evaluate()
     }
 
     func complete(with result: Result<[Word], Error>) {
