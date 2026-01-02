@@ -11,7 +11,7 @@ import Testing
 @testable import Definery
 
 final class RemoteWithLocalFallbackLoaderTests {
-    private var sutTracker: MemoryLeakTracker<RemoteWithLocalFallbackLoader>?
+    private var sutTracker: MemoryLeakTracker<SUT>?
 
     deinit {
         sutTracker?.verify()
@@ -84,11 +84,18 @@ final class RemoteWithLocalFallbackLoaderTests {
 // MARK: - Helpers
 
 extension RemoteWithLocalFallbackLoaderTests {
-    private struct SUT {
+    final class SUT {
         let loader: RemoteWithLocalFallbackLoader
         let remote: WordLoaderSpy
         let local: WordLoaderSpy
         let cache: WordCacheSpy
+
+        init(loader: RemoteWithLocalFallbackLoader, remote: WordLoaderSpy, local: WordLoaderSpy, cache: WordCacheSpy) {
+            self.loader = loader
+            self.remote = remote
+            self.local = local
+            self.cache = cache
+        }
     }
 
     private func makeSUT(
@@ -100,7 +107,8 @@ extension RemoteWithLocalFallbackLoaderTests {
         let remote = WordLoaderSpy()
         let local = WordLoaderSpy()
         let cache = WordCacheSpy()
-        let sut = RemoteWithLocalFallbackLoader(remote: remote, local: local, cache: cache)
+        let loader = RemoteWithLocalFallbackLoader(remote: remote, local: local, cache: cache)
+        let sut = SUT(loader: loader, remote: remote, local: local, cache: cache)
 
         sutTracker = MemoryLeakTracker(
             instance: sut,
@@ -112,6 +120,6 @@ extension RemoteWithLocalFallbackLoaderTests {
             )
         )
 
-        return SUT(loader: sut, remote: remote, local: local, cache: cache)
+        return sut
     }
 }
