@@ -46,14 +46,14 @@ This project follows **Clean Architecture** principles with separate frameworks 
 │  │                      Composition Root                                │    │
 │  │  - Wires all dependencies                                            │    │
 │  │  - Creates RemoteWithLocalFallback loader                            │    │
-│  │  - Injects into ViewModels                                           │    │
+│  │  - Injects into ViewStores                                           │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │
 │                                                                              │
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
 │  │                         UI Layer                                     │    │
 │  │  - SwiftUI Views (HomeView, LibraryView, QuizView)                  │    │
 │  │  - ViewStates (ScreenState subclasses)                               │    │
-│  │  - ViewModels (ScreenActionStore actors)                             │    │
+│  │  - ViewStores (ScreenActionStore actors)                             │    │
 │  │  - Uses ScreenStateKit patterns                                      │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -171,15 +171,15 @@ Definery/
     └── Features/
         ├── Home/
         │   ├── HomeViewState.swift   # ScreenState subclass
-        │   ├── HomeViewModel.swift   # ScreenActionStore actor
+        │   ├── HomeViewStore.swift   # ScreenActionStore actor
         │   └── HomeView.swift        # SwiftUI view
         ├── Library/
         │   ├── LibraryViewState.swift
-        │   ├── LibraryViewModel.swift
+        │   ├── LibraryViewStore.swift
         │   └── LibraryView.swift
         ├── Quiz/
         │   ├── QuizViewState.swift
-        │   ├── QuizViewModel.swift   # Uses Clock for countdown timer
+        │   ├── QuizViewStore.swift   # Uses Clock for countdown timer
         │   └── QuizView.swift
         └── WordDetail/
             └── WordDetailView.swift
@@ -295,10 +295,10 @@ final class HomeViewState: ScreenState {
 }
 ```
 
-### 2. ViewModel (ScreenActionStore actor)
+### 2. ViewStore (ScreenActionStore actor)
 
 ```swift
-actor HomeViewModel: ScreenActionStore {
+actor HomeViewStore: ScreenActionStore {
     enum Action: ActionLockable, LoadingTrackable, Sendable {
         case refresh
         case loadMore
@@ -315,15 +315,15 @@ actor HomeViewModel: ScreenActionStore {
 ```swift
 struct HomeView: View {
     @State private var viewState: HomeViewState
-    @State private var viewModel: HomeViewModel
+    @State private var viewStore: HomeViewStore
 
     var body: some View {
         // ...
         .onShowLoading($viewState.isLoading)
         .onShowError($viewState.displayError)
         .task {
-            await viewModel.binding(state: viewState)
-            viewModel.receive(action: .refresh)
+            await viewStore.binding(state: viewState)
+            viewStore.receive(action: .refresh)
         }
     }
 }
@@ -369,7 +369,7 @@ struct HomeView: View {
 - [ ] Wire dependencies in app
 
 ### Phase 6: UI Layer - Home
-- [ ] Create HomeViewState + HomeViewModel + HomeView
+- [ ] Create HomeViewState + HomeViewStore + HomeView
 - [ ] Add language filter
 - [ ] Add pull-to-refresh
 - [ ] Add load more
