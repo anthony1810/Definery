@@ -56,10 +56,33 @@ final class SwiftDataWordStoreTests {
         let sut = try makeSUT()
         
         do {
-            let _ = try await sut.insertCache(words: uniqueLocalWords())
+            try await sut.insertCache(words: uniqueLocalWords())
         } catch {
             Issue.record("Expect no error, got \(error)")
         }
+    }
+    
+    @Test func insert_deliversNoErrorOnNonEmptyCache() async throws {
+        let sut = try makeSUT()
+
+        do {
+            try await sut.insertCache(words: uniqueLocalWords())
+            try await sut.insertCache(words: uniqueLocalWords())
+        } catch {
+            Issue.record("Expect no error, got \(error)")
+        }
+    }
+    
+    @Test func insert_overridesPreviouslyInsertedCacheValues() async throws {
+        let sut = try makeSUT()
+        let expectedWords = [uniqueLocalWord()]
+        
+        try await sut.insertCache(words: uniqueLocalWords())
+        try await sut.insertCache(words: expectedWords)
+        
+        let actualWords = try await sut.retrieveWords()
+        
+        #expect(actualWords == expectedWords)
     }
     
 }

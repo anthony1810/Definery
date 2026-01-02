@@ -20,13 +20,18 @@ public final class SwiftDataWordStore: WordStorageProtocol, @unchecked Sendable 
         context = ModelContext(container)
     }
 
-    public func deleteCachedWords() async throws {}
+    public func deleteCachedWords() async throws {
+        try context.delete(model: ManagedWord.self)
+        try context.save()
+    }
 
     public func insertCache(words: [LocalWord]) async throws {
+        try context.delete(model: ManagedWord.self)
+
         words
             .map(ManagedWord.init)
             .forEach(context.insert)
-        
+
         try context.save()
     }
 
