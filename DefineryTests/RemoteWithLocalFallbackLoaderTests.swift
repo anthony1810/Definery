@@ -37,6 +37,21 @@ final class RemoteWithLocalFallbackLoaderTests {
         
         #expect(sut.cache.savedWords == remoteWords)
     }
+    
+    @Test func load_deliversCacheWordsOnRemoteFailure() async {
+        let sut = makeSUT()
+        let cachedWords = [uniqueWord()]
+        
+        sut.remote.complete(with: .failure(anyNSError()))
+        sut.local.complete(with: .success(cachedWords))
+        
+        do {
+            let result = try await sut.loader.load()
+            #expect(result == cachedWords)
+        } catch {
+            Issue.record("Expected to succeed, but threw: \(error)")
+        }
+    }
 }
 
 // MARK: - Helpers
