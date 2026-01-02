@@ -85,6 +85,27 @@ final class SwiftDataWordStoreTests {
         #expect(actualWords == expectedWords)
     }
     
+    @Test func delete_deliversNoErrorOnEmptyCache() async {
+        do {
+            let sut = try makeSUT()
+            try await sut.deleteCachedWords()
+        } catch {
+            Issue.record("Expected no error, got \(error)")
+        }
+    }
+    
+    @Test func delete_hasNoSideEffectsOnEmptyCache() async throws {
+        let sut = try makeSUT()
+        
+        let expectedWords = try await sut.retrieveWords()
+        #expect(expectedWords.isEmpty)
+        
+        try await sut.deleteCachedWords()
+        
+        let actualWords = try await sut.retrieveWords()
+        #expect(expectedWords == actualWords)
+    }
+    
 }
 // MARK: - Helpers
 
