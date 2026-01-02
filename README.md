@@ -358,10 +358,10 @@ struct HomeView: View {
 - [x] Write LoadWordFromCacheUseCaseTests (7 tests)
 
 ### Phase 4: Infrastructure Layer
-- [ ] Create WordCacheInfrastructure framework
-- [ ] Create SwiftDataWordStore
-- [ ] Create InMemoryWordStore
-- [ ] Write SwiftDataWordStoreTests
+- [x] Create WordCacheInfrastructure framework
+- [x] Create SwiftDataWordStore (with in-memory option for tests/previews)
+- [x] Create ManagedWord and ManagedMeaning SwiftData models
+- [x] Write SwiftDataWordStoreTests (10 tests)
 
 ### Phase 5: Composition
 - [ ] Create WordLoaderComposer
