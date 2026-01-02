@@ -33,6 +33,16 @@ final class SwiftDataWordStoreTests {
         #expect(secondResult.isEmpty)
     }
     
+    @Test func retrieve_deliversFoundValuesOnNonEmptyCache() async throws {
+        let sut = try makeSUT()
+        let expectedWords = [uniqueLocalWord()]
+        
+        try await sut.insertCache(words: expectedWords)
+        let actualWords = try await sut.retrieveWords()
+        
+        #expect(actualWords == expectedWords)
+    }
+    
 }
 // MARK: - Helpers
 
@@ -43,7 +53,7 @@ extension SwiftDataWordStoreTests {
         line: Int = #line,
         column: Int = #column
     ) throws -> SwiftDataWordStore {
-        let sut = SwiftDataWordStore()
+        let sut = try SwiftDataWordStore(inMemory: true)
         
         sutTracker = MemoryLeakTracker(
             instance: sut,
@@ -54,7 +64,7 @@ extension SwiftDataWordStoreTests {
                 column: column
             )
         )
-
+        
         return sut
     }
 }
