@@ -5,6 +5,7 @@
 //  Created by Anthony on 2/1/26.
 //
 
+import Foundation
 import Testing
 
 @testable import Definery
@@ -50,6 +51,21 @@ final class RemoteWithLocalFallbackLoaderTests {
             #expect(result == cachedWords)
         } catch {
             Issue.record("Expected to succeed, but threw: \(error)")
+        }
+    }
+    
+    @Test func load_deliversErrorOnBothRemoteAndLocalFailure() async throws {
+        let sut = makeSUT()
+        let expectedError = anyNSError()
+        
+        sut.remote.complete(with: .failure(expectedError))
+        sut.local.complete(with: .failure(expectedError))
+        
+        do {
+            let result = try await sut.loader.load()
+            Issue.record("expected to fail, but succeeded with: \(result)")
+        } catch {
+            #expect(error as NSError? == expectedError)
         }
     }
 }
