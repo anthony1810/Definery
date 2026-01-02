@@ -68,6 +68,17 @@ final class RemoteWithLocalFallbackLoaderTests {
             #expect(error as NSError? == expectedError)
         }
     }
+    
+    @Test func load_doesNotCacheOnRemoteFailure() async {
+        let sut = makeSUT()
+        
+        sut.remote.complete(with: .failure(anyNSError()))
+        sut.local.complete(with: .success([]))
+        
+        _ = try? await sut.loader.load()
+        
+        #expect(sut.cache.savedWords.isEmpty)
+    }
 }
 
 // MARK: - Helpers
