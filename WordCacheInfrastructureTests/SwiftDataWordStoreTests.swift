@@ -52,6 +52,16 @@ final class SwiftDataWordStoreTests {
         #expect(firstResult == secondResult)
     }
     
+    @Test func insert_deliversNoErrorOnEmptyCache() async throws {
+        let sut = try makeSUT()
+        
+        do {
+            let _ = try await sut.insertCache(words: uniqueLocalWords())
+        } catch {
+            Issue.record("Expect no error, got \(error)")
+        }
+    }
+    
 }
 // MARK: - Helpers
 
