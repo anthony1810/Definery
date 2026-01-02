@@ -23,10 +23,10 @@ public final class SwiftDataWordStore: WordStorageProtocol, @unchecked Sendable 
     public func deleteCachedWords() async throws {}
 
     public func insertCache(words: [LocalWord]) async throws {
-        for word in words {
-            let managed = ManagedWord(from: word)
-            context.insert(managed)
-        }
+        words
+            .map(ManagedWord.init)
+            .forEach(context.insert)
+        
         try context.save()
     }
 
