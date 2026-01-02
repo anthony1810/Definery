@@ -19,6 +19,7 @@
 		922E662E2F07582B0069C8CC /* WordCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; };
 		922E662F2F07582B0069C8CC /* WordCache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		922E93032F07E8970069C8CC /* ScreenStateKit in Frameworks */ = {isa = PBXBuildFile; productRef = 922E93022F07E8970069C8CC /* ScreenStateKit */; };
+		922E93082F07F7570069C8CC /* ConcurrencyExtras in Frameworks */ = {isa = PBXBuildFile; productRef = 922E93072F07F7570069C8CC /* ConcurrencyExtras */; };
 		924D29AF2F050392007FFEFF /* Definery-iOS.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */; };
 		92A75F0E2F04C99D008DC78C /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
 		92A75F182F04C99D008DC78C /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
@@ -317,6 +318,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				922E570A2F06136D0069C8CC /* WordCache.framework in Frameworks */,
+				922E93082F07F7570069C8CC /* ConcurrencyExtras in Frameworks */,
 				92A75F182F04C99D008DC78C /* WordFeature.framework in Frameworks */,
 				922E93032F07E8970069C8CC /* ScreenStateKit in Frameworks */,
 				922E66262F07581E0069C8CC /* WordCacheInfrastructure.framework in Frameworks */,
@@ -583,6 +585,7 @@
 			name = Definery;
 			packageProductDependencies = (
 				922E93022F07E8970069C8CC /* ScreenStateKit */,
+				922E93072F07F7570069C8CC /* ConcurrencyExtras */,
 			);
 			productName = Definery;
 			productReference = 92A75ED62F04C904008DC78C /* Definery.app */;
@@ -789,6 +792,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				922E93012F07E8970069C8CC /* XCRemoteSwiftPackageReference "ScreenStateKit" */,
+				922E93062F07F7570069C8CC /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 92A75ED72F04C904008DC78C /* Products */;
@@ -2034,6 +2038,14 @@
 				kind = branch;
 			};
 		};
+		922E93062F07F7570069C8CC /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-concurrency-extras";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2041,6 +2053,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 922E93012F07E8970069C8CC /* XCRemoteSwiftPackageReference "ScreenStateKit" */;
 			productName = ScreenStateKit;
+		};
+		922E93072F07F7570069C8CC /* ConcurrencyExtras */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 922E93062F07F7570069C8CC /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */;
+			productName = ConcurrencyExtras;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

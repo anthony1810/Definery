@@ -10,6 +10,8 @@ import Testing
 import WordFeature
 
 import ScreenStateKit
+import ConcurrencyExtras
+
 @testable import Definery
 
 @MainActor
@@ -48,6 +50,20 @@ final class HomeViewStoreTests {
         }
     }
     
+    @Test func loadWords_deliversErrorToViewStateOnLoaderError() async throws {
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+            let expectedError = anyNSError()
+            
+            sut.loader.complete(with: .failure(expectedError))
+            sut.store.receive(action: .loadWords)
+            
+            await Task.megaYield()
+            
+            #expect(sut.state.displayError != nil)
+        }
+    }
+    
     @Test func loadWords_deliversWordsOnLoaderSuccess() async throws {
         let sut = await makeSUT()
         let expectedWords = [uniqueWord()]
@@ -74,6 +90,8 @@ final class HomeViewStoreTests {
         
         #expect(sut.loader.loadCallCount == 1)
     }
+    
+    
 }
 
 // MARK: - Helpers
