@@ -59,10 +59,14 @@ actor HomeViewStore: ScreenActionStore {
     }
     
     func isolatedReceive(action: Action) async throws {
+        guard await actionLocker.canExecute(action) else { return }
+        
         switch action {
         case .loadWords:
             let words = try await loader.load()
             await viewState?.tryUpdate(property: \.words, newValue: words)
         }
+        
+        await actionLocker.unlock(action)
     }
 }
