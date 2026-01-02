@@ -23,6 +23,16 @@ final class SwiftDataWordStoreTests {
         #expect(words.isEmpty)
     }
     
+    @Test func retrieve_hasNoSideEffectsOnEmptyCache() async throws {
+        let sut = try makeSUT()
+        
+        let firstResult = try await sut.retrieveWords()
+        let secondResult = try await sut.retrieveWords()
+        
+        #expect(firstResult.isEmpty)
+        #expect(secondResult.isEmpty)
+    }
+    
 }
 // MARK: - Helpers
 
