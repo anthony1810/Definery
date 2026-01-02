@@ -14,6 +14,15 @@ import WordFeature
 @MainActor @Observable
 final class HomeViewState: ScreenState {
     private(set) var words: [Word] = []
+    
+    func tryUpdate<T>(property: @autoclosure @MainActor () -> KeyPath<HomeViewState, T>,
+                      newValue: T) {
+      guard let keypath = property() as? ReferenceWritableKeyPath<HomeViewState, T> else {
+        assertionFailure("Read-only property")
+        return
+      }
+      self[keyPath: keypath] = newValue
+    }
 }
 
 actor HomeViewStore: ScreenActionStore {
@@ -52,8 +61,8 @@ actor HomeViewStore: ScreenActionStore {
     func isolatedReceive(action: Action) async throws {
         switch action {
         case .loadWords:
-            let _ = try await loader.load()
-            
+            let words = try await loader.load()
+            await viewState?.tryUpdate(property: \.words, newValue: words)
         }
     }
 }
