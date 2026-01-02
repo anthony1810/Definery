@@ -7,7 +7,7 @@
 
 import Testing
 
-struct MemoryLeakTracker<T: AnyObject> {
+struct MemoryLeakTracker<T: AnyObject> where T: Sendable {
     weak var instance: T?
     var sourceLocation: SourceLocation
 

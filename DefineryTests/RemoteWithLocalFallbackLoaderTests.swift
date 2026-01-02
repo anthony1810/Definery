@@ -84,7 +84,7 @@ final class RemoteWithLocalFallbackLoaderTests {
 // MARK: - Helpers
 
 extension RemoteWithLocalFallbackLoaderTests {
-    final class SUT {
+    final class SUT: Sendable {
         let loader: RemoteWithLocalFallbackLoader
         let remote: WordLoaderSpy
         let local: WordLoaderSpy
