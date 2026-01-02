@@ -100,6 +100,17 @@
                ReferencedContainer = "container:Definery.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "922E661A2F07581E0069C8CC"
+               BuildableName = "WordCacheInfrastructureTests.xctest"
+               BlueprintName = "WordCacheInfrastructureTests"
+               ReferencedContainer = "container:Definery.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
