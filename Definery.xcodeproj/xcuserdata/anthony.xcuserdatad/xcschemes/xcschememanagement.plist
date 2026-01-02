@@ -24,6 +24,11 @@
 			<key>orderHint</key>
 			<integer>4</integer>
 		</dict>
+		<key>WordCacheInfrastructure.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
 		<key>WordFeature.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -33,6 +38,11 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>922E56F62F06136D0069C8CC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>922E66122F07581D0069C8CC</key>
 		<dict>
 			<key>primary</key>
 			<true/>

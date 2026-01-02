@@ -13,6 +13,11 @@
 		922E570B2F06136D0069C8CC /* WordCache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		922E57122F061CF90069C8CC /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
 		922E57132F061CF90069C8CC /* WordFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		922E661C2F07581E0069C8CC /* WordCacheInfrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E66132F07581D0069C8CC /* WordCacheInfrastructure.framework */; };
+		922E66262F07581E0069C8CC /* WordCacheInfrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E66132F07581D0069C8CC /* WordCacheInfrastructure.framework */; };
+		922E66272F07581E0069C8CC /* WordCacheInfrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 922E66132F07581D0069C8CC /* WordCacheInfrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		922E662E2F07582B0069C8CC /* WordCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; };
+		922E662F2F07582B0069C8CC /* WordCache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		924D29AF2F050392007FFEFF /* Definery-iOS.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */; };
 		92A75F0E2F04C99D008DC78C /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
 		92A75F182F04C99D008DC78C /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
@@ -53,6 +58,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = 92A75F042F04C99C008DC78C;
 			remoteInfo = WordFeature;
+		};
+		922E661D2F07581E0069C8CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92A75ECE2F04C904008DC78C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 922E66122F07581D0069C8CC;
+			remoteInfo = WordCacheInfrastructure;
+		};
+		922E661F2F07581E0069C8CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92A75ECE2F04C904008DC78C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92A75ED52F04C904008DC78C;
+			remoteInfo = Definery;
+		};
+		922E66242F07581E0069C8CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92A75ECE2F04C904008DC78C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 922E66122F07581D0069C8CC;
+			remoteInfo = WordCacheInfrastructure;
+		};
+		922E66302F07582B0069C8CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92A75ECE2F04C904008DC78C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 922E56F62F06136D0069C8CC;
+			remoteInfo = WordCache;
 		};
 		92A75EE42F04C905008DC78C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -131,6 +164,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		922E66322F07582B0069C8CC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				922E662F2F07582B0069C8CC /* WordCache.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92A75F1D2F04C99D008DC78C /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -139,6 +183,7 @@
 			files = (
 				922E570B2F06136D0069C8CC /* WordCache.framework in Embed Frameworks */,
 				92A75F192F04C99D008DC78C /* WordFeature.framework in Embed Frameworks */,
+				922E66272F07581E0069C8CC /* WordCacheInfrastructure.framework in Embed Frameworks */,
 				92A75F3A2F04C9B7008DC78C /* WordAPI.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -161,6 +206,8 @@
 		922E56EF2F060DA20069C8CC /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		922E56F72F06136D0069C8CC /* WordCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WordCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		922E56FF2F06136D0069C8CC /* WordCacheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WordCacheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		922E66132F07581D0069C8CC /* WordCacheInfrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WordCacheInfrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		922E661B2F07581E0069C8CC /* WordCacheInfrastructureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WordCacheInfrastructureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		924D29AD2F05034A007FFEFF /* Definery-macOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Definery-macOS.xctestplan"; sourceTree = "<group>"; };
 		924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Definery-iOS.xctestplan"; sourceTree = "<group>"; };
 		92A75ED62F04C904008DC78C /* Definery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Definery.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -182,6 +229,16 @@
 		922E57052F06136D0069C8CC /* WordCacheTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = WordCacheTests;
+			sourceTree = "<group>";
+		};
+		922E66142F07581D0069C8CC /* WordCacheInfrastructure */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = WordCacheInfrastructure;
+			sourceTree = "<group>";
+		};
+		922E66212F07581E0069C8CC /* WordCacheInfrastructureTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = WordCacheInfrastructureTests;
 			sourceTree = "<group>";
 		};
 		92A75ED82F04C904008DC78C /* Definery */ = {
@@ -238,12 +295,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		922E66102F07581D0069C8CC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				922E662E2F07582B0069C8CC /* WordCache.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		922E66182F07581E0069C8CC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				922E661C2F07581E0069C8CC /* WordCacheInfrastructure.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92A75ED32F04C904008DC78C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				922E570A2F06136D0069C8CC /* WordCache.framework in Frameworks */,
 				92A75F182F04C99D008DC78C /* WordFeature.framework in Frameworks */,
+				922E66262F07581E0069C8CC /* WordCacheInfrastructure.framework in Frameworks */,
 				92A75F392F04C9B7008DC78C /* WordAPI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -320,6 +394,8 @@
 				92A75F342F04C9B7008DC78C /* WordAPITests */,
 				922E56F82F06136D0069C8CC /* WordCache */,
 				922E57052F06136D0069C8CC /* WordCacheTests */,
+				922E66142F07581D0069C8CC /* WordCacheInfrastructure */,
+				922E66212F07581E0069C8CC /* WordCacheInfrastructureTests */,
 				92A75F412F04C9D0008DC78C /* Frameworks */,
 				92A75ED72F04C904008DC78C /* Products */,
 			);
@@ -337,6 +413,8 @@
 				92A75F2E2F04C9B7008DC78C /* WordAPITests.xctest */,
 				922E56F72F06136D0069C8CC /* WordCache.framework */,
 				922E56FF2F06136D0069C8CC /* WordCacheTests.xctest */,
+				922E66132F07581D0069C8CC /* WordCacheInfrastructure.framework */,
+				922E661B2F07581E0069C8CC /* WordCacheInfrastructureTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -352,6 +430,13 @@
 
 /* Begin PBXHeadersBuildPhase section */
 		922E56F22F06136D0069C8CC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		922E660E2F07581D0069C8CC /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -424,6 +509,55 @@
 			productReference = 922E56FF2F06136D0069C8CC /* WordCacheTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		922E66122F07581D0069C8CC /* WordCacheInfrastructure */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 922E66282F07581E0069C8CC /* Build configuration list for PBXNativeTarget "WordCacheInfrastructure" */;
+			buildPhases = (
+				922E660E2F07581D0069C8CC /* Headers */,
+				922E660F2F07581D0069C8CC /* Sources */,
+				922E66102F07581D0069C8CC /* Frameworks */,
+				922E66112F07581D0069C8CC /* Resources */,
+				922E66322F07582B0069C8CC /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				922E66312F07582B0069C8CC /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				922E66142F07581D0069C8CC /* WordCacheInfrastructure */,
+			);
+			name = WordCacheInfrastructure;
+			packageProductDependencies = (
+			);
+			productName = WordCacheInfrastructure;
+			productReference = 922E66132F07581D0069C8CC /* WordCacheInfrastructure.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		922E661A2F07581E0069C8CC /* WordCacheInfrastructureTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 922E662B2F07581E0069C8CC /* Build configuration list for PBXNativeTarget "WordCacheInfrastructureTests" */;
+			buildPhases = (
+				922E66172F07581E0069C8CC /* Sources */,
+				922E66182F07581E0069C8CC /* Frameworks */,
+				922E66192F07581E0069C8CC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				922E661E2F07581E0069C8CC /* PBXTargetDependency */,
+				922E66202F07581E0069C8CC /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				922E66212F07581E0069C8CC /* WordCacheInfrastructureTests */,
+			);
+			name = WordCacheInfrastructureTests;
+			packageProductDependencies = (
+			);
+			productName = WordCacheInfrastructureTests;
+			productReference = 922E661B2F07581E0069C8CC /* WordCacheInfrastructureTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		92A75ED52F04C904008DC78C /* Definery */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92A75EF72F04C905008DC78C /* Build configuration list for PBXNativeTarget "Definery" */;
@@ -439,6 +573,7 @@
 				92A75F172F04C99D008DC78C /* PBXTargetDependency */,
 				92A75F382F04C9B7008DC78C /* PBXTargetDependency */,
 				922E57092F06136D0069C8CC /* PBXTargetDependency */,
+				922E66252F07581E0069C8CC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				92A75ED82F04C904008DC78C /* Definery */,
@@ -608,6 +743,13 @@
 					922E56FE2F06136D0069C8CC = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
+					922E66122F07581D0069C8CC = {
+						CreatedOnToolsVersion = 26.1.1;
+						LastSwiftMigration = 2610;
+					};
+					922E661A2F07581E0069C8CC = {
+						CreatedOnToolsVersion = 26.1.1;
+					};
 					92A75ED52F04C904008DC78C = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
@@ -656,6 +798,8 @@
 				92A75F2D2F04C9B7008DC78C /* WordAPITests */,
 				922E56F62F06136D0069C8CC /* WordCache */,
 				922E56FE2F06136D0069C8CC /* WordCacheTests */,
+				922E66122F07581D0069C8CC /* WordCacheInfrastructure */,
+				922E661A2F07581E0069C8CC /* WordCacheInfrastructureTests */,
 			);
 		};
 /* End PBXProject section */
@@ -669,6 +813,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		922E56FD2F06136D0069C8CC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		922E66112F07581D0069C8CC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		922E66192F07581E0069C8CC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -738,6 +896,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		922E56FB2F06136D0069C8CC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		922E660F2F07581D0069C8CC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		922E66172F07581E0069C8CC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -815,6 +987,26 @@
 			isa = PBXTargetDependency;
 			target = 92A75F042F04C99C008DC78C /* WordFeature */;
 			targetProxy = 922E57142F061CF90069C8CC /* PBXContainerItemProxy */;
+		};
+		922E661E2F07581E0069C8CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 922E66122F07581D0069C8CC /* WordCacheInfrastructure */;
+			targetProxy = 922E661D2F07581E0069C8CC /* PBXContainerItemProxy */;
+		};
+		922E66202F07581E0069C8CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 92A75ED52F04C904008DC78C /* Definery */;
+			targetProxy = 922E661F2F07581E0069C8CC /* PBXContainerItemProxy */;
+		};
+		922E66252F07581E0069C8CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 922E66122F07581D0069C8CC /* WordCacheInfrastructure */;
+			targetProxy = 922E66242F07581E0069C8CC /* PBXContainerItemProxy */;
+		};
+		922E66312F07582B0069C8CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 922E56F62F06136D0069C8CC /* WordCache */;
+			targetProxy = 922E66302F07582B0069C8CC /* PBXContainerItemProxy */;
 		};
 		92A75EE52F04C905008DC78C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -995,6 +1187,155 @@
 				MACOSX_DEPLOYMENT_TARGET = 26.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.viothun.Definery.WordCacheTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 26.1;
+			};
+			name = Release;
+		};
+		922E66292F07581E0069C8CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = LL6XGHYGV4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.viothun.Definery.WordCacheInfrastructure;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				XROS_DEPLOYMENT_TARGET = 26.1;
+			};
+			name = Debug;
+		};
+		922E662A2F07581E0069C8CC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = LL6XGHYGV4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.viothun.Definery.WordCacheInfrastructure;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				XROS_DEPLOYMENT_TARGET = 26.1;
+			};
+			name = Release;
+		};
+		922E662C2F07581E0069C8CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LL6XGHYGV4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MACOSX_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.viothun.Definery.WordCacheInfrastructureTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 26.1;
+			};
+			name = Debug;
+		};
+		922E662D2F07581E0069C8CC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LL6XGHYGV4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MACOSX_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.viothun.Definery.WordCacheInfrastructureTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
@@ -1582,6 +1923,24 @@
 			buildConfigurations = (
 				922E57102F06136D0069C8CC /* Debug */,
 				922E57112F06136D0069C8CC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		922E66282F07581E0069C8CC /* Build configuration list for PBXNativeTarget "WordCacheInfrastructure" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				922E66292F07581E0069C8CC /* Debug */,
+				922E662A2F07581E0069C8CC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		922E662B2F07581E0069C8CC /* Build configuration list for PBXNativeTarget "WordCacheInfrastructureTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				922E662C2F07581E0069C8CC /* Debug */,
+				922E662D2F07581E0069C8CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
