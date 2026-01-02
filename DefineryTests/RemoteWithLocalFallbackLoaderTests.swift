@@ -26,6 +26,17 @@ final class RemoteWithLocalFallbackLoaderTests {
 
         #expect(result == remoteWords)
     }
+    
+    @Test func load_cacesRemoteWordsOnRemoteSuccess() async throws {
+        let sut = makeSUT()
+        let remoteWords = [uniqueWord()]
+        
+        sut.remote.complete(with: .success(remoteWords))
+        
+        _ = try await sut.loader.load()
+        
+        #expect(sut.cache.savedWords == remoteWords)
+    }
 }
 
 // MARK: - Helpers
