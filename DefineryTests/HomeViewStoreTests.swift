@@ -61,6 +61,19 @@ final class HomeViewStoreTests {
             Issue.record("expected to succeed, but it failed with error: \(error)")
         }
     }
+    
+    @Test func loadWords_doesNotRequestLoadTwiceWhilePending() async throws {
+        let sut = await makeSUT()
+        
+        sut.loader.complete(with: .success([]))
+        
+        async let first: () = sut.store.isolatedReceive(action: .loadWords)
+        async let second: () = sut.store.isolatedReceive(action: .loadWords)
+        
+        _ = try await (first, second)
+        
+        #expect(sut.loader.loadCallCount == 1)
+    }
 }
 
 // MARK: - Helpers
