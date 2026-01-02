@@ -65,10 +65,11 @@ This project follows **Clean Architecture** principles with separate frameworks 
 ├──────────────────┤    ├──────────────────┤    ├──────────────────────────┤
 │ • Word (Model)   │◄───│ • RemoteLoader   │    │ • LocalWordLoader        │
 │ • Meaning        │    │ • WordMapper     │    │ • WordStorageProtocol    │
-│ • WordLoader     │◄───│ • WordsEndpoint  │    │                          │
-│   (Protocol)     │    │                  │    │ Depends on:              │
-│                  │    │ Depends on:      │    │ → WordFeature            │
-│                  │    │ → WordFeature    │    │                          │
+│ • WordLoader     │◄───│ • WordsEndpoint  │    │ • LocalWord (DTO)        │
+│   (Protocol)     │    │                  │    │ • LocalMeaning (DTO)     │
+│                  │    │ Depends on:      │    │                          │
+│                  │    │ → WordFeature    │    │ Depends on:              │
+│                  │    │                  │    │ → WordFeature            │
 └──────────────────┘    └──────────────────┘    └──────────────────────────┘
                                                             │
                                                             ▼
@@ -143,7 +144,10 @@ Definery/
 │
 ├── WordCache/                        # Cache Layer (Framework)
 │   ├── LocalWordLoader.swift         # Cache use case (implements WordCacheProtocol)
-│   └── WordStorageProtocol.swift     # Protocol for store implementations
+│   ├── WordStorageProtocol.swift     # Protocol for store implementations
+│   └── Models/
+│       ├── LocalWord.swift           # Cache DTO for Word
+│       └── LocalMeaning.swift        # Cache DTO for Meaning
 │
 ├── WordCacheTests/                   # Cache tests
 │   ├── CacheWordUseCaseTests.swift   # Save tests
@@ -255,10 +259,24 @@ public protocol WordCacheProtocol: Sendable {
 ```swift
 public protocol WordStorageProtocol: Sendable {
     func deleteCachedWords() async throws
-    func insertCache(words: [Word]) async throws
-    func retrieveWords() async throws -> [Word]
+    func insertCache(words: [LocalWord]) async throws
+    func retrieveWords() async throws -> [LocalWord]
 }
 ```
+
+### LocalWord (Cache DTO)
+
+```swift
+public struct LocalWord: Equatable {
+    public let id: UUID
+    public let text: String
+    public let language: String
+    public let phonetic: String?
+    public let meanings: [LocalMeaning]
+}
+```
+
+**Purpose:** Cache DTOs (`LocalWord`, `LocalMeaning`) create a protocol boundary between the cache layer and infrastructure layer, allowing SwiftData models to be independent of domain models.
 
 ---
 

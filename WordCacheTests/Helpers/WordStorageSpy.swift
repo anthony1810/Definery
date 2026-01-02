@@ -6,14 +6,13 @@
 //
 
 import Foundation
-import WordFeature
 import WordCache
 
 final class WordStorageSpy: WordStorageProtocol, @unchecked Sendable {
 
     enum ReceiveMessage: Equatable {
         case deletion
-        case insertion(_ words: [Word])
+        case insertion(_ words: [LocalWord])
         case retrieve
     }
 
@@ -32,7 +31,7 @@ final class WordStorageSpy: WordStorageProtocol, @unchecked Sendable {
 
     // MARK: - Insertion
     private var insertionResult: Result<Void, Error>?
-    func insertCache(words: [Word]) async throws {
+    func insertCache(words: [LocalWord]) async throws {
         receiveMessages.append(.insertion(words))
         try insertionResult.evaluate()
     }
@@ -42,13 +41,13 @@ final class WordStorageSpy: WordStorageProtocol, @unchecked Sendable {
     }
 
     // MARK: - Retrieve
-    private var retrievalResult: Result<[Word], Error>?
-    func retrieveWords() async throws -> [Word] {
+    private var retrievalResult: Result<[LocalWord], Error>?
+    func retrieveWords() async throws -> [LocalWord] {
         receiveMessages.append(.retrieve)
         return try retrievalResult.evaluate()
     }
 
-    func completeRetrieval(with result: Result<[Word], Error>) {
+    func completeRetrieval(with result: Result<[LocalWord], Error>) {
         retrievalResult = result
     }
 }
