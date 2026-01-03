@@ -28,6 +28,8 @@ final class HomeViewState: ScreenState {
 
 actor HomeViewStore: ScreenActionStore {
     public typealias ScreenState = HomeViewState
+    public typealias LoaderFactory = @Sendable (Locale.LanguageCode) -> WordLoaderProtocol
+    
     weak var viewState: HomeViewState?
     
     private let actionLocker = ActionLocker()
@@ -42,9 +44,10 @@ actor HomeViewStore: ScreenActionStore {
         }
     }
     
-    private let loader: WordLoaderProtocol
-    init(loader: WordLoaderProtocol) {
-        self.loader = loader
+    private let loaderFactory: LoaderFactory
+    
+    init(loader: @escaping LoaderFactory) {
+        self.loaderFactory = loader
     }
     
     func binding(state: HomeViewState) {
@@ -65,6 +68,9 @@ actor HomeViewStore: ScreenActionStore {
         guard await actionLocker.canExecute(action) else { return }
         await viewState?.loadingStarted()
         
+        let selectedLanguage = await viewState?.selectedLanguage ?? .english
+        let loader = loaderFactory(selectedLanguage)
+
         switch action {
         case .loadWords:
             let words = try await loader.load()
@@ -77,8 +83,9 @@ actor HomeViewStore: ScreenActionStore {
         case .selectLanguage(let language):
             await viewState?.tryUpdate(property: \.selectedLanguage, newValue: language)
             await viewState?.tryUpdate(property: \.words, newValue: [])
-            
-            let wordsFromNewSelectedLanguage = try await loader.load()
+
+            let newLoader = loaderFactory(language)
+            let wordsFromNewSelectedLanguage = try await newLoader.load()
             await viewState?.tryUpdate(property: \.words, newValue: wordsFromNewSelectedLanguage)
         }
         
