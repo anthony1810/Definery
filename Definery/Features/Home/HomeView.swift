@@ -10,11 +10,10 @@ import ScreenStateKit
 import WordFeature
 
 struct HomeView: View {
-    @State private var viewState: HomeViewState
+    @State private var viewState = HomeViewState()
     @State private var viewStore: HomeViewStore
 
-    init(viewState: HomeViewState = HomeViewState(), viewStore: HomeViewStore) {
-        self._viewState = State(initialValue: viewState)
+    init(viewStore: HomeViewStore) {
         self._viewStore = State(initialValue: viewStore)
     }
 
@@ -43,10 +42,15 @@ struct HomeView: View {
 
     @ViewBuilder
     private var content: some View {
-        if viewState.words.isEmpty && !viewState.isLoading {
+        switch viewState.loadState {
+        case .idle:
+            EmptyView()
+        case .loaded(let words) where words.isEmpty:
             emptyState
-        } else {
+        case .loaded:
             wordList
+        case .error(let errorMessage):
+            errorState(errorMessage)
         }
     }
 
@@ -75,6 +79,19 @@ struct HomeView: View {
         )
     }
 
+    private func errorState(_ message: String) -> some View {
+        ContentUnavailableView {
+            Label("Something Went Wrong", systemImage: "exclamationmark.triangle")
+        } description: {
+            Text(message)
+        } actions: {
+            Button("Try Again") {
+                viewStore.receive(action: .loadWords)
+            }
+            .buttonStyle(.borderedProminent)
+        }
+    }
+
     private func loadMoreIfNeeded(for word: Word) {
         guard word.id == viewState.words.last?.id else { return }
         viewStore.receive(action: .loadMore)
@@ -87,31 +104,22 @@ struct HomeView: View {
     }
 }
 
-// MARK: - Identifiable
-
-extension Word: Identifiable {}
-
 // MARK: - Preview
 
 #if DEBUG
 #Preview("With Words") {
-    HomeView(
-        viewState: .preview(words: Word.samples),
-        viewStore: .preview
-    )
+    HomeView(viewStore: .preview)
 }
 
 #Preview("Empty State") {
-    HomeView(
-        viewState: .preview(words: []),
-        viewStore: .preview
-    )
+    HomeView(viewStore: .previewEmpty)
 }
 
 #Preview("Loading") {
-    HomeView(
-        viewState: .previewLoading,
-        viewStore: .preview
-    )
+    HomeView(viewStore: .previewLoading)
+}
+
+#Preview("Error") {
+    HomeView(viewStore: .previewError)
 }
 #endif

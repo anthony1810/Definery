@@ -9,36 +9,33 @@ import Foundation
 import WordFeature
 
 #if DEBUG
-extension HomeViewState {
-    static func preview(
-        words: [Word] = Word.samples,
-        selectedLanguage: Locale.LanguageCode = .english
-    ) -> HomeViewState {
-        let state = HomeViewState()
-        state.tryUpdate(property: \.words, newValue: words)
-        state.tryUpdate(property: \.selectedLanguage, newValue: selectedLanguage)
-        return state
-    }
-
-    static var previewLoading: HomeViewState {
-        let state = HomeViewState()
-        state.loadingStarted()
-        return state
-    }
-}
-
 extension HomeViewStore {
+    /// Default preview with mock data
     static var preview: HomeViewStore {
         HomeViewStore(loader: { _ in
-            PreviewWordLoader()
+            MockWordLoader()
         })
     }
-}
 
-private struct PreviewWordLoader: WordLoaderProtocol {
-    func load() async throws -> [Word] {
-        try? await Task.sleep(for: .seconds(1))
-        return Word.samples
+    /// Preview that returns empty words
+    static var previewEmpty: HomeViewStore {
+        HomeViewStore(loader: { _ in
+            MockWordLoader(wordsPerLoad: 0)
+        })
+    }
+
+    /// Preview that simulates slow loading
+    static var previewLoading: HomeViewStore {
+        HomeViewStore(loader: { _ in
+            MockWordLoader(delay: .seconds(60))
+        })
+    }
+
+    /// Preview that fails with error
+    static var previewError: HomeViewStore {
+        HomeViewStore(loader: { _ in
+            MockWordLoader(shouldFail: true)
+        })
     }
 }
 #endif
