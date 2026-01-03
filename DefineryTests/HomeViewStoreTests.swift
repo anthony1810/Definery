@@ -93,6 +93,17 @@ final class HomeViewStoreTests {
         #expect(sut.loader.loadCallCount == 1)
     }
     
+    // MARK: - Load More
+    
+    @Test func loadMore_requestsLoadFromLoader() async throws {
+        let sut = await makeSUT()
+        
+        sut.loader.complete(with: .success([]))
+        try await sut.store.isolatedReceive(action: .loadMore)
+        
+        #expect(sut.loader.loadCallCount == 1)
+    }
+    
     @Test func loadMore_appendsWordsToExistingWords() async throws {
         await withMainSerialExecutor {
             let sut = await makeSUT()
@@ -100,7 +111,7 @@ final class HomeViewStoreTests {
             let newWords = [uniqueWord()]
             
             sut.loader.complete(with: .success(initialWords))
-            sut.store.receive(action: .loadMore)
+            sut.store.receive(action: .loadWords)
             await Task.megaYield()
             
             sut.loader.complete(with: .success(newWords))
@@ -111,15 +122,22 @@ final class HomeViewStoreTests {
         }
     }
     
-    // MARK: - Load More
-    
-    @Test func loadMore_requestsLoadFromLoader() async throws {
-        let sut = await makeSUT()
-        
-        sut.loader.complete(with: .success([]))
-        try await sut.store.isolatedReceive(action: .loadMore)
-        
-        #expect(sut.loader.loadCallCount == 1)
+    @Test func loadMore_doesNotDuplicaExistingWords() async throws {
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+            let existingWord = uniqueWord()
+            let newWord = uniqueWord()
+            
+            sut.loader.complete(with: .success([existingWord]))
+            sut.store.receive(action: .loadWords)
+            await Task.megaYield()
+            
+            sut.loader.complete(with: .success([existingWord, newWord]))
+            sut.store.receive(action: .loadMore)
+            await Task.megaYield()
+            
+            #expect(sut.state.words == [existingWord, newWord])
+        }
     }
     
 }
