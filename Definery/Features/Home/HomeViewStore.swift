@@ -33,6 +33,7 @@ actor HomeViewStore: ScreenActionStore {
     
     enum Action: ActionLockable, LoadingTrackable, Sendable {
         case loadWords
+        case loadMore
         
         var canTrackLoading: Bool {
             true
@@ -60,13 +61,17 @@ actor HomeViewStore: ScreenActionStore {
     
     func isolatedReceive(action: Action) async throws {
         guard await actionLocker.canExecute(action) else { return }
+        await viewState?.loadingStarted()
         
         switch action {
         case .loadWords:
             let words = try await loader.load()
             await viewState?.tryUpdate(property: \.words, newValue: words)
+        case .loadMore:
+            let _ = try await loader.load()
         }
         
         await actionLocker.unlock(action)
+        await viewState?.loadingFinished()
     }
 }

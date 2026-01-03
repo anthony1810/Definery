@@ -22,6 +22,8 @@ final class HomeViewStoreTests {
         sutTracker?.verify()
     }
     
+    // MARK: - Load
+    
     @Test func init_doesNotLoadWords() async {
         let sut = await makeSUT()
         
@@ -91,6 +93,16 @@ final class HomeViewStoreTests {
         #expect(sut.loader.loadCallCount == 1)
     }
     
+    // MARK: - Load More
+    
+    @Test func loadMore_requestsLoadFromLoader() async throws {
+        let sut = await makeSUT()
+        
+        sut.loader.complete(with: .success([]))
+        try await sut.store.isolatedReceive(action: .loadMore)
+        
+        #expect(sut.loader.loadCallCount == 1)
+    }
     
 }
 
