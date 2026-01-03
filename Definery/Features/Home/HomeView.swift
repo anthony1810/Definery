@@ -10,11 +10,12 @@ import ScreenStateKit
 import WordFeature
 
 struct HomeView: View {
-    @State private var viewState = HomeViewState()
+    @State private var viewState: HomeViewState
     @State private var viewStore: HomeViewStore
 
-    init(viewStore: HomeViewStore) {
+    init(viewStore: HomeViewStore, viewState: HomeViewState) {
         self._viewStore = State(initialValue: viewStore)
+        self._viewState = State(initialValue: viewState)
     }
 
     var body: some View {
@@ -112,18 +113,18 @@ extension HomeView {
 
 #if DEBUG
 #Preview("With Words") {
-    HomeView(viewStore: .preview)
+    HomeView(viewStore: .preview, viewState: HomeViewState())
 }
 
 #Preview("Empty State") {
-    HomeView(viewStore: .previewEmpty)
+    HomeView(viewStore: .previewEmpty, viewState: HomeViewState())
 }
 
 #Preview("Loading") {
-    HomeView(viewStore: .previewLoading)
+    HomeView(viewStore: .previewLoading, viewState: HomeViewState())
 }
 
 #Preview("Error") {
-    HomeView(viewStore: .previewError)
+    HomeView(viewStore: .previewError, viewState: HomeViewState())
 }
 #endif
