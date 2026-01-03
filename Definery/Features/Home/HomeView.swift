@@ -73,6 +73,7 @@ extension HomeView {
             }
 
             ProgressView()
+                .id(UUID())
                 .frame(maxWidth: .infinity)
                 .listRowSeparator(.hidden)
                 .onAppear {
