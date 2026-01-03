@@ -181,6 +181,8 @@ final class HomeViewStoreTests {
         }
     }
     
+    // MARK: - Select Language
+    
     @Test func selectLanguage_updatesSelectedLanguage() async throws {
         await withMainSerialExecutor {
             let sut = await makeSUT()
@@ -191,6 +193,29 @@ final class HomeViewStoreTests {
             await Task.megaYield()
             
             #expect(sut.state.selectedLanguage == .spanish)
+        }
+    }
+    
+    @Test func selectLanguage_clearsWordsAndReloadsFromLoader() async throws {
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+            let englishWords = [uniqueWord()]
+            let spanishWords = [uniqueWord()]
+            
+            // load english words
+            sut.loader.complete(with: .success(englishWords))
+            sut.store.receive(action: .loadWords)
+            await Task.megaYield()
+            
+            #expect(sut.state.words == englishWords)
+            
+            // change language - should clear and reload
+            sut.loader.complete(with: .success(spanishWords))
+            sut.store.receive(action: .selectLanguage(.spanish))
+            await Task.megaYield()
+            
+            #expect(sut.state.words == spanishWords)
+            #expect(sut.loader.loadCallCount == 2)
         }
     }
 }
