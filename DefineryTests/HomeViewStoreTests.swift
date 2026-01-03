@@ -80,7 +80,7 @@ final class HomeViewStoreTests {
         }
     }
     
-    @Test func loadMore_doesNotRequestLoadTwiceWhilePending() async throws {
+    @Test func loadWords_doesNotRequestLoadTwiceWhilePending() async throws {
         let sut = await makeSUT()
         
         sut.loader.complete(with: .success([]))
@@ -140,6 +140,17 @@ final class HomeViewStoreTests {
         }
     }
     
+    @Test func loadMore_deliversErrorToViewStateOnLoaderError() async throws {
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+            
+            sut.loader.complete(with: .failure(anyNSError()))
+            sut.store.receive(action: .loadMore)
+            await Task.megaYield()
+            
+            #expect(sut.state.displayError != nil)
+        }
+    }
 }
 
 // MARK: - Helpers
