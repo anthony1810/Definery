@@ -4,27 +4,9 @@
 //
 //  Created by Anthony on 2/1/26.
 //
-
-import SwiftUI
-import Observation
-
+import Foundation
 import ScreenStateKit
 import WordFeature
-
-@MainActor @Observable
-final class HomeViewState: ScreenState {
-    private(set) var words: [Word] = []
-    private(set) var selectedLanguage: Locale.LanguageCode = .english
-    
-    func tryUpdate<T>(property: @autoclosure @MainActor () -> KeyPath<HomeViewState, T>,
-                      newValue: T) {
-      guard let keypath = property() as? ReferenceWritableKeyPath<HomeViewState, T> else {
-        assertionFailure("Read-only property")
-        return
-      }
-      self[keyPath: keypath] = newValue
-    }
-}
 
 actor HomeViewStore: ScreenActionStore {
     public typealias ScreenState = HomeViewState
@@ -59,7 +41,7 @@ actor HomeViewStore: ScreenActionStore {
             do {
                 try await isolatedReceive(action: action)
             } catch {
-                await viewState?.showError(AppError.abnormalState(error.localizedDescription))
+                await handleError(error, for: action)
             }
         }
     }
@@ -68,28 +50,66 @@ actor HomeViewStore: ScreenActionStore {
         guard await actionLocker.canExecute(action) else { return }
         await viewState?.loadingStarted()
         
+        do {
+            switch action {
+            case .loadWords:
+                try await loadWords()
+            case .loadMore:
+                try await loadMore()
+            case .selectLanguage(let language):
+                try await selectLanguage(language)
+            }
+            
+            await actionLocker.unlock(action)
+            await viewState?.loadingFinished()
+        } catch {
+            await actionLocker.unlock(action)
+            await viewState?.loadingFinished()
+            throw error
+        }
+    }
+}
+
+// MARK: - Actions
+
+extension HomeViewStore {
+    private func loadWords() async throws {
         let selectedLanguage = await viewState?.selectedLanguage ?? .english
         let loader = loaderFactory(selectedLanguage)
-
-        switch action {
-        case .loadWords:
-            let words = try await loader.load()
-            await viewState?.tryUpdate(property: \.words, newValue: words)
-        case .loadMore:
-            let newWords = try await loader.load()
-            let currentWords = await viewState?.words ?? []
-            let uniqueNewWords = newWords.filter { !currentWords.contains($0) }
-            await viewState?.tryUpdate(property: \.words, newValue: currentWords + uniqueNewWords)
-        case .selectLanguage(let language):
-            await viewState?.tryUpdate(property: \.selectedLanguage, newValue: language)
-            await viewState?.tryUpdate(property: \.words, newValue: [])
-
-            let newLoader = loaderFactory(language)
-            let wordsFromNewSelectedLanguage = try await newLoader.load()
-            await viewState?.tryUpdate(property: \.words, newValue: wordsFromNewSelectedLanguage)
-        }
+        let words = try await loader.load()
+        await viewState?.tryUpdate(property: \.loadState, newValue: .loaded(words))
+    }
+    
+    private func loadMore() async throws {
+        let selectedLanguage = await viewState?.selectedLanguage ?? .english
+        let loader = loaderFactory(selectedLanguage)
+        let newWords = try await loader.load()
+        let currentWords = await viewState?.words ?? []
+        let uniqueNewWords = newWords.filter { !currentWords.contains($0) }
+        await viewState?.tryUpdate(property: \.loadState, newValue: .loaded(currentWords + uniqueNewWords))
+    }
+    
+    private func selectLanguage(_ language: Locale.LanguageCode) async throws {
+        await viewState?.tryUpdate(property: \.selectedLanguage, newValue: language)
+        await viewState?.tryUpdate(property: \.loadState, newValue: .idle)
         
-        await actionLocker.unlock(action)
-        await viewState?.loadingFinished()
+        let loader = loaderFactory(language)
+        let words = try await loader.load()
+        await viewState?.tryUpdate(property: \.loadState, newValue: .loaded(words))
+    }
+}
+
+// MARK: - Helpers
+
+extension HomeViewStore {
+    private func handleError(_ error: Error, for action: Action) async {
+        switch action {
+        case .loadWords, .selectLanguage:
+            await viewState?.tryUpdate(property: \.loadState, newValue: .error(error.localizedDescription))
+        case .loadMore:
+            // Keep existing words on loadMore error, only show alert
+            break
+        }
+        await viewState?.showError(AppError.abnormalState(error.localizedDescription))
     }
 }

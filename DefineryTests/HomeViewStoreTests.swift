@@ -56,28 +56,66 @@ final class HomeViewStoreTests {
         await withMainSerialExecutor {
             let sut = await makeSUT()
             let expectedError = anyNSError()
-            
+
             sut.loader.complete(with: .failure(expectedError))
             sut.store.receive(action: .loadWords)
-            
+
             await Task.megaYield()
-            
+
             #expect(sut.state.displayError != nil)
+        }
+    }
+
+    @Test func loadWords_transitionsToErrorStateOnLoaderError() async throws {
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+            let expectedError = anyNSError()
+
+            sut.loader.complete(with: .failure(expectedError))
+            sut.store.receive(action: .loadWords)
+
+            await Task.megaYield()
+
+            #expect(sut.state.loadState == .error(expectedError.localizedDescription))
+        }
+    }
+
+    @Test func loadWords_stopsLoadingOnError() async throws {
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+
+            sut.loader.complete(with: .failure(anyNSError()))
+            sut.store.receive(action: .loadWords)
+
+            await Task.megaYield()
+
+            #expect(sut.state.isLoading == false)
         }
     }
     
     @Test func loadWords_deliversWordsOnLoaderSuccess() async throws {
         let sut = await makeSUT()
         let expectedWords = [uniqueWord()]
-        
+
         do {
             sut.loader.complete(with: .success(expectedWords))
             try await sut.store.isolatedReceive(action: .loadWords)
-            
+
             #expect(sut.state.words == expectedWords)
         } catch {
             Issue.record("expected to succeed, but it failed with error: \(error)")
         }
+    }
+
+    @Test func loadWords_transitionsFromIdleToLoadedOnSuccess() async throws {
+        let sut = await makeSUT()
+
+        #expect(sut.state.loadState == .idle)
+
+        sut.loader.complete(with: .success([]))
+        try await sut.store.isolatedReceive(action: .loadWords)
+
+        #expect(sut.state.loadState == .loaded([]))
     }
     
     @Test func loadWords_doesNotRequestLoadTwiceWhilePending() async throws {
@@ -230,12 +268,26 @@ final class HomeViewStoreTests {
             })
             let state = HomeViewState()
             await store.binding(state: state)
-            
+
             loader.complete(with: .success([]))
             store.receive(action: .loadWords)
             await Task.megaYield()
-            
+
             #expect(capturedSelectedLanguage.value == [.english])
+        }
+    }
+
+    @Test func selectLanguage_transitionsToLoadedOnSuccess() async throws {
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+
+            #expect(sut.state.loadState == .idle)
+
+            sut.loader.complete(with: .success([]))
+            sut.store.receive(action: .selectLanguage(.spanish))
+            await Task.megaYield()
+
+            #expect(sut.state.loadState == .loaded([]))
         }
     }
 }
