@@ -180,6 +180,19 @@ final class HomeViewStoreTests {
             #expect(sut.state.words == initialWords)
         }
     }
+    
+    @Test func selectLanguage_updatesSelectedLanguage() async throws {
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+            
+            #expect(sut.state.selectedLanguage == .english)
+            
+            sut.store.receive(action: .selectLanguage(.spanish))
+            await Task.megaYield()
+            
+            #expect(sut.state.selectedLanguage == .spanish)
+        }
+    }
 }
 
 // MARK: - Helpers
