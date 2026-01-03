@@ -8,10 +8,11 @@ import Foundation
 import ScreenStateKit
 import WordFeature
 
+typealias WordLoaderFactory = @Sendable (Locale.LanguageCode) -> WordLoaderProtocol
+
 actor HomeViewStore: ScreenActionStore {
     public typealias ScreenState = HomeViewState
-    public typealias LoaderFactory = @Sendable (Locale.LanguageCode) -> WordLoaderProtocol
-    
+  
     weak var viewState: HomeViewState?
     
     private let actionLocker = ActionLocker()
@@ -26,9 +27,9 @@ actor HomeViewStore: ScreenActionStore {
         }
     }
     
-    private let loaderFactory: LoaderFactory
+    private let loaderFactory: WordLoaderFactory
     
-    init(loader: @escaping LoaderFactory) {
+    init(loader: @escaping WordLoaderFactory) {
         self.loaderFactory = loader
     }
     
