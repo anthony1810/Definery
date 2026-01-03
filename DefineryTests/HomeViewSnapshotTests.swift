@@ -21,7 +21,37 @@ struct HomeViewSnapshotTests {
     @Test("HomeView with words shows word list")
     func homeView_withWords_showsWordList() async throws {
         let view = makeSUT(result: .success(Word.mocks))
-                
+
+        assertSnapshot(
+            of: view,
+            as: .image(
+                precision: 0.96,
+                perceptualPrecision: 0.97,
+                layout: .device(config: .iPhone13)
+            ),
+            record: false
+        )
+    }
+
+    @Test("HomeView with empty words shows empty state")
+    func homeView_withEmptyWords_showsEmptyState() async throws {
+        let view = makeSUT(result: .success([]))
+
+        assertSnapshot(
+            of: view,
+            as: .image(
+                precision: 0.96,
+                perceptualPrecision: 0.97,
+                layout: .device(config: .iPhone13)
+            ),
+            record: false
+        )
+    }
+
+    @Test("HomeView with error shows error state")
+    func homeView_withError_showsErrorState() async throws {
+        let view = makeSUT(result: .failure(anyNSError()))
+
         assertSnapshot(
             of: view,
             as: .image(
@@ -71,5 +101,9 @@ extension HomeViewSnapshotTests {
         let loader = WordLoaderSpy()
         loader.complete(with: result)
         return loader
+    }
+
+    private func anyNSError() -> NSError {
+        NSError(domain: "test", code: 0, userInfo: [NSLocalizedDescriptionKey: "Something went wrong"])
     }
 }
