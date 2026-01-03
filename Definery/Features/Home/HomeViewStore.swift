@@ -68,7 +68,9 @@ actor HomeViewStore: ScreenActionStore {
             let words = try await loader.load()
             await viewState?.tryUpdate(property: \.words, newValue: words)
         case .loadMore:
-            let _ = try await loader.load()
+            let newWords = try await loader.load()
+            let currentWords = await viewState?.words ?? []
+            await viewState?.tryUpdate(property: \.words, newValue: currentWords + newWords)
         }
         
         await actionLocker.unlock(action)

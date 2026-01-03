@@ -80,7 +80,7 @@ final class HomeViewStoreTests {
         }
     }
     
-    @Test func loadWords_doesNotRequestLoadTwiceWhilePending() async throws {
+    @Test func loadMore_doesNotRequestLoadTwiceWhilePending() async throws {
         let sut = await makeSUT()
         
         sut.loader.complete(with: .success([]))
@@ -91,6 +91,24 @@ final class HomeViewStoreTests {
         _ = try await (first, second)
         
         #expect(sut.loader.loadCallCount == 1)
+    }
+    
+    @Test func loadMore_appendsWordsToExistingWords() async throws {
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+            let initialWords = [uniqueWord(), uniqueWord()]
+            let newWords = [uniqueWord()]
+            
+            sut.loader.complete(with: .success(initialWords))
+            sut.store.receive(action: .loadMore)
+            await Task.megaYield()
+            
+            sut.loader.complete(with: .success(newWords))
+            sut.store.receive(action: .loadMore)
+            await Task.megaYield()
+            
+            #expect(sut.state.words == initialWords + newWords)
+        }
     }
     
     // MARK: - Load More
