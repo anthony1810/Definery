@@ -369,10 +369,11 @@ struct HomeView: View {
 - [ ] Wire dependencies in app
 
 ### Phase 6: UI Layer - Home
-- [ ] Create HomeViewState + HomeViewStore + HomeView
-- [ ] Add language filter
-- [ ] Add pull-to-refresh
-- [ ] Add load more
+- [x] Create HomeViewState + HomeViewStore + HomeView
+- [x] Add language filter
+- [x] Add pull-to-refresh
+- [x] Add load more
+- [x] Add snapshot tests
 
 ### Phase 7: UI Layer - Library
 - [ ] Create LibraryViewState + LibraryViewModel + LibraryView
