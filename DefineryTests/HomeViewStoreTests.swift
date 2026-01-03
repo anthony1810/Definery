@@ -163,6 +163,23 @@ final class HomeViewStoreTests {
         
         #expect(sut.loader.loadCallCount == 1)
     }
+    
+    @Test func loadMore_keepExistingWordsOnError() async throws {
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+            let initialWords = [uniqueWord(), uniqueWord()]
+            
+            sut.loader.complete(with: .success(initialWords))
+            sut.store.receive(action: .loadWords)
+            await Task.megaYield()
+            
+            sut.loader.complete(with: .failure(anyNSError()))
+            sut.store.receive(action: .loadMore)
+            await Task.megaYield()
+            
+            #expect(sut.state.words == initialWords)
+        }
+    }
 }
 
 // MARK: - Helpers
