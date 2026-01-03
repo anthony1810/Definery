@@ -76,6 +76,10 @@ actor HomeViewStore: ScreenActionStore {
             await viewState?.tryUpdate(property: \.words, newValue: currentWords + uniqueNewWords)
         case .selectLanguage(let language):
             await viewState?.tryUpdate(property: \.selectedLanguage, newValue: language)
+            await viewState?.tryUpdate(property: \.words, newValue: [])
+            
+            let wordsFromNewSelectedLanguage = try await loader.load()
+            await viewState?.tryUpdate(property: \.words, newValue: wordsFromNewSelectedLanguage)
         }
         
         await actionLocker.unlock(action)
