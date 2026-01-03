@@ -20,17 +20,8 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             content
-                .navigationTitle("Definery")
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        LanguagePickerView(
-                            selected: viewState.selectedLanguage,
-                            onSelect: { language in
-                                viewStore.receive(action: .selectLanguage(language))
-                            }
-                        )
-                    }
-                }
+                .navigationTitle(String(localized: "navigation.title", table: "Home"))
+                .toolbar { toolbarContent }
         }
         .onShowLoading($viewState.isLoading)
         .onShowError($viewState.displayError)
@@ -39,7 +30,27 @@ struct HomeView: View {
             viewStore.receive(action: .loadWords)
         }
     }
+}
 
+// MARK: - Toolbar
+
+extension HomeView {
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            LanguagePickerView(
+                selected: viewState.selectedLanguage,
+                onSelect: { language in
+                    viewStore.receive(action: .selectLanguage(language))
+                }
+            )
+        }
+    }
+}
+
+// MARK: - Components
+
+extension HomeView {
     @ViewBuilder
     private var content: some View {
         switch viewState.loadState {
@@ -55,52 +66,44 @@ struct HomeView: View {
     }
 
     private var wordList: some View {
-        ScrollView {
-            LazyVStack(spacing: 12) {
-                ForEach(viewState.words) { word in
-                    WordCardView(word: word)
-                        .onAppear {
-                            loadMoreIfNeeded(for: word)
-                        }
-                }
+        List {
+            ForEach(viewState.words) { word in
+                WordCardView(word: word)
+                    .listRowSeparator(.hidden)
             }
-            .padding()
+
+            ProgressView()
+                .frame(maxWidth: .infinity)
+                .listRowSeparator(.hidden)
+                .onAppear {
+                    viewStore.receive(action: .loadMore)
+                }
         }
+        .listStyle(.plain)
         .refreshable {
-            await refresh()
+            try? await viewStore.isolatedReceive(action: .loadWords)
         }
     }
 
     private var emptyState: some View {
         ContentUnavailableView(
-            "No Words",
+            String(localized: "empty.title", table: "Home"),
             systemImage: "book.closed",
-            description: Text("Pull to refresh or try a different language")
+            description: Text("empty.description", tableName: "Home")
         )
     }
 
     private func errorState(_ message: String) -> some View {
         ContentUnavailableView {
-            Label("Something Went Wrong", systemImage: "exclamationmark.triangle")
+            Label(String(localized: "error.title", table: "Home"), systemImage: "exclamationmark.triangle")
         } description: {
             Text(message)
         } actions: {
-            Button("Try Again") {
+            Button(String(localized: "error.tryAgain", table: "Home")) {
                 viewStore.receive(action: .loadWords)
             }
             .buttonStyle(.borderedProminent)
         }
-    }
-
-    private func loadMoreIfNeeded(for word: Word) {
-        guard word.id == viewState.words.last?.id else { return }
-        viewStore.receive(action: .loadMore)
-    }
-
-    @MainActor
-    private func refresh() async {
-        viewStore.receive(action: .loadWords)
-        try? await Task.sleep(for: .milliseconds(500))
     }
 }
 
