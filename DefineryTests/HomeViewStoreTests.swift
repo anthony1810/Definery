@@ -189,6 +189,7 @@ final class HomeViewStoreTests {
             
             #expect(sut.state.selectedLanguage == .english)
             
+            sut.loader.complete(with: .success([]))
             sut.store.receive(action: .selectLanguage(.spanish))
             await Task.megaYield()
             

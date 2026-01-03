@@ -28,8 +28,7 @@ public extension Optional {
       return try result.get()
       
     case .none:
-      Issue.record("Stub not set")
-      throw NSError(domain: "Stub not set error", code: 0)
+      fatalError("Stub not set - did you forget to call complete(with:)?")
     }
   }
 }
