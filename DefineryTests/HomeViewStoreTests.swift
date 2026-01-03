@@ -219,6 +219,25 @@ final class HomeViewStoreTests {
             #expect(sut.loader.loadCallCount == 2)
         }
     }
+    
+    @Test func loadWords_requestsLoaderWithSelectedLanguage() async throws {
+        await withMainSerialExecutor {
+            let capturedSelectedLanguage = LockIsolated<[Locale.LanguageCode]>([])
+            let loader = WordLoaderSpy()
+            let store = HomeViewStore(loader: { language in
+                capturedSelectedLanguage.withValue { $0.append(language) }
+                return loader
+            })
+            let state = HomeViewState()
+            await store.binding(state: state)
+            
+            loader.complete(with: .success([]))
+            store.receive(action: .loadWords)
+            await Task.megaYield()
+            
+            #expect(capturedSelectedLanguage.value == [.english])
+        }
+    }
 }
 
 // MARK: - Helpers
@@ -245,7 +264,7 @@ extension HomeViewStoreTests {
     ) async -> SUT {
         let loader = WordLoaderSpy()
         let state = HomeViewState()
-        let store = HomeViewStore(loader: loader)
+        let store = HomeViewStore(loader: { _ in loader })
         
         await store.binding(state: state)
         
