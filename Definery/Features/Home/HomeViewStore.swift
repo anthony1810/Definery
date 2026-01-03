@@ -14,6 +14,7 @@ import WordFeature
 @MainActor @Observable
 final class HomeViewState: ScreenState {
     private(set) var words: [Word] = []
+    private(set) var selectedLanguage: Locale.LanguageCode = .english
     
     func tryUpdate<T>(property: @autoclosure @MainActor () -> KeyPath<HomeViewState, T>,
                       newValue: T) {
@@ -34,6 +35,7 @@ actor HomeViewStore: ScreenActionStore {
     enum Action: ActionLockable, LoadingTrackable, Sendable {
         case loadWords
         case loadMore
+        case selectLanguage(Locale.LanguageCode)
         
         var canTrackLoading: Bool {
             true
@@ -72,6 +74,8 @@ actor HomeViewStore: ScreenActionStore {
             let currentWords = await viewState?.words ?? []
             let uniqueNewWords = newWords.filter { !currentWords.contains($0) }
             await viewState?.tryUpdate(property: \.words, newValue: currentWords + uniqueNewWords)
+        case .selectLanguage(let language):
+            await viewState?.tryUpdate(property: \.selectedLanguage, newValue: language)
         }
         
         await actionLocker.unlock(action)
