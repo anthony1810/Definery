@@ -151,6 +151,18 @@ final class HomeViewStoreTests {
             #expect(sut.state.displayError != nil)
         }
     }
+    
+    @Test func loadMore_doesNotRequestLoadTwiceWhilePending() async throws {
+        let sut = await makeSUT()
+        
+        sut.loader.complete(with: .success([]))
+        async let firstLoad: () = sut.store.isolatedReceive(action: .loadMore)
+        async let secondLoad: () = sut.store.isolatedReceive(action: .loadMore)
+        
+        _ = try await (firstLoad, secondLoad)
+        
+        #expect(sut.loader.loadCallCount == 1)
+    }
 }
 
 // MARK: - Helpers
