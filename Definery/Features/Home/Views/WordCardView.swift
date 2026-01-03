@@ -84,7 +84,7 @@ private struct MeaningRow: View {
 #Preview("Word List") {
     ScrollView {
         LazyVStack(spacing: 12) {
-            ForEach(Word.samples) { word in
+            ForEach(Word.mocks) { word in
                 WordCardView(word: word)
             }
         }
