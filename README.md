@@ -109,7 +109,9 @@ User triggers refresh/load
 | Purpose | API | Endpoint |
 |---------|-----|----------|
 | Random Words | [random-word-api](https://random-word-api.herokuapp.com) | `GET /word?number=20&lang=en` |
-| Definitions | [dictionaryapi.dev](https://dictionaryapi.dev) | `GET /api/v2/entries/{lang}/{word}` |
+| Definitions | [Wiktionary API](https://en.wiktionary.org) | `GET /w/api.php?action=parse&format=json&page={word}&prop=wikitext` |
+
+**Note:** Wiktionary provides English definitions for words in all supported languages (en, es, it, de, fr, zh, pt-br).
 
 ---
 
@@ -136,7 +138,7 @@ Definery/
 │   ├── RemoteWordLoader.swift        # Composite loader (random words + definitions)
 │   ├── WordsEndpoint.swift           # URL builder for APIs
 │   ├── RandomWordMapper.swift        # Maps Random Word API JSON → [String]
-│   ├── DefinitionMapper.swift        # Maps Dictionary API JSON → Word
+│   ├── DefinitionMapper.swift        # Maps Wiktionary API wikitext → Word
 │   └── WordMapper.swift              # Legacy mapper (deprecated)
 │
 ├── WordAPITests/                     # API tests
@@ -491,7 +493,7 @@ dependencies: [
 ## Resources
 
 - [ScreenStateKit](https://github.com/anthony1810/ScreenStateKit) - State management toolkit
-- [Free Dictionary API](https://dictionaryapi.dev/) - Word definitions
+- [Wiktionary API](https://en.wiktionary.org/w/api.php) - Word definitions (multi-language support)
 - [Random Word API](https://random-word-api.herokuapp.com/home) - Random words
 - [swift-clocks](https://github.com/pointfreeco/swift-clocks) - Testable Swift concurrency clocks
 - [swift-snapshot-testing](https://github.com/pointfreeco/swift-snapshot-testing) - Snapshot testing library

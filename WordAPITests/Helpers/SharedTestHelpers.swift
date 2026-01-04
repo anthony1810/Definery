@@ -27,6 +27,10 @@ func anyLanguageCode() -> String {
     "en"
 }
 
+func anyWord() -> String {
+    "anyword"
+}
+
 // MARK: - HTTPURLResponse Extension
 
 extension HTTPURLResponse {
