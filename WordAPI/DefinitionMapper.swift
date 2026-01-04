@@ -94,8 +94,9 @@ public enum DefinitionMapper {
     // MARK: - Wikitext Parsing
 
     private static func extractPhonetic(from section: String) -> String? {
-        // Match {{IPA|lang|/phonetic/}} or {{IPA|lang|/phonetic/|/alternate/}}
-        let ipaPattern = "\\{\\{IPA\\|[a-z-]+\\|(/[^/|}]+/)(?:\\|[^}]*)?\\}\\}"
+        // Match {{IPA|lang|/phonetic/}} - phonetic can contain any chars except }}
+        // Examples: {{IPA|en|/ˈɡæðə(ɹ)/}}, {{IPA|en|/həˈləʊ/|/hɛˈləʊ/}}
+        let ipaPattern = "\\{\\{IPA\\|[a-z-]+\\|(/[^}]+?/)(?:\\|[^}]*)?\\}\\}"
 
         guard let regex = try? NSRegularExpression(pattern: ipaPattern, options: []),
               let match = regex.firstMatch(in: section, range: NSRange(section.startIndex..., in: section)),
@@ -180,7 +181,11 @@ public enum DefinitionMapper {
             if trimmed.hasPrefix("#") && !trimmed.hasPrefix("#:") && !trimmed.hasPrefix("#*") {
                 if definition == nil {
                     let defText = String(trimmed.dropFirst()).trimmingCharacters(in: .whitespaces)
-                    definition = cleanWikitext(defText)
+                    let cleaned = cleanWikitext(defText)
+                    // Only accept valid definitions
+                    if isValidDefinition(cleaned) {
+                        definition = cleaned
+                    }
                 }
             }
 
@@ -198,6 +203,12 @@ public enum DefinitionMapper {
 
         guard let def = definition, !def.isEmpty else { return nil }
         return (def, example)
+    }
+
+    private static func isValidDefinition(_ definition: String) -> Bool {
+        // Filter out definitions that are just punctuation or too short
+        let stripped = definition.trimmingCharacters(in: .punctuationCharacters.union(.whitespaces))
+        return stripped.count >= 2
     }
 
     private static func cleanWikitext(_ text: String) -> String {
@@ -257,8 +268,8 @@ public enum DefinitionMapper {
     private static func extractExample(from text: String) -> String? {
         var result = text
 
-        // Handle {{ux|en|Example text}}
-        let uxPattern = "\\{\\{ux\\|[a-z]+\\|([^}]+)\\}\\}"
+        // Handle {{ux|en|Example text}} or {{usex|en|Example text}}
+        let uxPattern = "\\{\\{u(?:se)?x\\|[a-z-]+\\|([^}]+)\\}\\}"
         if let regex = try? NSRegularExpression(pattern: uxPattern, options: []),
            let match = regex.firstMatch(in: result, range: NSRange(result.startIndex..., in: result)),
            let range = Range(match.range(at: 1), in: result) {
