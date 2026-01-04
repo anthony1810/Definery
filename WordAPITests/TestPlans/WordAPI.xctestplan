@@ -12,7 +12,13 @@
 
   },
   "testTargets" : [
-
+    {
+      "target" : {
+        "containerPath" : "container:Definery.xcodeproj",
+        "identifier" : "92A75F2D2F04C9B7008DC78C",
+        "name" : "WordAPITests"
+      }
+    }
   ],
   "version" : 1
 }
