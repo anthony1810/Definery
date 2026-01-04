@@ -29,7 +29,7 @@ extension DefineryApp {
         let httpClient = self.httpClient
         let store = self.store
         let randomWordsBaseURL = URL(string: "https://random-word-api.herokuapp.com")!
-        let definitionBaseURL = URL(string: "https://api.dictionaryapi.dev")!
+        let definitionBaseURL = URL(string: "https://en.wiktionary.org")!
 
         return { language in
             let randomWordsURL = WordsEndpoint.randomWords(
