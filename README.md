@@ -130,17 +130,22 @@ Definery/
 │   └── WordTests.swift
 │
 ├── WordAPI/                          # API Layer (Framework)
-│   ├── HTTPClientProtocol.swift      # HTTP client abstraction
-│   ├── URLSessionHTTPClient.swift    # URLSession implementation
-│   ├── RemoteWordLoader.swift        # Implements WordLoaderProtocol
+│   ├── Shared/
+│   │   ├── HTTPClientProtocol.swift  # HTTP client abstraction
+│   │   └── URLSessionHTTPClient.swift # URLSession implementation
+│   ├── RemoteWordLoader.swift        # Composite loader (random words + definitions)
 │   ├── WordsEndpoint.swift           # URL builder for APIs
-│   ├── WordMapper.swift              # Maps API JSON → Word
-│   └── RemoteWord.swift              # API DTO (Decodable)
+│   ├── RandomWordMapper.swift        # Maps Random Word API JSON → [String]
+│   ├── DefinitionMapper.swift        # Maps Dictionary API JSON → Word
+│   └── WordMapper.swift              # Legacy mapper (deprecated)
 │
 ├── WordAPITests/                     # API tests
 │   ├── RemoteWordLoaderTests.swift
+│   ├── RandomWordMapperTests.swift
+│   ├── DefinitionMapperTests.swift
 │   ├── WordMapperTests.swift
-│   └── WordsEndpointTests.swift
+│   ├── WordsEndpointTests.swift
+│   └── WordAPIEndToEndTests.swift
 │
 ├── WordCache/                        # Cache Layer (Framework)
 │   ├── LocalWordLoader.swift         # Cache use case (implements WordCacheProtocol)
@@ -164,25 +169,32 @@ Definery/
 ├── WordCacheInfrastructureTests/     # Infrastructure tests
 │   └── SwiftDataWordStoreTests.swift
 │
+├── DefineryTests/                    # Main App Tests
+│   ├── HomeViewStoreTests.swift
+│   ├── HomeViewSnapshotTests.swift
+│   ├── RemoteWithLocalFallbackLoaderTests.swift
+│   └── Helpers/
+│       ├── MemoryLeakTracker.swift
+│       ├── WordLoaderSpy.swift
+│       ├── WordCacheSpy.swift
+│       └── TestHelpers.swift
+│
 └── Definery/                         # Main App Target
     ├── DefineryApp.swift             # App entry point
+    ├── AppError.swift                # App-level error handling
     ├── Composer/
-    │   └── WordLoaderComposer.swift  # Wires remote + local with fallback
+    │   ├── HomeUIComposer.swift      # Wires HomeView dependencies
+    │   └── RemoteWithLocalFallbackLoader.swift  # Remote + local fallback
     └── Features/
-        ├── Home/
-        │   ├── HomeViewState.swift   # ScreenState subclass
-        │   ├── HomeViewStore.swift   # ScreenActionStore actor
-        │   └── HomeView.swift        # SwiftUI view
-        ├── Library/
-        │   ├── LibraryViewState.swift
-        │   ├── LibraryViewStore.swift
-        │   └── LibraryView.swift
-        ├── Quiz/
-        │   ├── QuizViewState.swift
-        │   ├── QuizViewStore.swift   # Uses Clock for countdown timer
-        │   └── QuizView.swift
-        └── WordDetail/
-            └── WordDetailView.swift
+        └── Home/
+            ├── HomeViewState.swift   # ScreenState subclass
+            ├── HomeViewStore.swift   # ScreenActionStore actor
+            ├── HomeView.swift        # SwiftUI view
+            ├── Preview/
+            │   └── HomeViewStore+Preview.swift
+            └── Views/
+                ├── LanguagePickerView.swift
+                └── WordCardView.swift
 ```
 
 ---
@@ -364,9 +376,9 @@ struct HomeView: View {
 - [x] Write SwiftDataWordStoreTests (10 tests)
 
 ### Phase 5: Composition
-- [ ] Create WordLoaderComposer
-- [ ] Implement remote-with-fallback pattern
-- [ ] Wire dependencies in app
+- [x] Create HomeUIComposer
+- [x] Implement remote-with-fallback pattern (RemoteWithLocalFallbackLoader)
+- [x] Wire dependencies in app
 
 ### Phase 6: UI Layer - Home
 - [x] Create HomeViewState + HomeViewStore + HomeView
