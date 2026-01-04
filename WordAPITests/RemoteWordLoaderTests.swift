@@ -25,96 +25,103 @@ final class RemoteWordLoaderTests {
         #expect(sut.client.requestedURLs.isEmpty)
     }
 
-    // MARK: - Load Tests
+    // MARK: - Load Tests - Random Words Request
 
-    @Test func load_requestsDataFromURL() async throws {
-        let url = URL(string: "https://a-given-url.com")!
-        let sut = makeSUT(url: url)
+    @Test func load_requestsRandomWordsFromURL() async throws {
+        let randomWordsURL = anyURL()
+        let sut = makeSUT(randomWordsURL: randomWordsURL)
+        sut.client.complete(withStatusCode: 200, data: makeWordsJSON([]))
 
         _ = try? await sut.loader.load()
 
-        #expect(sut.client.requestedURLs == [url])
+        #expect(sut.client.requestedURLs == [randomWordsURL])
     }
 
-    @Test func load_requestsDataFromURLTwice() async throws {
-        let url = URL(string: "https://a-given-url.com")!
-        let sut = makeSUT(url: url)
-
-        _ = try? await sut.loader.load()
-        _ = try? await sut.loader.load()
-
-        #expect(sut.client.requestedURLs == [url, url])
-    }
-
-    @Test func load_deliversErrorOnClientError() async {
+    @Test func load_deliversConnectivityErrorOnRandomWordsClientError() async {
         let sut = makeSUT()
-        sut.client.stub = .failure(anyNSError())
+        sut.client.complete(with: anyNSError())
 
         await #expect(throws: RemoteWordLoader.Error.connectivity) {
             try await sut.loader.load()
         }
     }
 
-    @Test func load_deliversErrorOnNon200HTTPResponse() async {
+    @Test func load_deliversInvalidDataErrorOnInvalidRandomWordsResponse() async {
         let sut = makeSUT()
-
-        let samples = [199, 201, 300, 400, 500]
-        for statusCode in samples {
-            sut.client.stub = .success((anyData(), HTTPURLResponse(statusCode: statusCode)))
-
-            await #expect(throws: RemoteWordLoader.Error.invalidData) {
-                try await sut.loader.load()
-            }
-        }
-    }
-
-    @Test func load_deliversErrorOn200HTTPResponseWithInvalidJSON() async {
-        let sut = makeSUT()
-        let invalidJSON = Data("invalid json".utf8)
-        sut.client.stub = .success((invalidJSON, HTTPURLResponse(statusCode: 200)))
+        sut.client.complete(withStatusCode: 200, data: Data("invalid".utf8))
 
         await #expect(throws: RemoteWordLoader.Error.invalidData) {
             try await sut.loader.load()
         }
     }
 
-    @Test func load_deliversNoItemsOn200HTTPResponseWithEmptyJSONArray() async throws {
-        let sut = makeSUT()
-        let emptyListJSON = makeItemsJSON([])
-        sut.client.stub = .success((emptyListJSON, HTTPURLResponse(statusCode: 200)))
+    // MARK: - Load Tests - Definition Requests
 
-        let result = try await sut.loader.load()
-
-        #expect(result == [])
+    @Test func load_requestsDefinitionForEachRandomWord() async throws {
+        let definitionBaseURL = anyURL()
+        let sut = makeSUT(definitionBaseURL: definitionBaseURL)
+        let words = ["hello", "world"]
+        
+        sut.client.complete(withStatusCode: 200, data: makeWordsJSON(words), at: 0)
+        sut.client.complete(withStatusCode: 200, data: Data(), at: 1)
+        sut.client.complete(withStatusCode: 200, data: Data(), at: 2)
+        
+        _ = try? await sut.loader.load()
+        
+        #expect(sut.client.requestedURLs.contains(definitionBaseURL.appending(path: "hello")))
+        #expect(sut.client.requestedURLs.contains(definitionBaseURL.appending(path: "world")))
     }
 
-    @Test func load_deliversItemsOn200HTTPResponseWithJSONItems() async throws {
+    @Test func load_deliversWordsOnSuccessfulResponses() async throws {
         let sut = makeSUT()
-
-        let item1 = makeItem(
-            id: UUID(),
-            text: "hello",
-            language: "en",
-            phonetic: "həˈləʊ",
-            meanings: [
-                makeMeaning(partOfSpeech: "noun", definition: "A greeting", example: "Hello there!")
-            ]
+        
+        sut.client.complete(withStatusCode: 200, data: makeWordsJSON(["hello"]), at: 0)
+        sut.client.complete(
+            withStatusCode: 200,
+            data: makeDefinitionJSON(
+                word: "hello",
+                phonetic: "/həˈloʊ/",
+                meanings: [
+                    makeMeaningJSON(
+                        partOfSpeech: "noun",
+                        definition: "A greeting"
+                    )
+                ]
+            ),
+            at: 1
         )
-
-        let item2 = makeItem(
-            id: UUID(),
-            text: "world",
-            language: "en",
-            phonetic: nil,
-            meanings: []
-        )
-
-        let json = makeItemsJSON([item1.json, item2.json])
-        sut.client.stub = .success((json, HTTPURLResponse(statusCode: 200)))
-
+        
         let result = try await sut.loader.load()
+        
+        #expect(result.count == 1)
+        #expect(result[0].text == "hello")
+        #expect(result[0].phonetic == "/həˈloʊ/")
+        #expect(result[0].meanings[0].partOfSpeech == "noun")
+        #expect(result[0].meanings[0].definition == "A greeting")
+    }
 
-        #expect(result == [item1.model, item2.model])
+    @Test func load_skipsWordsWithFailedDefinitions() async throws {
+        let sut = makeSUT()
+        
+        sut.client.complete(withStatusCode: 200, data: makeWordsJSON(["hello", "word"]), at: 0)
+        sut.client.complete(with: anyNSError(), at: 1)
+        sut.client.complete(
+            withStatusCode: 200,
+            data: makeDefinitionJSON(
+                word: "word",
+                meanings: [
+                    makeMeaningJSON(partOfSpeech: "noun", definition: "The earth")
+                ]
+            ),
+            at: 2
+        )
+        
+        let result = try await sut.loader.load()
+        
+        #expect(result.count == 1)
+        #expect(result[0].text == "word")
+        #expect(result[0].meanings[0].partOfSpeech == "noun")
+        #expect(result[0].meanings[0].definition == "The earth")
     }
 }
 
@@ -132,14 +139,21 @@ extension RemoteWordLoaderTests {
     }
 
     private func makeSUT(
-        url: URL = URL(string: "https://any-url.com")!,
+        randomWordsURL: URL = anyURL(),
+        definitionBaseURL: URL = anyURL(),
+        language: String = anyLanguageCode(),
         fileId: String = #fileID,
         filePath: String = #filePath,
         line: Int = #line,
         column: Int = #column
     ) -> SUT {
         let client = HTTPClientSpy()
-        let loader = RemoteWordLoader(url: url, client: client)
+        let loader = RemoteWordLoader(
+            client: client,
+            randomWordsURL: randomWordsURL,
+            definitionBaseURL: definitionBaseURL,
+            language: language
+        )
         let sut = SUT(loader: loader, client: client)
 
         sutTracker = MemoryLeakTracker(
@@ -155,80 +169,56 @@ extension RemoteWordLoaderTests {
         return sut
     }
 
-    private func makeItem(
-        id: UUID,
-        text: String,
-        language: String,
-        phonetic: String?,
-        meanings: [(model: Meaning, json: [String: Any])]
-    ) -> (model: Word, json: [String: Any]) {
-        let model = Word(
-            id: id,
-            text: text,
-            language: language,
-            phonetic: phonetic,
-            meanings: meanings.map { $0.model }
-        )
+    // MARK: - JSON Helpers
 
-        var json: [String: Any] = [
-            "id": id.uuidString,
-            "text": text,
-            "language": language,
-            "meanings": meanings.map { $0.json }
-        ]
-
-        if let phonetic = phonetic {
-            json["phonetic"] = phonetic
-        }
-
-        return (model, json)
+    private func makeDefinitionJSON(
+        word: String,
+        phonetic: String? = nil,
+        meanings: [[String: Any]]
+    ) -> Data {
+        var wordJSON: [String: Any] = ["word": word, "meanings": meanings]
+        if let phonetic { wordJSON["phonetic"] = phonetic }
+        return try! JSONSerialization.data(withJSONObject: [wordJSON])
     }
 
-    private func makeMeaning(
+    private func makeMeaningJSON(
         partOfSpeech: String,
         definition: String,
-        example: String?
-    ) -> (model: Meaning, json: [String: Any]) {
-        let model = Meaning(
-            partOfSpeech: partOfSpeech,
-            definition: definition,
-            example: example
-        )
-
-        var json: [String: Any] = [
-            "partOfSpeech": partOfSpeech,
-            "definition": definition
-        ]
-
-        if let example = example {
-            json["example"] = example
-        }
-
-        return (model, json)
-    }
-
-    private func makeItemsJSON(_ items: [[String: Any]]) -> Data {
-        let json = ["items": items]
-        return try! JSONSerialization.data(withJSONObject: json)
+        example: String? = nil
+    ) -> [String: Any] {
+        var defJSON: [String: Any] = ["definition": definition]
+        if let example { defJSON["example"] = example }
+        return ["partOfSpeech": partOfSpeech, "definitions": [defJSON]]
     }
 }
 
 // MARK: - HTTPClientSpy
 
 final class HTTPClientSpy: HTTPClient, @unchecked Sendable {
-    var requestedURLs: [URL] = []
-    var stub: Result<(Data, HTTPURLResponse), Error> = .success((Data(), HTTPURLResponse()))
+    private var messages: [URL] = []
+    private var stubs: [Int: Result<(Data, HTTPURLResponse), Error>] = [:]
+
+    var requestedURLs: [URL] {
+        messages
+    }
+
+    func complete(with error: Error, at index: Int = 0) {
+        stubs[index] = .failure(error)
+    }
+
+    func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
+        let response = HTTPURLResponse(statusCode: code)
+        stubs[index] = .success((data, response))
+    }
 
     func get(from url: URL) async throws -> (Data, HTTPURLResponse) {
-        requestedURLs.append(url)
+        let index = messages.count
+        messages.append(url)
+
+        guard let stub = stubs[index] else {
+            throw anyNSError()
+        }
+
         return try stub.get()
-    }
-}
-
-// MARK: - HTTPURLResponse Extension
-
-extension HTTPURLResponse {
-    convenience init(statusCode: Int) {
-        self.init(url: URL(string: "https://any-url.com")!, statusCode: statusCode, httpVersion: nil, headerFields: nil)!
     }
 }
