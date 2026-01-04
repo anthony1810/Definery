@@ -50,12 +50,26 @@ final class WordAPIEndToEndTests {
         let sut = makeSUT()
         let url = WordsEndpoint.definition(word: "asdfghjklzxcvbnm", language: "en")
             .url(baseURL: URL(string: "https://api.dictionaryapi.dev")!)
-        
+
         let (data, response) = try await sut.client.get(from: url)
-        
+
         #expect(throws: DefinitionMapper.Error.invalidData) {
             try DefinitionMapper.map(data, from: response, language: "en")
         }
+    }
+
+    @Test func getWordDefinition_deliversMappableResponseForSpanish() async throws {
+        let sut = makeSUT()
+        let url = WordsEndpoint.definition(word: "hola", language: "es")
+            .url(baseURL: URL(string: "https://api.dictionaryapi.dev")!)
+
+        let (data, response) = try await sut.client.get(from: url)
+
+        let word = try DefinitionMapper.map(data, from: response, language: "es")
+
+        #expect(word.text == "hola")
+        #expect(word.language == "es")
+        #expect(!word.meanings.isEmpty)
     }
 }
 

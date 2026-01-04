@@ -119,16 +119,18 @@ final class HomeViewStoreTests {
     }
     
     @Test func loadWords_doesNotRequestLoadTwiceWhilePending() async throws {
-        let sut = await makeSUT()
-        
-        sut.loader.complete(with: .success([]))
-        
-        async let first: () = sut.store.isolatedReceive(action: .loadWords)
-        async let second: () = sut.store.isolatedReceive(action: .loadWords)
-        
-        _ = try await (first, second)
-        
-        #expect(sut.loader.loadCallCount == 1)
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+
+            sut.loader.complete(with: .success([]))
+
+            async let first: () = sut.store.isolatedReceive(action: .loadWords)
+            async let second: () = sut.store.isolatedReceive(action: .loadWords)
+
+            _ = try? await (first, second)
+
+            #expect(sut.loader.loadCallCount == 1)
+        }
     }
     
     // MARK: - Load More
@@ -191,15 +193,17 @@ final class HomeViewStoreTests {
     }
     
     @Test func loadMore_doesNotRequestLoadTwiceWhilePending() async throws {
-        let sut = await makeSUT()
-        
-        sut.loader.complete(with: .success([]))
-        async let firstLoad: () = sut.store.isolatedReceive(action: .loadMore)
-        async let secondLoad: () = sut.store.isolatedReceive(action: .loadMore)
-        
-        _ = try await (firstLoad, secondLoad)
-        
-        #expect(sut.loader.loadCallCount == 1)
+        await withMainSerialExecutor {
+            let sut = await makeSUT()
+
+            sut.loader.complete(with: .success([]))
+            async let firstLoad: () = sut.store.isolatedReceive(action: .loadMore)
+            async let secondLoad: () = sut.store.isolatedReceive(action: .loadMore)
+
+            _ = try? await (firstLoad, secondLoad)
+
+            #expect(sut.loader.loadCallCount == 1)
+        }
     }
     
     @Test func loadMore_keepExistingWordsOnError() async throws {

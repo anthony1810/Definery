@@ -108,8 +108,6 @@ extension HomeViewSnapshotTests {
             line: line
         )
 
-        if let message = failure {
-            Issue.record(Comment(rawValue: message), sourceLocation: SourceLocation(fileID: "", filePath: "\(file)", line: Int(line), column: 0))
-        }
+        #expect(failure == nil, "\(failure ?? "")")
     }
 }
