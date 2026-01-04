@@ -58,32 +58,63 @@ final class WordAPIEndToEndTests {
         }
     }
 
-    @Test func getWordDefinition_deliversMappableResponseForSpanish() async throws {
+
+    // MARK: - Multi-Language Support Tests
+
+    @Test(arguments: randomWordAPILanguages)
+    func getRandomWords_deliversResultsForAllSupportedLanguages(language: String) async throws {
         let sut = makeSUT()
-        let url = WordsEndpoint.definition(word: "hola", language: "es")
+        let url = WordsEndpoint.randomWords(count: 3, language: language)
+            .url(baseURL: URL(string: "https://random-word-api.herokuapp.com")!)
+
+        let (data, response) = try await sut.client.get(from: url)
+
+        let words = try RandomWordMapper.map(data, from: response)
+
+        #expect(words.count == 3, "Expected 3 words for language '\(language)', got \(words.count)")
+        #expect(words.allSatisfy { !$0.isEmpty }, "Expected non-empty words for language '\(language)'")
+    }
+
+    @Test(arguments: dictionaryAPITestWords)
+    func getWordDefinition_deliversResultsForAllSupportedLanguages(testCase: (language: String, word: String)) async throws {
+        let sut = makeSUT()
+        let url = WordsEndpoint.definition(word: testCase.word, language: testCase.language)
             .url(baseURL: URL(string: "https://api.dictionaryapi.dev")!)
 
         let (data, response) = try await sut.client.get(from: url)
 
-        let word = try DefinitionMapper.map(data, from: response, language: "es")
+        let word = try DefinitionMapper.map(data, from: response, language: testCase.language)
 
-        #expect(word.text == "hola")
-        #expect(word.language == "es")
-        #expect(!word.meanings.isEmpty)
+        #expect(word.text == testCase.word, "Expected word '\(testCase.word)' for language '\(testCase.language)'")
+        #expect(word.language == testCase.language)
+        #expect(!word.meanings.isEmpty, "Expected meanings for '\(testCase.word)' in '\(testCase.language)'")
     }
 }
+
+// MARK: - Test Data
+
+// Random Word API supported languages (from https://random-word-api.herokuapp.com/languages)
+// Note: Portuguese uses "pt-br" not "pt"
+private let randomWordAPILanguages = ["en", "es", "it", "de", "fr", "zh", "pt-br"]
+
+// Dictionary API (dictionaryapi.dev) only supports English
+private let dictionaryAPILanguages = ["en"]
+
+private let dictionaryAPITestWords: [(language: String, word: String)] = [
+    ("en", "hello")
+]
 
 // MARK: - Helpers
 
 extension WordAPIEndToEndTests {
     final class SUT {
         let client: URLSessionHTTPClient
-        
+
         init(client: URLSessionHTTPClient) {
             self.client = client
         }
     }
-    
+
     private func makeSUT(
         fileId: String = #fileID,
         filePath: String = #filePath,
@@ -93,7 +124,7 @@ extension WordAPIEndToEndTests {
         let configuration = URLSessionConfiguration.ephemeral
         let client = URLSessionHTTPClient(session: URLSession(configuration: configuration))
         let sut = SUT(client: client)
-        
+
         sutTracker = MemoryLeakTracker(
             instance: sut,
             sourceLocation: SourceLocation(
@@ -103,7 +134,7 @@ extension WordAPIEndToEndTests {
                 column: column
             )
         )
-        
+
         return sut
     }
 }
