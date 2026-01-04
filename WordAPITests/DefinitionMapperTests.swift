@@ -108,8 +108,15 @@ struct DefinitionMapperTests {
     }
     
     @Test func map_deliversWordWithoutPhonetic() throws {
-        // TODO: Test that phonetic is optional and nil is handled
-        #expect(Bool(false), "Implement this test")
+        let language = "en"
+        let definitionJSON = makeDefinitionJSON(definition: "A test word")
+        let meaningJSON = makeMeaningJSON(partOfSpeech: "noun", definitions: [definitionJSON])
+        let wordJSON = makeWordJSON(word: "test", meanings: [meaningJSON])  // no phonetic
+        let json = makeRootJSON([wordJSON])
+        
+        let result = try DefinitionMapper.map(json, from: HTTPURLResponse(statusCode: 200), language: language)
+        
+        #expect(result.phonetic == nil)
     }
     
     @Test func map_deliversWordWithDefinitionWithoutExample() throws {
