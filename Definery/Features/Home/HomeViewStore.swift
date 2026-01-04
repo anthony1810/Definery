@@ -19,6 +19,7 @@ actor HomeViewStore: ScreenActionStore {
     
     enum Action: ActionLockable, LoadingTrackable, Sendable {
         case loadWords
+        case refresh
         case loadMore
         case selectLanguage(Locale.LanguageCode)
 
@@ -26,7 +27,7 @@ actor HomeViewStore: ScreenActionStore {
             switch self {
             case .loadWords, .selectLanguage:
                 return true
-            case .loadMore:
+            case .refresh, .loadMore:
                 return false
             }
         }
@@ -58,7 +59,7 @@ actor HomeViewStore: ScreenActionStore {
 
         do {
             switch action {
-            case .loadWords:
+            case .loadWords, .refresh:
                 try await loadWords()
             case .loadMore:
                 try await loadMore()
@@ -114,7 +115,7 @@ extension HomeViewStore {
 extension HomeViewStore {
     private func handleError(_ error: Error, for action: Action) async {
         switch action {
-        case .loadWords, .selectLanguage:
+        case .loadWords, .refresh, .selectLanguage:
             await viewState?.tryUpdate(property: \.loadState, newValue: .error(error.localizedDescription))
         case .loadMore:
             // Keep existing words on loadMore error, only show alert
