@@ -122,14 +122,11 @@ Definery/
 ├── README.md
 ├── Definery.xcodeproj/
 │
-├── WordFeature/                      # Domain Layer (Framework)
+├── WordFeature/                      # Domain Layer (Framework, no tests)
 │   ├── Word.swift                    # Domain model
 │   ├── Meaning.swift                 # Value object for word meanings
 │   ├── WordLoaderProtocol.swift      # Protocol for loading words
 │   └── WordCacheProtocol.swift       # Protocol for caching words
-│
-├── WordFeatureTests/                 # Domain tests
-│   └── WordTests.swift
 │
 ├── WordAPI/                          # API Layer (Framework)
 │   ├── Shared/
@@ -408,7 +405,6 @@ struct HomeView: View {
 
 | Framework | Test Focus |
 |-----------|------------|
-| WordFeature | Model equality, protocol contracts |
 | WordAPI | Mapper tests, endpoint URL building, loader behavior |
 | WordCache | Cache/load behavior, DTO mapping |
 | WordCacheInfrastructure | SwiftData persistence, in-memory store |
