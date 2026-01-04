@@ -21,9 +21,14 @@ actor HomeViewStore: ScreenActionStore {
         case loadWords
         case loadMore
         case selectLanguage(Locale.LanguageCode)
-        
+
         var canTrackLoading: Bool {
-            true
+            switch self {
+            case .loadWords, .selectLanguage:
+                return true
+            case .loadMore:
+                return false
+            }
         }
     }
     
@@ -49,8 +54,8 @@ actor HomeViewStore: ScreenActionStore {
     
     func isolatedReceive(action: Action) async throws {
         guard await actionLocker.canExecute(action) else { return }
-        await viewState?.loadingStarted()
-        
+        await viewState?.loadingStarted(action: action)
+
         do {
             switch action {
             case .loadWords:
@@ -60,12 +65,12 @@ actor HomeViewStore: ScreenActionStore {
             case .selectLanguage(let language):
                 try await selectLanguage(language)
             }
-            
+
             await actionLocker.unlock(action)
-            await viewState?.loadingFinished()
+            await viewState?.loadingFinished(action: action)
         } catch {
             await actionLocker.unlock(action)
-            await viewState?.loadingFinished()
+            await viewState?.loadingFinished(action: action)
             throw error
         }
     }
@@ -82,11 +87,15 @@ extension HomeViewStore {
     }
     
     private func loadMore() async throws {
+        await viewState?.tryUpdate(property: \.isLoadingMore, newValue: true)
+
         let selectedLanguage = await viewState?.selectedLanguage ?? .english
         let loader = loaderFactory(selectedLanguage)
         let newWords = try await loader.load()
         let currentWords = await viewState?.words ?? []
         let uniqueNewWords = newWords.filter { !currentWords.contains($0) }
+        
+        await viewState?.tryUpdate(property: \.isLoadingMore, newValue: false)
         await viewState?.tryUpdate(property: \.loadState, newValue: .loaded(currentWords + uniqueNewWords))
     }
     
