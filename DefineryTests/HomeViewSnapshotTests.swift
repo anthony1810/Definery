@@ -14,6 +14,17 @@ import WordFeature
 
 @testable import Definery
 
+// Snapshot directory path computed at compile time from #filePath
+private let snapshotBasePath: String = {
+    let filePath = #filePath
+    let url = URL(fileURLWithPath: filePath)
+    return url
+        .deletingLastPathComponent()
+        .appendingPathComponent("__Snapshots__")
+        .appendingPathComponent("HomeViewSnapshotTests")
+        .path
+}()
+
 @MainActor
 final class HomeViewSnapshotTests {
     @Test("HomeView with words shows word list")
@@ -85,12 +96,6 @@ extension HomeViewSnapshotTests {
         testName: String = #function,
         line: UInt = #line
     ) {
-        let snapshotDirectory = URL(fileURLWithPath: "\(file)")
-            .deletingLastPathComponent()
-            .appendingPathComponent("__Snapshots__")
-            .appendingPathComponent("HomeViewSnapshotTests")
-            .path
-
         let failure = verifySnapshot(
             of: view,
             as: .image(
@@ -98,7 +103,7 @@ extension HomeViewSnapshotTests {
                 perceptualPrecision: 0.97,
                 layout: .device(config: .iPhone13)
             ),
-            snapshotDirectory: snapshotDirectory,
+            snapshotDirectory: snapshotBasePath,
             file: file,
             testName: testName,
             line: line
