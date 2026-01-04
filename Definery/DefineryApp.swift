@@ -43,7 +43,10 @@ extension DefineryApp {
             let remote = RemoteWordLoader(
                 client: httpClient,
                 randomWordsURL: randomWordsURL,
-                definitionBaseURL: definitionBaseURL,
+                definitionURLBuilder: { word in
+                    WordsEndpoint.definition(word: word, language: language.identifier)
+                        .url(baseURL: definitionBaseURL)
+                },
                 language: language.identifier
             )
             let local = LocalWordLoader(store: store)

@@ -8,10 +8,12 @@
 import Foundation
 import WordFeature
 
+public typealias DefinitionURLBuilder = @Sendable (String) -> URL
+
 public final class RemoteWordLoader: WordLoaderProtocol, Sendable {
     private let client: HTTPClient
     private let randomWordsURL: URL
-    private let definitionBaseURL: URL
+    private let definitionURLBuilder: DefinitionURLBuilder
     private let language: String
 
     public enum Error: Swift.Error {
@@ -22,12 +24,12 @@ public final class RemoteWordLoader: WordLoaderProtocol, Sendable {
     public init(
         client: HTTPClient,
         randomWordsURL: URL,
-        definitionBaseURL: URL,
+        definitionURLBuilder: @escaping DefinitionURLBuilder,
         language: String
     ) {
         self.client = client
         self.randomWordsURL = randomWordsURL
-        self.definitionBaseURL = definitionBaseURL
+        self.definitionURLBuilder = definitionURLBuilder
         self.language = language
     }
 
@@ -43,13 +45,12 @@ public final class RemoteWordLoader: WordLoaderProtocol, Sendable {
         else { throw Error.invalidData }
 
         let language = self.language
-        let definitionBaseURL = self.definitionBaseURL
+        let definitionURLBuilder = self.definitionURLBuilder
         return await withTaskGroup(of: Word?.self) { group in
             for word in wordStrings {
                 group.addTask {
-                    let url = WordsEndpoint.definition(word: word, language: language)
-                        .url(baseURL: definitionBaseURL)
-                    
+                    let url = definitionURLBuilder(word)
+
                     guard let (defData, defRes) = try? await self.client.get(from: url),
                           let defWord = try? DefinitionMapper.map(defData, from: defRes, word: word, language: language)
                     else { return nil }
