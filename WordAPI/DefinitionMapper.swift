@@ -68,28 +68,42 @@ public enum DefinitionMapper {
             throw Error.noDefinitionFound
         }
 
-        let meanings = parseWikitext(wikitext, for: language)
+        let languageSection = extractLanguageSection(from: wikitext, language: language)
+
+        guard !languageSection.isEmpty else {
+            throw Error.noDefinitionFound
+        }
+
+        let meanings = extractMeanings(from: languageSection)
 
         guard !meanings.isEmpty else {
             throw Error.noDefinitionFound
         }
 
+        let phonetic = extractPhonetic(from: languageSection)
+
         return Word(
             id: UUID(),
             text: word,
             language: language,
-            phonetic: nil,
+            phonetic: phonetic,
             meanings: meanings
         )
     }
 
     // MARK: - Wikitext Parsing
 
-    private static func parseWikitext(_ wikitext: String, for language: String) -> [Meaning] {
-        let languageSection = extractLanguageSection(from: wikitext, language: language)
-        guard !languageSection.isEmpty else { return [] }
+    private static func extractPhonetic(from section: String) -> String? {
+        // Match {{IPA|lang|/phonetic/}} or {{IPA|lang|/phonetic/|/alternate/}}
+        let ipaPattern = "\\{\\{IPA\\|[a-z-]+\\|(/[^/|}]+/)(?:\\|[^}]*)?\\}\\}"
 
-        return extractMeanings(from: languageSection)
+        guard let regex = try? NSRegularExpression(pattern: ipaPattern, options: []),
+              let match = regex.firstMatch(in: section, range: NSRange(section.startIndex..., in: section)),
+              let range = Range(match.range(at: 1), in: section) else {
+            return nil
+        }
+
+        return String(section[range])
     }
 
     private static func extractLanguageSection(from wikitext: String, language: String) -> String {
