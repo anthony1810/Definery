@@ -18,3 +18,8 @@ func anyNSError() -> NSError {
 func anyData() -> Data {
     Data("any data".utf8)
 }
+
+func makeWordsJSON(_ words: [String]) -> Data {
+    try! JSONSerialization.data(withJSONObject: words)
+}
+
