@@ -18,6 +18,14 @@ import WordFeature
 @MainActor
 @Suite("HomeViewSnapshotTests")
 struct HomeViewSnapshotTests {
+    private let snapshotDirectory: String = {
+        let fileURL = URL(fileURLWithPath: #file)
+        return fileURL.deletingLastPathComponent()
+            .appendingPathComponent("__Snapshots__")
+            .appendingPathComponent("HomeViewSnapshotTests")
+            .path
+    }()
+
     @Test("HomeView with words shows word list")
     func homeView_withWords_showsWordList() async throws {
         let view = makeSUT(result: .success(Word.mocks))
@@ -29,7 +37,8 @@ struct HomeViewSnapshotTests {
                 perceptualPrecision: 0.97,
                 layout: .device(config: .iPhone13)
             ),
-            record: false
+            record: false,
+            snapshotDirectory: snapshotDirectory
         )
     }
 
@@ -44,7 +53,8 @@ struct HomeViewSnapshotTests {
                 perceptualPrecision: 0.97,
                 layout: .device(config: .iPhone13)
             ),
-            record: false
+            record: false,
+            snapshotDirectory: snapshotDirectory
         )
     }
 
@@ -59,7 +69,8 @@ struct HomeViewSnapshotTests {
                 perceptualPrecision: 0.97,
                 layout: .device(config: .iPhone13)
             ),
-            record: false
+            record: false,
+            snapshotDirectory: snapshotDirectory
         )
     }
 }
