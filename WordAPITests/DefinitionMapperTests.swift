@@ -93,9 +93,18 @@ struct DefinitionMapperTests {
     }
     
     @Test func map_deliversWordWithFirstDefinitionPerMeaning() throws {
-        // TODO: Dictionary API returns multiple definitions per meaning
-        // We only take the first definition for simplicity
-        #expect(Bool(false), "Implement this test")
+        let language = "en"
+        let firstDef = makeDefinitionJSON(definition: "First definition", example: "First example")
+        let secondDef = makeDefinitionJSON(definition: "Second definition", example: "Second example")
+        let meaningJSON = makeMeaningJSON(partOfSpeech: "noun", definitions: [firstDef, secondDef])
+        let wordJSON = makeWordJSON(word: "test", meanings: [meaningJSON])
+        let json = makeRootJSON([wordJSON])
+        
+        let result = try DefinitionMapper.map(json, from: HTTPURLResponse(statusCode: 200), language: language)
+        
+        #expect(result.meanings.count == 1)
+        #expect(result.meanings[0].definition == "First definition")
+        #expect(result.meanings[0].example == "First example")
     }
     
     @Test func map_deliversWordWithoutPhonetic() throws {
