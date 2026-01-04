@@ -89,7 +89,7 @@ extension HomeView {
         }
         .listStyle(.plain)
         .refreshable {
-            try? await viewStore.isolatedReceive(action: .loadWords)
+            try? await viewStore.isolatedReceive(action: .refresh)
         }
     }
 

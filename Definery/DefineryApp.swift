@@ -32,9 +32,12 @@ extension DefineryApp {
         let definitionBaseURL = URL(string: "https://en.wiktionary.org")!
 
         return { language in
+            // Random Word API uses "pt-br" for Portuguese, not "pt"
+            let apiLanguage = language == .portuguese ? "pt-br" : language.identifier
+
             let randomWordsURL = WordsEndpoint.randomWords(
                 count: 10,
-                language: language.identifier
+                language: apiLanguage
             ).url(baseURL: randomWordsBaseURL)
 
             let remote = RemoteWordLoader(

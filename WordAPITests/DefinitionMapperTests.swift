@@ -359,6 +359,154 @@ struct DefinitionMapperTests {
         #expect(result.phonetic == nil)
     }
 
+    @Test func map_extractsPhoneticWithAlternativePronunciations() throws {
+        let wikitext = """
+        ==English==
+
+        ===Pronunciation===
+        * {{IPA|en|/ˈwɔːtə/|/ˈwɑːtəɹ/}}
+
+        ===Noun===
+        # A liquid.
+        """
+        let json = makeWikitextJSON(title: "water", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "water",
+            language: "en"
+        )
+
+        #expect(result.phonetic == "/ˈwɔːtə/")
+    }
+
+    @Test func map_extractsChinesePhonetic() throws {
+        let wikitext = """
+        ==Chinese==
+
+        ===Pronunciation===
+        * {{IPA|zh|/xuɑn˧˥ t͡sɤ˧˥/}}
+
+        ===Verb===
+        # to choose
+        """
+        let json = makeWikitextJSON(title: "選擇", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "選擇",
+            language: "zh"
+        )
+
+        #expect(result.phonetic == "/xuɑn˧˥ t͡sɤ˧˥/")
+    }
+
+    @Test func map_extractsPhoneticWithParentheses() throws {
+        let wikitext = """
+        ==English==
+
+        ===Pronunciation===
+        * {{IPA|en|/ˈɡæðə(ɹ)/}}
+
+        ===Verb===
+        # To collect.
+        """
+        let json = makeWikitextJSON(title: "gather", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "gather",
+            language: "en"
+        )
+
+        #expect(result.phonetic == "/ˈɡæðə(ɹ)/")
+    }
+
+    // MARK: - Example Extraction
+
+    @Test func map_handlesWordWithoutExample() throws {
+        let wikitext = """
+        ==English==
+
+        ===Noun===
+        # A thing.
+        """
+        let json = makeWikitextJSON(title: "thing", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "thing",
+            language: "en"
+        )
+
+        #expect(result.meanings[0].example == nil)
+    }
+
+    @Test func map_extractsExampleWithBoldMarkers() throws {
+        let wikitext = """
+        ==English==
+
+        ===Verb===
+        # To move quickly.
+        #: {{ux|en|She '''ran''' to the store.}}
+        """
+        let json = makeWikitextJSON(title: "run", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "run",
+            language: "en"
+        )
+
+        #expect(result.meanings[0].example == "She ran to the store.")
+    }
+
+    @Test func map_extractsExampleWithWikiLinks() throws {
+        let wikitext = """
+        ==English==
+
+        ===Noun===
+        # A type of [[food]].
+        #: {{ux|en|I ate some [[bread]] for [[breakfast]].}}
+        """
+        let json = makeWikitextJSON(title: "bread", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "bread",
+            language: "en"
+        )
+
+        #expect(result.meanings[0].example == "I ate some bread for breakfast.")
+    }
+
+    @Test func map_extractsOnlyFirstExamplePerMeaning() throws {
+        let wikitext = """
+        ==English==
+
+        ===Verb===
+        # To move quickly.
+        #: {{ux|en|She ran fast.}}
+        #: {{ux|en|He ran slowly.}}
+        """
+        let json = makeWikitextJSON(title: "run", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "run",
+            language: "en"
+        )
+
+        #expect(result.meanings[0].example == "She ran fast.")
+    }
+
     // MARK: - Edge Cases
 
     @Test func map_handlesDefinitionWithTemplateMarkup() throws {
@@ -381,6 +529,45 @@ struct DefinitionMapperTests {
 
         // Should extract the definition, handling or stripping the template
         #expect(result.meanings[0].definition.contains("greeting") || result.meanings[0].definition.contains("A greeting"))
+    }
+
+    @Test func map_throwsErrorWhenDefinitionIsOnlyPunctuation() throws {
+        let wikitext = """
+        ==English==
+
+        ===Noun===
+        # {{only-template|that|results|in|nothing}}
+        """
+        let json = makeWikitextJSON(title: "test", wikitext: wikitext)
+
+        #expect(throws: DefinitionMapper.Error.noDefinitionFound) {
+            try DefinitionMapper.map(
+                json,
+                from: HTTPURLResponse(statusCode: 200),
+                word: "test",
+                language: "en"
+            )
+        }
+    }
+
+    @Test func map_skipsInvalidDefinitionsAndUsesValidOne() throws {
+        let wikitext = """
+        ==English==
+
+        ===Noun===
+        # {{template-only}}
+        # A valid definition here.
+        """
+        let json = makeWikitextJSON(title: "test", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "test",
+            language: "en"
+        )
+
+        #expect(result.meanings[0].definition == "A valid definition here.")
     }
 
     @Test func map_ignoresNonTargetLanguageSections() throws {
