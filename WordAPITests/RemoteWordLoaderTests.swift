@@ -59,17 +59,23 @@ final class RemoteWordLoaderTests {
 
     @Test func load_requestsDefinitionForEachRandomWord() async throws {
         let definitionBaseURL = anyURL()
-        let sut = makeSUT(definitionBaseURL: definitionBaseURL)
+        let language = anyLanguageCode()
+        let sut = makeSUT(definitionBaseURL: definitionBaseURL, language: language)
         let words = ["hello", "world"]
-        
+
         sut.client.complete(withStatusCode: 200, data: makeWordsJSON(words), at: 0)
         sut.client.complete(withStatusCode: 200, data: Data(), at: 1)
         sut.client.complete(withStatusCode: 200, data: Data(), at: 2)
-        
+
         _ = try? await sut.loader.load()
-        
-        #expect(sut.client.requestedURLs.contains(definitionBaseURL.appending(path: "hello")))
-        #expect(sut.client.requestedURLs.contains(definitionBaseURL.appending(path: "world")))
+
+        let expectedHelloURL = WordsEndpoint.definition(word: "hello", language: language)
+            .url(baseURL: definitionBaseURL)
+        let expectedWorldURL = WordsEndpoint.definition(word: "world", language: language)
+            .url(baseURL: definitionBaseURL)
+
+        #expect(sut.client.requestedURLs.contains(expectedHelloURL))
+        #expect(sut.client.requestedURLs.contains(expectedWorldURL))
     }
 
     @Test func load_deliversWordsOnSuccessfulResponses() async throws {
