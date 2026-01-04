@@ -20,7 +20,7 @@ private let snapshotBasePath: String = {
     let url = URL(fileURLWithPath: filePath)
     return url
         .deletingLastPathComponent()
-        .appendingPathComponent("__Snapshots__")
+        .appendingPathComponent("Snapshots")
         .appendingPathComponent("HomeViewSnapshotTests")
         .path
 }()
