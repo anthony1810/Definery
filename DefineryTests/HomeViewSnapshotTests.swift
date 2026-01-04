@@ -16,8 +16,15 @@ import WordFeature
 @testable import Definery
 
 @MainActor
-@Suite("HomeViewSnapshotTests")
-struct HomeViewSnapshotTests {
+final class HomeViewSnapshotTests {
+    private var stateTracker: MemoryLeakTracker<HomeViewState>?
+    private var storeTracker: MemoryLeakTracker<HomeViewStore>?
+
+    deinit {
+        stateTracker?.verify()
+        storeTracker?.verify()
+    }
+
     @Test("HomeView with words shows word list")
     func homeView_withWords_showsWordList() async throws {
         let view = makeSUT(result: .success(Word.mocks))
@@ -45,11 +52,24 @@ struct HomeViewSnapshotTests {
 extension HomeViewSnapshotTests {
     private func makeSUT(
         result: Result<[Word], Error>,
-        selectedLanguage: Locale.LanguageCode = .english
+        selectedLanguage: Locale.LanguageCode = .english,
+        fileId: String = #fileID,
+        filePath: String = #filePath,
+        line: Int = #line,
+        column: Int = #column
     ) -> some View {
         let viewState = makeState(result: result, selectedLanguage: selectedLanguage)
         let loader = makeLoader(result: result)
         let viewStore = HomeViewStore(loader: { _ in loader })
+
+        let sourceLocation = SourceLocation(
+            fileID: fileId,
+            filePath: filePath,
+            line: line,
+            column: column
+        )
+        stateTracker = MemoryLeakTracker(instance: viewState, sourceLocation: sourceLocation)
+        storeTracker = MemoryLeakTracker(instance: viewStore, sourceLocation: sourceLocation)
 
         let view = HomeView(viewStore: viewStore, viewState: viewState)
 
