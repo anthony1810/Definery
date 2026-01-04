@@ -192,6 +192,30 @@ struct DefinitionMapperTests {
         #expect(result.meanings[0].example == "Hello, everyone.")
     }
 
+    @Test func map_extractsExampleFromRealWikitextFormat() throws {
+        // Real Wiktionary format uses {{ng|...}} for definitions
+        let wikitext = """
+        ==English==
+
+        ===Interjection===
+        {{en-intj}}
+
+        # {{ng|A [[greeting]] said when [[meet]]ing someone.}}
+        #: {{ux|en|'''Hello''', everyone.}}
+        """
+        let json = makeWikitextJSON(title: "hello", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "hello",
+            language: "en"
+        )
+
+        #expect(result.meanings[0].definition == "A greeting said when meeting someone.")
+        #expect(result.meanings[0].example == "Hello, everyone.")
+    }
+
     // MARK: - Chinese Word Parsing
 
     @Test func map_deliversChineseWordWithEnglishDefinition() throws {
@@ -264,6 +288,75 @@ struct DefinitionMapperTests {
         #expect(result.text == "codicioso")
         #expect(result.language == "es")
         #expect(result.meanings[0].definition == "greedy, covetous")
+    }
+
+    // MARK: - Phonetic Extraction
+
+    @Test func map_extractsPhoneticFromIPATemplate() throws {
+        let wikitext = """
+        ==English==
+
+        ===Pronunciation===
+        * {{IPA|en|/həˈləʊ/}}
+
+        ===Interjection===
+        {{en-intj}}
+
+        # A greeting.
+        """
+        let json = makeWikitextJSON(title: "hello", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "hello",
+            language: "en"
+        )
+
+        #expect(result.phonetic == "/həˈləʊ/")
+    }
+
+    @Test func map_extractsPhoneticFromMultipleIPAEntries() throws {
+        let wikitext = """
+        ==English==
+
+        ===Pronunciation===
+        * {{a|UK}} {{IPA|en|/həˈləʊ/}}
+        * {{a|US}} {{IPA|en|/həˈloʊ/}}
+
+        ===Noun===
+        # A greeting.
+        """
+        let json = makeWikitextJSON(title: "hello", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "hello",
+            language: "en"
+        )
+
+        // Should extract the first IPA pronunciation
+        #expect(result.phonetic == "/həˈləʊ/")
+    }
+
+    @Test func map_handlesWordWithoutPhonetic() throws {
+        let wikitext = """
+        ==English==
+
+        ===Noun===
+        # A thing.
+        """
+        let json = makeWikitextJSON(title: "thing", wikitext: wikitext)
+
+        let result = try DefinitionMapper.map(
+            json,
+            from: HTTPURLResponse(statusCode: 200),
+            word: "thing",
+            language: "en"
+        )
+
+        #expect(result.phonetic == nil)
     }
 
     // MARK: - Edge Cases
