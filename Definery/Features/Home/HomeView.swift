@@ -73,13 +73,19 @@ extension HomeView {
                     .listRowSeparator(.hidden)
             }
 
-            ProgressView()
-                .id(UUID())
-                .frame(maxWidth: .infinity)
-                .listRowSeparator(.hidden)
-                .onAppear {
-                    viewStore.receive(action: .loadMore)
-                }
+            if viewState.isLoadingMore {
+                ProgressView()
+                    .id(UUID())
+                    .frame(maxWidth: .infinity)
+                    .listRowSeparator(.hidden)
+            } else {
+                Color.clear
+                    .frame(height: 1)
+                    .listRowSeparator(.hidden)
+                    .onAppear {
+                        viewStore.receive(action: .loadMore)
+                    }
+            }
         }
         .listStyle(.plain)
         .refreshable {

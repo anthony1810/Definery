@@ -33,6 +33,7 @@ final class HomeViewState: ScreenState {
     
     private(set) var loadState: LoadState = .idle
     private(set) var selectedLanguage: Locale.LanguageCode = .english
+    private(set) var isLoadingMore: Bool = false
     
     var words: [Word] {
         if case .loaded(let words) = loadState {
