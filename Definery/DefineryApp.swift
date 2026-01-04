@@ -26,20 +26,25 @@ struct DefineryApp: App {
 
 extension DefineryApp {
     nonisolated func makeLoader() -> WordLoaderFactory {
-
         let httpClient = self.httpClient
         let store = self.store
-        let baseURL = URL(string: "https://random-word-api.herokuapp.com")!
-        
+        let randomWordsBaseURL = URL(string: "https://random-word-api.herokuapp.com")!
+        let definitionBaseURL = URL(string: "https://api.dictionaryapi.dev")!
+
         return { language in
-            let url = WordsEndpoint.randomWords(
+            let randomWordsURL = WordsEndpoint.randomWords(
                 count: 10,
                 language: language.identifier
-            ).url(baseURL: baseURL)
-            
-            let remote = RemoteWordLoader(url: url, client: httpClient)
+            ).url(baseURL: randomWordsBaseURL)
+
+            let remote = RemoteWordLoader(
+                client: httpClient,
+                randomWordsURL: randomWordsURL,
+                definitionBaseURL: definitionBaseURL,
+                language: language.identifier
+            )
             let local = LocalWordLoader(store: store)
-            
+
             return RemoteWithLocalFallbackLoader(remote: remote, local: local, cache: local)
         }
     }
