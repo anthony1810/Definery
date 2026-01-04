@@ -120,8 +120,15 @@ struct DefinitionMapperTests {
     }
     
     @Test func map_deliversWordWithDefinitionWithoutExample() throws {
-        // TODO: Test that example is optional and nil is handled
-        #expect(Bool(false), "Implement this test")
+        let language = "en"
+        let definitionJSON = makeDefinitionJSON(definition: "A test word")  // no example
+        let meaningJSON = makeMeaningJSON(partOfSpeech: "noun", definitions: [definitionJSON])
+        let wordJSON = makeWordJSON(word: "test", meanings: [meaningJSON])
+        let json = makeRootJSON([wordJSON])
+        
+        let result = try DefinitionMapper.map(json, from: HTTPURLResponse(statusCode: 200), language: language)
+        
+        #expect(result.meanings[0].example == nil)
     }
     
     // MARK: - Helpers
