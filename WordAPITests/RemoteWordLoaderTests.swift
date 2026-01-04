@@ -22,7 +22,8 @@ final class RemoteWordLoaderTests {
     @Test func init_doesNotRequestDataFromURL() async {
         let sut = makeSUT()
 
-        #expect(sut.client.requestedURLs.isEmpty)
+        let urls = await sut.client.requestedURLs
+        #expect(urls.isEmpty)
     }
 
     // MARK: - Load Tests - Random Words Request
@@ -34,7 +35,8 @@ final class RemoteWordLoaderTests {
 
         _ = try? await sut.loader.load()
 
-        #expect(sut.client.requestedURLs == [randomWordsURL])
+        let urls = await sut.client.requestedURLs
+        #expect(urls == [randomWordsURL])
     }
 
     @Test func load_deliversConnectivityErrorOnRandomWordsClientError() async {
@@ -74,59 +76,53 @@ final class RemoteWordLoaderTests {
         let expectedWorldURL = WordsEndpoint.definition(word: "world", language: language)
             .url(baseURL: definitionBaseURL)
 
-        #expect(sut.client.requestedURLs.contains(expectedHelloURL))
-        #expect(sut.client.requestedURLs.contains(expectedWorldURL))
+        let urls = await sut.client.requestedURLs
+        #expect(urls.contains(expectedHelloURL))
+        #expect(urls.contains(expectedWorldURL))
     }
 
     @Test func load_deliversWordsOnSuccessfulResponses() async throws {
         let sut = makeSUT()
-        
+
         sut.client.complete(withStatusCode: 200, data: makeWordsJSON(["hello"]), at: 0)
         sut.client.complete(
             withStatusCode: 200,
-            data: makeDefinitionJSON(
+            data: makeWiktionaryJSON(
                 word: "hello",
-                phonetic: "/həˈloʊ/",
-                meanings: [
-                    makeMeaningJSON(
-                        partOfSpeech: "noun",
-                        definition: "A greeting"
-                    )
-                ]
+                partOfSpeech: "Noun",
+                definition: "A greeting"
             ),
             at: 1
         )
-        
+
         let result = try await sut.loader.load()
-        
+
         #expect(result.count == 1)
         #expect(result[0].text == "hello")
-        #expect(result[0].phonetic == "/həˈloʊ/")
-        #expect(result[0].meanings[0].partOfSpeech == "noun")
+        #expect(result[0].meanings[0].partOfSpeech == "Noun")
         #expect(result[0].meanings[0].definition == "A greeting")
     }
 
     @Test func load_skipsWordsWithFailedDefinitions() async throws {
         let sut = makeSUT()
-        
+
         sut.client.complete(withStatusCode: 200, data: makeWordsJSON(["hello", "word"]), at: 0)
         sut.client.complete(with: anyNSError(), at: 1)
         sut.client.complete(
             withStatusCode: 200,
-            data: makeDefinitionJSON(
+            data: makeWiktionaryJSON(
                 word: "word",
-                meanings: [
-                    makeMeaningJSON(partOfSpeech: "noun", definition: "The earth")
-                ]
+                partOfSpeech: "Noun",
+                definition: "The earth"
             ),
             at: 2
         )
-        
+
         let result = try await sut.loader.load()
-        
+
         #expect(result.count == 1)
         #expect(result[0].text == "word")
-        #expect(result[0].meanings[0].partOfSpeech == "noun")
+        #expect(result[0].meanings[0].partOfSpeech == "Noun")
         #expect(result[0].meanings[0].definition == "The earth")
     }
     
@@ -187,53 +183,82 @@ extension RemoteWordLoaderTests {
         return sut
     }
 
-    // MARK: - JSON Helpers
+    // MARK: - JSON Helpers (Wiktionary format)
 
-    private func makeDefinitionJSON(
+    private func makeWiktionaryJSON(
         word: String,
-        phonetic: String? = nil,
-        meanings: [[String: Any]]
-    ) -> Data {
-        var wordJSON: [String: Any] = ["word": word, "meanings": meanings]
-        if let phonetic { wordJSON["phonetic"] = phonetic }
-        return try! JSONSerialization.data(withJSONObject: [wordJSON])
-    }
-
-    private func makeMeaningJSON(
+        language: String = "en",
         partOfSpeech: String,
-        definition: String,
-        example: String? = nil
-    ) -> [String: Any] {
-        var defJSON: [String: Any] = ["definition": definition]
-        if let example { defJSON["example"] = example }
-        return ["partOfSpeech": partOfSpeech, "definitions": [defJSON]]
+        definition: String
+    ) -> Data {
+        let languageName = language == "en" ? "English" : language
+        let wikitext = """
+        ==\(languageName)==
+
+        ===\(partOfSpeech)===
+        {{\(language)-\(partOfSpeech.lowercased())}}
+
+        # \(definition)
+        """
+
+        let json: [String: Any] = [
+            "parse": [
+                "title": word,
+                "pageid": 12345,
+                "wikitext": [
+                    "*": wikitext
+                ]
+            ]
+        ]
+        return try! JSONSerialization.data(withJSONObject: json)
     }
 }
 
 // MARK: - HTTPClientSpy
 
+actor HTTPClientSpyStorage {
+    var messages: [URL] = []
+    var stubs: [Int: Result<(Data, HTTPURLResponse), Error>] = [:]
+
+    func appendMessage(_ url: URL) -> Int {
+        let index = messages.count
+        messages.append(url)
+        return index
+    }
+
+    func setStub(_ result: Result<(Data, HTTPURLResponse), Error>, at index: Int) {
+        stubs[index] = result
+    }
+
+    func getStub(at index: Int) -> Result<(Data, HTTPURLResponse), Error>? {
+        stubs[index]
+    }
+}
+
 final class HTTPClientSpy: HTTPClient, @unchecked Sendable {
-    private var messages: [URL] = []
-    private var stubs: [Int: Result<(Data, HTTPURLResponse), Error>] = [:]
+    private let storage = HTTPClientSpyStorage()
+    // Synchronous storage for stubs set before async calls
+    private var syncStubs: [Int: Result<(Data, HTTPURLResponse), Error>] = [:]
 
     var requestedURLs: [URL] {
-        messages
+        get async {
+            await storage.messages
+        }
     }
 
     func complete(with error: Error, at index: Int = 0) {
-        stubs[index] = .failure(error)
+        syncStubs[index] = .failure(error)
     }
 
     func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
         let response = HTTPURLResponse(statusCode: code)
-        stubs[index] = .success((data, response))
+        syncStubs[index] = .success((data, response))
     }
 
     func get(from url: URL) async throws -> (Data, HTTPURLResponse) {
-        let index = messages.count
-        messages.append(url)
+        let index = await storage.appendMessage(url)
 
-        guard let stub = stubs[index] else {
+        guard let stub = syncStubs[index] else {
             throw anyNSError()
         }
 

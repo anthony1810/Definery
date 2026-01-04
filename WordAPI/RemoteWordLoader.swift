@@ -51,7 +51,7 @@ public final class RemoteWordLoader: WordLoaderProtocol, Sendable {
                         .url(baseURL: definitionBaseURL)
                     
                     guard let (defData, defRes) = try? await self.client.get(from: url),
-                          let defWord = try? DefinitionMapper.map(defData, from: defRes, language: language)
+                          let defWord = try? DefinitionMapper.map(defData, from: defRes, word: word, language: language)
                     else { return nil }
 
                     return defWord

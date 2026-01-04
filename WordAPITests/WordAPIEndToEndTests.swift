@@ -31,15 +31,15 @@ final class WordAPIEndToEndTests {
         #expect(words.allSatisfy { !$0.isEmpty })
     }
     
-    // MARK: - Dictionary API End-to-End Tests
+    // MARK: - Wiktionary API End-to-End Tests
     @Test func getWordDefinition_deliversMappableResponse() async throws {
         let sut = makeSUT()
         let url = WordsEndpoint.definition(word: "hello", language: "en")
-            .url(baseURL: URL(string: "https://api.dictionaryapi.dev")!)
+            .url(baseURL: URL(string: "https://en.wiktionary.org")!)
         
         let (data, response) = try await sut.client.get(from: url)
         
-        let word = try DefinitionMapper.map(data, from: response, language: "en")
+        let word = try DefinitionMapper.map(data, from: response, word: "hello", language: "en")
         
         #expect(word.text == "hello")
         #expect(word.language == "en")
@@ -49,12 +49,12 @@ final class WordAPIEndToEndTests {
     @Test func getWordDefinition_throwsForUnknownWord() async throws {
         let sut = makeSUT()
         let url = WordsEndpoint.definition(word: "asdfghjklzxcvbnm", language: "en")
-            .url(baseURL: URL(string: "https://api.dictionaryapi.dev")!)
+            .url(baseURL: URL(string: "https://en.wiktionary.org")!)
 
         let (data, response) = try await sut.client.get(from: url)
 
-        #expect(throws: DefinitionMapper.Error.invalidData) {
-            try DefinitionMapper.map(data, from: response, language: "en")
+        #expect(throws: DefinitionMapper.Error.wordNotFound) {
+            try DefinitionMapper.map(data, from: response, word: "asdfghjklzxcvbnm", language: "en")
         }
     }
 
@@ -75,15 +75,15 @@ final class WordAPIEndToEndTests {
         #expect(words.allSatisfy { !$0.isEmpty }, "Expected non-empty words for language '\(language)'")
     }
 
-    @Test(arguments: dictionaryAPITestWords)
+    @Test(arguments: wiktionaryTestWords)
     func getWordDefinition_deliversResultsForAllSupportedLanguages(testCase: (language: String, word: String)) async throws {
         let sut = makeSUT()
         let url = WordsEndpoint.definition(word: testCase.word, language: testCase.language)
-            .url(baseURL: URL(string: "https://api.dictionaryapi.dev")!)
+            .url(baseURL: URL(string: "https://en.wiktionary.org")!)
 
         let (data, response) = try await sut.client.get(from: url)
 
-        let word = try DefinitionMapper.map(data, from: response, language: testCase.language)
+        let word = try DefinitionMapper.map(data, from: response, word: testCase.word, language: testCase.language)
 
         #expect(word.text == testCase.word, "Expected word '\(testCase.word)' for language '\(testCase.language)'")
         #expect(word.language == testCase.language)
@@ -97,11 +97,16 @@ final class WordAPIEndToEndTests {
 // Note: Portuguese uses "pt-br" not "pt"
 private let randomWordAPILanguages = ["en", "es", "it", "de", "fr", "zh", "pt-br"]
 
-// Dictionary API (dictionaryapi.dev) only supports English
-private let dictionaryAPILanguages = ["en"]
-
-private let dictionaryAPITestWords: [(language: String, word: String)] = [
-    ("en", "hello")
+// Wiktionary (en.wiktionary.org) supports all languages with English definitions
+// Test words for each supported language
+private let wiktionaryTestWords: [(language: String, word: String)] = [
+    ("en", "hello"),
+    ("es", "hola"),
+    ("it", "ciao"),
+    ("de", "hallo"),
+    ("fr", "bonjour"),
+    ("zh", "你好"),
+    ("pt-br", "olá")
 ]
 
 // MARK: - Helpers
