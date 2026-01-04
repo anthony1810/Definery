@@ -1,8 +1,8 @@
 # Definery
 
-A word definition and learning iOS app demonstrating **[ScreenStateKit](https://github.com/anthony1810/ScreenStateKit)** - a comprehensive Swift state management toolkit with clean architecture and offline-first capability.
+One of the most important aspects of learning a new language is vocabulary, but remembering new words is simple yet very difficult to maintain. **Definery** is your custom dictionary on your journey of learning a new language — it remembers new words for you and helps you maintain those words in your memory.
 
-> This project serves as a real-world demo for [ScreenStateKit](https://github.com/anthony1810/ScreenStateKit), showcasing the Three Pillars pattern (State + ViewModel + View) in a production-like app.
+> This project also serves as a real-world demo for [ScreenStateKit](https://github.com/anthony1810/ScreenStateKit), showcasing the Three Pillars pattern (State + ViewModel + View) in a production-like iOS app with clean architecture and offline-first capability.
 
 ## Build Status
 
