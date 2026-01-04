@@ -123,6 +123,18 @@ final class RemoteWordLoaderTests {
         #expect(result[0].meanings[0].partOfSpeech == "noun")
         #expect(result[0].meanings[0].definition == "The earth")
     }
+    
+    @Test func load_deliversEmptyArrayWhenAllDefinitionsFail() async throws {
+        let sut = makeSUT()
+        
+        sut.client.complete(withStatusCode: 200, data: makeWordsJSON(["hello", "world"]), at: 0)
+        sut.client.complete(with: anyNSError(), at: 1)
+        sut.client.complete(with: anyNSError(), at: 2)
+        
+        let result = try await sut.loader.load()
+        
+        #expect(result.isEmpty)
+    }
 }
 
 // MARK: - Helpers
