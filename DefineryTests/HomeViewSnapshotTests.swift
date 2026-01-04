@@ -18,60 +18,25 @@ import WordFeature
 @MainActor
 @Suite("HomeViewSnapshotTests")
 struct HomeViewSnapshotTests {
-    private let snapshotDirectory: String = {
-        let fileURL = URL(fileURLWithPath: #file)
-        return fileURL.deletingLastPathComponent()
-            .appendingPathComponent("__Snapshots__")
-            .appendingPathComponent("HomeViewSnapshotTests")
-            .path
-    }()
-
     @Test("HomeView with words shows word list")
     func homeView_withWords_showsWordList() async throws {
         let view = makeSUT(result: .success(Word.mocks))
 
-        assertSnapshot(
-            of: view,
-            as: .image(
-                precision: 0.96,
-                perceptualPrecision: 0.97,
-                layout: .device(config: .iPhone13)
-            ),
-            record: false,
-            snapshotDirectory: snapshotDirectory
-        )
+        assertHomeViewSnapshot(of: view)
     }
 
     @Test("HomeView with empty words shows empty state")
     func homeView_withEmptyWords_showsEmptyState() async throws {
         let view = makeSUT(result: .success([]))
 
-        assertSnapshot(
-            of: view,
-            as: .image(
-                precision: 0.96,
-                perceptualPrecision: 0.97,
-                layout: .device(config: .iPhone13)
-            ),
-            record: false,
-            snapshotDirectory: snapshotDirectory
-        )
+        assertHomeViewSnapshot(of: view)
     }
 
     @Test("HomeView with error shows error state")
     func homeView_withError_showsErrorState() async throws {
         let view = makeSUT(result: .failure(anyNSError()))
 
-        assertSnapshot(
-            of: view,
-            as: .image(
-                precision: 0.96,
-                perceptualPrecision: 0.97,
-                layout: .device(config: .iPhone13)
-            ),
-            record: false,
-            snapshotDirectory: snapshotDirectory
-        )
+        assertHomeViewSnapshot(of: view)
     }
 }
 
@@ -116,5 +81,35 @@ extension HomeViewSnapshotTests {
 
     private func anyNSError() -> NSError {
         NSError(domain: "test", code: 0, userInfo: [NSLocalizedDescriptionKey: "Something went wrong"])
+    }
+
+    private func assertHomeViewSnapshot<V: View>(
+        of view: V,
+        file: StaticString = #filePath,
+        testName: String = #function,
+        line: UInt = #line
+    ) {
+        let snapshotDirectory = URL(fileURLWithPath: "\(file)")
+            .deletingLastPathComponent()
+            .appendingPathComponent("__Snapshots__")
+            .appendingPathComponent("HomeViewSnapshotTests")
+            .path
+
+        let failure = verifySnapshot(
+            of: view,
+            as: .image(
+                precision: 0.96,
+                perceptualPrecision: 0.97,
+                layout: .device(config: .iPhone13)
+            ),
+            snapshotDirectory: snapshotDirectory,
+            file: file,
+            testName: testName,
+            line: line
+        )
+
+        if let message = failure {
+            Issue.record(Comment(rawValue: message), sourceLocation: SourceLocation(fileID: "", filePath: "\(file)", line: Int(line), column: 0))
+        }
     }
 }
