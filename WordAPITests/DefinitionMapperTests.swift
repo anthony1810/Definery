@@ -150,11 +150,14 @@ struct DefinitionMapperTests {
         phonetic: String? = nil,
         meanings: [[String: Any]]
     ) -> [String: Any] {
-        [
+        var json: [String: Any] = [
             "word": word,
-            "phonetic": phonetic,
             "meanings": meanings
-        ].compactMapValues { $0 }
+        ]
+        if let phonetic = phonetic {
+            json["phonetic"] = phonetic
+        }
+        return json
     }
     
     private func makeMeaningJSON(
