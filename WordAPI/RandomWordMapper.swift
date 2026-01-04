@@ -13,7 +13,12 @@ public enum RandomWordMapper {
     }
 
     public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [String] {
-        // TODO: Implement after tests are written
-        throw Error.invalidData
+        guard response.isOK,
+              let words = try? JSONDecoder().decode([String].self, from: data)
+        else {
+            throw Error.invalidData
+        }
+        
+        return words
     }
 }
