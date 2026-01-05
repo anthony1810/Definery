@@ -8,20 +8,24 @@
 import Foundation
 import WordFeature
 
-public struct LocalWordLoader: WordCacheProtocol {
+public struct LocalWordLoader {
     private let store: WordStorageProtocol
 
     public init(store: WordStorageProtocol) {
         self.store = store
     }
+}
 
+extension LocalWordLoader: WordLoaderProtocol {
+    public func load() async throws -> [Word] {
+        try await store.retrieveWords().map { $0.toModel() }
+    }
+}
+
+extension LocalWordLoader: WordCacheProtocol {
     public func save(_ words: [Word]) async throws {
         try await store.deleteCachedWords()
         try await store.insertCache(words: words.map { $0.toLocal() })
-    }
-
-    public func load() async throws -> [Word] {
-        try await store.retrieveWords().map { $0.toModel() }
     }
 }
 

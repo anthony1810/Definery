@@ -22,9 +22,15 @@ public enum WordsEndpoint {
             ]
             return components.url!
 
-        case let .definition(word, language):
+        case let .definition(word, _):
             var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)!
-            components.path = "/api/v2/entries/\(language)/\(word)"
+            components.path = "/w/api.php"
+            components.queryItems = [
+                URLQueryItem(name: "action", value: "parse"),
+                URLQueryItem(name: "format", value: "json"),
+                URLQueryItem(name: "page", value: word),
+                URLQueryItem(name: "prop", value: "wikitext")
+            ]
             return components.url!
         }
     }
