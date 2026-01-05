@@ -9,6 +9,10 @@ import Foundation
 import WordFeature
 
 public enum WordMapper {
+    public enum Error: Swift.Error {
+        case invalidData
+    }
+
     private struct Root: Decodable {
         let items: [RemoteWord]
 
@@ -53,7 +57,7 @@ public enum WordMapper {
         guard response.isOK,
               let root = try? JSONDecoder().decode(Root.self, from: data)
         else {
-            throw RemoteWordLoader.Error.invalidData
+            throw WordMapper.Error.invalidData
         }
 
         return root.words

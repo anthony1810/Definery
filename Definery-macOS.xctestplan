@@ -15,6 +15,13 @@
     {
       "target" : {
         "containerPath" : "container:Definery.xcodeproj",
+        "identifier" : "922E56FE2F06136D0069C8CC",
+        "name" : "WordCacheTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Definery.xcodeproj",
         "identifier" : "92A75F2D2F04C9B7008DC78C",
         "name" : "WordAPITests"
       }
@@ -22,8 +29,8 @@
     {
       "target" : {
         "containerPath" : "container:Definery.xcodeproj",
-        "identifier" : "92A75F0C2F04C99D008DC78C",
-        "name" : "WordFeatureTests"
+        "identifier" : "922E661A2F07581E0069C8CC",
+        "name" : "WordCacheInfrastructureTests"
       }
     }
   ],
