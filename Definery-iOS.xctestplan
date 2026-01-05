@@ -26,6 +26,7 @@
       }
     },
     {
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:Definery.xcodeproj",
         "identifier" : "92A75EE22F04C905008DC78C",

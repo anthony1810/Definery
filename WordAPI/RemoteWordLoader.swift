@@ -8,33 +8,65 @@
 import Foundation
 import WordFeature
 
+public typealias DefinitionURLBuilder = @Sendable (String) -> URL
+
 public final class RemoteWordLoader: WordLoaderProtocol, Sendable {
-    private let url: URL
     private let client: HTTPClient
+    private let randomWordsURL: URL
+    private let definitionURLBuilder: DefinitionURLBuilder
+    private let language: String
 
     public enum Error: Swift.Error {
         case connectivity
         case invalidData
     }
 
-    public init(url: URL, client: HTTPClient) {
-        self.url = url
+    public init(
+        client: HTTPClient,
+        randomWordsURL: URL,
+        definitionURLBuilder: @escaping DefinitionURLBuilder,
+        language: String
+    ) {
         self.client = client
+        self.randomWordsURL = randomWordsURL
+        self.definitionURLBuilder = definitionURLBuilder
+        self.language = language
     }
 
     public func load() async throws -> [Word] {
-        let (data, response): (Data, HTTPURLResponse)
-
+        let (data, res): (Data, HTTPURLResponse)
         do {
-            (data, response) = try await client.get(from: url)
+            (data, res) = try await client.get(from: randomWordsURL)
         } catch {
             throw Error.connectivity
         }
 
-        do {
-            return try WordMapper.map(data, from: response)
-        } catch {
-            throw Error.invalidData
+        guard let wordStrings = try? RandomWordMapper.map(data, from: res)
+        else { throw Error.invalidData }
+
+        let language = self.language
+        let definitionURLBuilder = self.definitionURLBuilder
+        return await withTaskGroup(of: Word?.self) { group in
+            for word in wordStrings {
+                group.addTask {
+                    let url = definitionURLBuilder(word)
+
+                    guard let (defData, defRes) = try? await self.client.get(from: url),
+                          let defWord = try? DefinitionMapper.map(defData, from: defRes, word: word, language: language)
+                    else { return nil }
+
+                    return defWord
+                }
+            }
+
+            var words: [Word] = []
+            for await word in group {
+                if let word = word {
+                    words.append(word)
+                }
+            }
+
+            return words
         }
     }
 }

@@ -1,8 +1,8 @@
 # Definery
 
-A word definition and learning iOS app demonstrating **[ScreenStateKit](https://github.com/anthony1810/ScreenStateKit)** - a comprehensive Swift state management toolkit with clean architecture and offline-first capability.
+One of the most important aspects of learning a new language is vocabulary, but remembering new words is simple yet very difficult to maintain. **Definery** is your custom dictionary on your journey of learning a new language — it remembers new words for you and helps you maintain those words in your memory.
 
-> This project serves as a real-world demo for [ScreenStateKit](https://github.com/anthony1810/ScreenStateKit), showcasing the Three Pillars pattern (State + ViewModel + View) in a production-like app.
+> This project also serves as a real-world demo for [ScreenStateKit](https://github.com/anthony1810/ScreenStateKit), showcasing the Three Pillars pattern (State + ViewModel + View) in a production-like iOS app with clean architecture and offline-first capability.
 
 ## Build Status
 
@@ -46,14 +46,14 @@ This project follows **Clean Architecture** principles with separate frameworks 
 │  │                      Composition Root                                │    │
 │  │  - Wires all dependencies                                            │    │
 │  │  - Creates RemoteWithLocalFallback loader                            │    │
-│  │  - Injects into ViewModels                                           │    │
+│  │  - Injects into ViewStores                                           │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │
 │                                                                              │
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
 │  │                         UI Layer                                     │    │
 │  │  - SwiftUI Views (HomeView, LibraryView, QuizView)                  │    │
 │  │  - ViewStates (ScreenState subclasses)                               │    │
-│  │  - ViewModels (ScreenActionStore actors)                             │    │
+│  │  - ViewStores (ScreenActionStore actors)                             │    │
 │  │  - Uses ScreenStateKit patterns                                      │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -109,7 +109,9 @@ User triggers refresh/load
 | Purpose | API | Endpoint |
 |---------|-----|----------|
 | Random Words | [random-word-api](https://random-word-api.herokuapp.com) | `GET /word?number=20&lang=en` |
-| Definitions | [dictionaryapi.dev](https://dictionaryapi.dev) | `GET /api/v2/entries/{lang}/{word}` |
+| Definitions | [Wiktionary API](https://en.wiktionary.org) | `GET /w/api.php?action=parse&format=json&page={word}&prop=wikitext` |
+
+**Note:** Wiktionary provides English definitions for words in all supported languages (en, es, it, de, fr, zh, pt-br).
 
 ---
 
@@ -120,27 +122,29 @@ Definery/
 ├── README.md
 ├── Definery.xcodeproj/
 │
-├── WordFeature/                      # Domain Layer (Framework)
+├── WordFeature/                      # Domain Layer (Framework, no tests)
 │   ├── Word.swift                    # Domain model
 │   ├── Meaning.swift                 # Value object for word meanings
 │   ├── WordLoaderProtocol.swift      # Protocol for loading words
 │   └── WordCacheProtocol.swift       # Protocol for caching words
 │
-├── WordFeatureTests/                 # Domain tests
-│   └── WordTests.swift
-│
 ├── WordAPI/                          # API Layer (Framework)
-│   ├── HTTPClientProtocol.swift      # HTTP client abstraction
-│   ├── URLSessionHTTPClient.swift    # URLSession implementation
-│   ├── RemoteWordLoader.swift        # Implements WordLoaderProtocol
+│   ├── Shared/
+│   │   ├── HTTPClientProtocol.swift  # HTTP client abstraction
+│   │   └── URLSessionHTTPClient.swift # URLSession implementation
+│   ├── RemoteWordLoader.swift        # Composite loader (random words + definitions)
 │   ├── WordsEndpoint.swift           # URL builder for APIs
-│   ├── WordMapper.swift              # Maps API JSON → Word
-│   └── RemoteWord.swift              # API DTO (Decodable)
+│   ├── RandomWordMapper.swift        # Maps Random Word API JSON → [String]
+│   ├── DefinitionMapper.swift        # Maps Wiktionary API wikitext → Word
+│   └── WordMapper.swift              # Legacy mapper (deprecated)
 │
 ├── WordAPITests/                     # API tests
 │   ├── RemoteWordLoaderTests.swift
+│   ├── RandomWordMapperTests.swift
+│   ├── DefinitionMapperTests.swift
 │   ├── WordMapperTests.swift
-│   └── WordsEndpointTests.swift
+│   ├── WordsEndpointTests.swift
+│   └── WordAPIEndToEndTests.swift
 │
 ├── WordCache/                        # Cache Layer (Framework)
 │   ├── LocalWordLoader.swift         # Cache use case (implements WordCacheProtocol)
@@ -164,25 +168,32 @@ Definery/
 ├── WordCacheInfrastructureTests/     # Infrastructure tests
 │   └── SwiftDataWordStoreTests.swift
 │
+├── DefineryTests/                    # Main App Tests
+│   ├── HomeViewStoreTests.swift
+│   ├── HomeViewSnapshotTests.swift
+│   ├── RemoteWithLocalFallbackLoaderTests.swift
+│   └── Helpers/
+│       ├── MemoryLeakTracker.swift
+│       ├── WordLoaderSpy.swift
+│       ├── WordCacheSpy.swift
+│       └── TestHelpers.swift
+│
 └── Definery/                         # Main App Target
     ├── DefineryApp.swift             # App entry point
+    ├── AppError.swift                # App-level error handling
     ├── Composer/
-    │   └── WordLoaderComposer.swift  # Wires remote + local with fallback
+    │   ├── HomeUIComposer.swift      # Wires HomeView dependencies
+    │   └── RemoteWithLocalFallbackLoader.swift  # Remote + local fallback
     └── Features/
-        ├── Home/
-        │   ├── HomeViewState.swift   # ScreenState subclass
-        │   ├── HomeViewModel.swift   # ScreenActionStore actor
-        │   └── HomeView.swift        # SwiftUI view
-        ├── Library/
-        │   ├── LibraryViewState.swift
-        │   ├── LibraryViewModel.swift
-        │   └── LibraryView.swift
-        ├── Quiz/
-        │   ├── QuizViewState.swift
-        │   ├── QuizViewModel.swift   # Uses Clock for countdown timer
-        │   └── QuizView.swift
-        └── WordDetail/
-            └── WordDetailView.swift
+        └── Home/
+            ├── HomeViewState.swift   # ScreenState subclass
+            ├── HomeViewStore.swift   # ScreenActionStore actor
+            ├── HomeView.swift        # SwiftUI view
+            ├── Preview/
+            │   └── HomeViewStore+Preview.swift
+            └── Views/
+                ├── LanguagePickerView.swift
+                └── WordCardView.swift
 ```
 
 ---
@@ -295,10 +306,10 @@ final class HomeViewState: ScreenState {
 }
 ```
 
-### 2. ViewModel (ScreenActionStore actor)
+### 2. ViewStore (ScreenActionStore actor)
 
 ```swift
-actor HomeViewModel: ScreenActionStore {
+actor HomeViewStore: ScreenActionStore {
     enum Action: ActionLockable, LoadingTrackable, Sendable {
         case refresh
         case loadMore
@@ -315,15 +326,15 @@ actor HomeViewModel: ScreenActionStore {
 ```swift
 struct HomeView: View {
     @State private var viewState: HomeViewState
-    @State private var viewModel: HomeViewModel
+    @State private var viewStore: HomeViewStore
 
     var body: some View {
         // ...
         .onShowLoading($viewState.isLoading)
         .onShowError($viewState.displayError)
         .task {
-            await viewModel.binding(state: viewState)
-            viewModel.receive(action: .refresh)
+            await viewStore.binding(state: viewState)
+            viewStore.receive(action: .refresh)
         }
     }
 }
@@ -364,15 +375,16 @@ struct HomeView: View {
 - [x] Write SwiftDataWordStoreTests (10 tests)
 
 ### Phase 5: Composition
-- [ ] Create WordLoaderComposer
-- [ ] Implement remote-with-fallback pattern
-- [ ] Wire dependencies in app
+- [x] Create HomeUIComposer
+- [x] Implement remote-with-fallback pattern (RemoteWithLocalFallbackLoader)
+- [x] Wire dependencies in app
 
 ### Phase 6: UI Layer - Home
-- [ ] Create HomeViewState + HomeViewModel + HomeView
-- [ ] Add language filter
-- [ ] Add pull-to-refresh
-- [ ] Add load more
+- [x] Create HomeViewState + HomeViewStore + HomeView
+- [x] Add language filter
+- [x] Add pull-to-refresh
+- [x] Add load more
+- [x] Add snapshot tests
 
 ### Phase 7: UI Layer - Library
 - [ ] Create LibraryViewState + LibraryViewModel + LibraryView
@@ -393,7 +405,6 @@ struct HomeView: View {
 
 | Framework | Test Focus |
 |-----------|------------|
-| WordFeature | Model equality, protocol contracts |
 | WordAPI | Mapper tests, endpoint URL building, loader behavior |
 | WordCache | Cache/load behavior, DTO mapping |
 | WordCacheInfrastructure | SwiftData persistence, in-memory store |
@@ -478,7 +489,7 @@ dependencies: [
 ## Resources
 
 - [ScreenStateKit](https://github.com/anthony1810/ScreenStateKit) - State management toolkit
-- [Free Dictionary API](https://dictionaryapi.dev/) - Word definitions
+- [Wiktionary API](https://en.wiktionary.org/w/api.php) - Word definitions (multi-language support)
 - [Random Word API](https://random-word-api.herokuapp.com/home) - Random words
 - [swift-clocks](https://github.com/pointfreeco/swift-clocks) - Testable Swift concurrency clocks
 - [swift-snapshot-testing](https://github.com/pointfreeco/swift-snapshot-testing) - Snapshot testing library

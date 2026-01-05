@@ -43,28 +43,37 @@ struct WordsEndpointTests {
         #expect(sut.query?.contains("number=50") == true)
     }
 
-    // MARK: - Definition Endpoint Tests
+    // MARK: - Definition Endpoint Tests (Wiktionary API)
 
     @Test func definition_endpointURL() {
-        let baseURL = URL(string: "https://api.dictionaryapi.dev")!
+        let baseURL = URL(string: "https://en.wiktionary.org")!
         let sut = WordsEndpoint.definition(word: "hello", language: "en").url(baseURL: baseURL)
 
         #expect(sut.scheme == "https")
-        #expect(sut.host == "api.dictionaryapi.dev")
-        #expect(sut.path == "/api/v2/entries/en/hello")
+        #expect(sut.host == "en.wiktionary.org")
+        #expect(sut.path == "/w/api.php")
+    }
+
+    @Test func definition_endpointURLWithRequiredQueryParameters() {
+        let baseURL = URL(string: "https://en.wiktionary.org")!
+        let sut = WordsEndpoint.definition(word: "hello", language: "en").url(baseURL: baseURL)
+
+        #expect(sut.query?.contains("action=parse") == true)
+        #expect(sut.query?.contains("format=json") == true)
+        #expect(sut.query?.contains("prop=wikitext") == true)
+    }
+
+    @Test func definition_endpointURLWithWordParameter() {
+        let baseURL = URL(string: "https://en.wiktionary.org")!
+        let sut = WordsEndpoint.definition(word: "hello", language: "en").url(baseURL: baseURL)
+
+        #expect(sut.query?.contains("page=hello") == true)
     }
 
     @Test func definition_endpointURLWithDifferentWord() {
-        let baseURL = URL(string: "https://api.dictionaryapi.dev")!
+        let baseURL = URL(string: "https://en.wiktionary.org")!
         let sut = WordsEndpoint.definition(word: "world", language: "en").url(baseURL: baseURL)
 
-        #expect(sut.path == "/api/v2/entries/en/world")
-    }
-
-    @Test func definition_endpointURLWithDifferentLanguage() {
-        let baseURL = URL(string: "https://api.dictionaryapi.dev")!
-        let sut = WordsEndpoint.definition(word: "hola", language: "es").url(baseURL: baseURL)
-
-        #expect(sut.path == "/api/v2/entries/es/hola")
+        #expect(sut.query?.contains("page=world") == true)
     }
 }

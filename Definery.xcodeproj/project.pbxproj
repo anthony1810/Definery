@@ -18,8 +18,10 @@
 		922E66272F07581E0069C8CC /* WordCacheInfrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 922E66132F07581D0069C8CC /* WordCacheInfrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		922E662E2F07582B0069C8CC /* WordCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; };
 		922E662F2F07582B0069C8CC /* WordCache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		922E93032F07E8970069C8CC /* ScreenStateKit in Frameworks */ = {isa = PBXBuildFile; productRef = 922E93022F07E8970069C8CC /* ScreenStateKit */; };
+		922E93082F07F7570069C8CC /* ConcurrencyExtras in Frameworks */ = {isa = PBXBuildFile; productRef = 922E93072F07F7570069C8CC /* ConcurrencyExtras */; };
+		922E94662F090E9C0069C8CC /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 922E94652F090E9C0069C8CC /* SnapshotTesting */; };
 		924D29AF2F050392007FFEFF /* Definery-iOS.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */; };
-		92A75F0E2F04C99D008DC78C /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
 		92A75F182F04C99D008DC78C /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
 		92A75F192F04C99D008DC78C /* WordFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		92A75F2F2F04C9B7008DC78C /* WordAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F262F04C9B7008DC78C /* WordAPI.framework */; };
@@ -95,20 +97,6 @@
 			remoteInfo = Definery;
 		};
 		92A75EEE2F04C905008DC78C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 92A75ECE2F04C904008DC78C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 92A75ED52F04C904008DC78C;
-			remoteInfo = Definery;
-		};
-		92A75F0F2F04C99D008DC78C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 92A75ECE2F04C904008DC78C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 92A75F042F04C99C008DC78C;
-			remoteInfo = WordFeature;
-		};
-		92A75F112F04C99D008DC78C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 92A75ECE2F04C904008DC78C /* Project object */;
 			proxyType = 1;
@@ -214,7 +202,6 @@
 		92A75EE32F04C905008DC78C /* DefineryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DefineryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75EED2F04C905008DC78C /* DefineryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DefineryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75F052F04C99C008DC78C /* WordFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WordFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		92A75F0D2F04C99D008DC78C /* WordFeatureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WordFeatureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75F262F04C9B7008DC78C /* WordAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WordAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75F2E2F04C9B7008DC78C /* WordAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WordAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75F5F2F04CBF6008DC78C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -259,11 +246,6 @@
 		92A75F062F04C99C008DC78C /* WordFeature */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = WordFeature;
-			sourceTree = "<group>";
-		};
-		92A75F132F04C99D008DC78C /* WordFeatureTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = WordFeatureTests;
 			sourceTree = "<group>";
 		};
 		92A75F272F04C9B7008DC78C /* WordAPI */ = {
@@ -316,7 +298,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				922E570A2F06136D0069C8CC /* WordCache.framework in Frameworks */,
+				922E93082F07F7570069C8CC /* ConcurrencyExtras in Frameworks */,
 				92A75F182F04C99D008DC78C /* WordFeature.framework in Frameworks */,
+				922E93032F07E8970069C8CC /* ScreenStateKit in Frameworks */,
 				922E66262F07581E0069C8CC /* WordCacheInfrastructure.framework in Frameworks */,
 				92A75F392F04C9B7008DC78C /* WordAPI.framework in Frameworks */,
 			);
@@ -326,6 +310,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				922E94662F090E9C0069C8CC /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,14 +325,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		92A75F0A2F04C99D008DC78C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				92A75F0E2F04C99D008DC78C /* WordFeature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,7 +366,6 @@
 				92A75EE62F04C905008DC78C /* DefineryTests */,
 				92A75EF02F04C905008DC78C /* DefineryUITests */,
 				92A75F062F04C99C008DC78C /* WordFeature */,
-				92A75F132F04C99D008DC78C /* WordFeatureTests */,
 				92A75F272F04C9B7008DC78C /* WordAPI */,
 				92A75F342F04C9B7008DC78C /* WordAPITests */,
 				922E56F82F06136D0069C8CC /* WordCache */,
@@ -408,7 +384,6 @@
 				92A75EE32F04C905008DC78C /* DefineryTests.xctest */,
 				92A75EED2F04C905008DC78C /* DefineryUITests.xctest */,
 				92A75F052F04C99C008DC78C /* WordFeature.framework */,
-				92A75F0D2F04C99D008DC78C /* WordFeatureTests.xctest */,
 				92A75F262F04C9B7008DC78C /* WordAPI.framework */,
 				92A75F2E2F04C9B7008DC78C /* WordAPITests.xctest */,
 				922E56F72F06136D0069C8CC /* WordCache.framework */,
@@ -580,6 +555,8 @@
 			);
 			name = Definery;
 			packageProductDependencies = (
+				922E93022F07E8970069C8CC /* ScreenStateKit */,
+				922E93072F07F7570069C8CC /* ConcurrencyExtras */,
 			);
 			productName = Definery;
 			productReference = 92A75ED62F04C904008DC78C /* Definery.app */;
@@ -603,6 +580,7 @@
 			);
 			name = DefineryTests;
 			packageProductDependencies = (
+				922E94652F090E9C0069C8CC /* SnapshotTesting */,
 			);
 			productName = DefineryTests;
 			productReference = 92A75EE32F04C905008DC78C /* DefineryTests.xctest */;
@@ -653,30 +631,6 @@
 			productName = WordFeature;
 			productReference = 92A75F052F04C99C008DC78C /* WordFeature.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		92A75F0C2F04C99D008DC78C /* WordFeatureTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 92A75F1E2F04C99D008DC78C /* Build configuration list for PBXNativeTarget "WordFeatureTests" */;
-			buildPhases = (
-				92A75F092F04C99D008DC78C /* Sources */,
-				92A75F0A2F04C99D008DC78C /* Frameworks */,
-				92A75F0B2F04C99D008DC78C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				92A75F102F04C99D008DC78C /* PBXTargetDependency */,
-				92A75F122F04C99D008DC78C /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				92A75F132F04C99D008DC78C /* WordFeatureTests */,
-			);
-			name = WordFeatureTests;
-			packageProductDependencies = (
-			);
-			productName = WordFeatureTests;
-			productReference = 92A75F0D2F04C99D008DC78C /* WordFeatureTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		92A75F252F04C9B7008DC78C /* WordAPI */ = {
 			isa = PBXNativeTarget;
@@ -764,9 +718,6 @@
 					92A75F042F04C99C008DC78C = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
-					92A75F0C2F04C99D008DC78C = {
-						CreatedOnToolsVersion = 26.1.1;
-					};
 					92A75F252F04C9B7008DC78C = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
@@ -784,6 +735,11 @@
 			);
 			mainGroup = 92A75ECD2F04C904008DC78C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				922E93012F07E8970069C8CC /* XCRemoteSwiftPackageReference "ScreenStateKit" */,
+				922E93062F07F7570069C8CC /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */,
+				922E94642F090E9C0069C8CC /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 92A75ED72F04C904008DC78C /* Products */;
 			projectDirPath = "";
@@ -793,7 +749,6 @@
 				92A75EE22F04C905008DC78C /* DefineryTests */,
 				92A75EEC2F04C905008DC78C /* DefineryUITests */,
 				92A75F042F04C99C008DC78C /* WordFeature */,
-				92A75F0C2F04C99D008DC78C /* WordFeatureTests */,
 				92A75F252F04C9B7008DC78C /* WordAPI */,
 				92A75F2D2F04C9B7008DC78C /* WordAPITests */,
 				922E56F62F06136D0069C8CC /* WordCache */,
@@ -858,13 +813,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		92A75F032F04C99C008DC78C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		92A75F0B2F04C99D008DC78C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -944,13 +892,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		92A75F092F04C99D008DC78C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		92A75F222F04C9B7008DC78C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1017,16 +958,6 @@
 			isa = PBXTargetDependency;
 			target = 92A75ED52F04C904008DC78C /* Definery */;
 			targetProxy = 92A75EEE2F04C905008DC78C /* PBXContainerItemProxy */;
-		};
-		92A75F102F04C99D008DC78C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 92A75F042F04C99C008DC78C /* WordFeature */;
-			targetProxy = 92A75F0F2F04C99D008DC78C /* PBXContainerItemProxy */;
-		};
-		92A75F122F04C99D008DC78C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 92A75ED52F04C904008DC78C /* Definery */;
-			targetProxy = 92A75F112F04C99D008DC78C /* PBXContainerItemProxy */;
 		};
 		92A75F172F04C99D008DC78C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1208,7 +1139,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = LL6XGHYGV4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1258,7 +1189,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = LL6XGHYGV4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1712,56 +1643,6 @@
 			};
 			name = Release;
 		};
-		92A75F1F2F04C99D008DC78C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 48CKAFKWVH;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.viothun.Definery.WordFeatureTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.1;
-			};
-			name = Debug;
-		};
-		92A75F202F04C99D008DC78C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 48CKAFKWVH;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.viothun.Definery.WordFeatureTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.1;
-			};
-			name = Release;
-		};
 		92A75F3C2F04C9B7008DC78C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1990,15 +1871,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		92A75F1E2F04C99D008DC78C /* Build configuration list for PBXNativeTarget "WordFeatureTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				92A75F1F2F04C99D008DC78C /* Debug */,
-				92A75F202F04C99D008DC78C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		92A75F3B2F04C9B7008DC78C /* Build configuration list for PBXNativeTarget "WordAPI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2018,6 +1890,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		922E93012F07E8970069C8CC /* XCRemoteSwiftPackageReference "ScreenStateKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/anthony1810/ScreenStateKit";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		922E93062F07F7570069C8CC /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-concurrency-extras";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.2;
+			};
+		};
+		922E94642F090E9C0069C8CC /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.18.7;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		922E93022F07E8970069C8CC /* ScreenStateKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 922E93012F07E8970069C8CC /* XCRemoteSwiftPackageReference "ScreenStateKit" */;
+			productName = ScreenStateKit;
+		};
+		922E93072F07F7570069C8CC /* ConcurrencyExtras */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 922E93062F07F7570069C8CC /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */;
+			productName = ConcurrencyExtras;
+		};
+		922E94652F090E9C0069C8CC /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 922E94642F090E9C0069C8CC /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 92A75ECE2F04C904008DC78C /* Project object */;
 }
