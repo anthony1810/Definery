@@ -12,12 +12,10 @@
 		922E570A2F06136D0069C8CC /* WordCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; };
 		922E570B2F06136D0069C8CC /* WordCache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		922E57122F061CF90069C8CC /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
-		922E57132F061CF90069C8CC /* WordFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		922E661C2F07581E0069C8CC /* WordCacheInfrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E66132F07581D0069C8CC /* WordCacheInfrastructure.framework */; };
 		922E66262F07581E0069C8CC /* WordCacheInfrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E66132F07581D0069C8CC /* WordCacheInfrastructure.framework */; };
 		922E66272F07581E0069C8CC /* WordCacheInfrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 922E66132F07581D0069C8CC /* WordCacheInfrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		922E662E2F07582B0069C8CC /* WordCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; };
-		922E662F2F07582B0069C8CC /* WordCache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		922E93032F07E8970069C8CC /* ScreenStateKit in Frameworks */ = {isa = PBXBuildFile; productRef = 922E93022F07E8970069C8CC /* ScreenStateKit */; };
 		922E93082F07F7570069C8CC /* ConcurrencyExtras in Frameworks */ = {isa = PBXBuildFile; productRef = 922E93072F07F7570069C8CC /* ConcurrencyExtras */; };
 		922E94662F090E9C0069C8CC /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 922E94652F090E9C0069C8CC /* SnapshotTesting */; };
@@ -28,7 +26,6 @@
 		92A75F392F04C9B7008DC78C /* WordAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F262F04C9B7008DC78C /* WordAPI.framework */; };
 		92A75F3A2F04C9B7008DC78C /* WordAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F262F04C9B7008DC78C /* WordAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		92A75F422F04C9D0008DC78C /* WordFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; };
-		92A75F432F04C9D0008DC78C /* WordFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92A75F052F04C99C008DC78C /* WordFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		92A75F602F04CBF6008DC78C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 92A75F5F2F04CBF6008DC78C /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -141,28 +138,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		922E57162F061CF90069C8CC /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				922E57132F061CF90069C8CC /* WordFeature.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		922E66322F07582B0069C8CC /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				922E662F2F07582B0069C8CC /* WordCache.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		92A75F1D2F04C99D008DC78C /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -173,17 +148,6 @@
 				92A75F192F04C99D008DC78C /* WordFeature.framework in Embed Frameworks */,
 				922E66272F07581E0069C8CC /* WordCacheInfrastructure.framework in Embed Frameworks */,
 				92A75F3A2F04C9B7008DC78C /* WordAPI.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		92A75F462F04C9D0008DC78C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				92A75F432F04C9D0008DC78C /* WordFeature.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -443,7 +407,6 @@
 				922E56F32F06136D0069C8CC /* Sources */,
 				922E56F42F06136D0069C8CC /* Frameworks */,
 				922E56F52F06136D0069C8CC /* Resources */,
-				922E57162F061CF90069C8CC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -492,7 +455,6 @@
 				922E660F2F07581D0069C8CC /* Sources */,
 				922E66102F07581D0069C8CC /* Frameworks */,
 				922E66112F07581D0069C8CC /* Resources */,
-				922E66322F07582B0069C8CC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -640,7 +602,6 @@
 				92A75F222F04C9B7008DC78C /* Sources */,
 				92A75F232F04C9B7008DC78C /* Frameworks */,
 				92A75F242F04C9B7008DC78C /* Resources */,
-				92A75F462F04C9D0008DC78C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
