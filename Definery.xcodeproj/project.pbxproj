@@ -1859,8 +1859,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/anthony1810/ScreenStateKit";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 		922E93062F07F7570069C8CC /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */ = {

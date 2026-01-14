@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/anthony1810/ScreenStateKit",
       "state" : {
-        "branch" : "main",
-        "revision" : "aa646f3d3d59609fc8aad3746056ac11af1bb868"
+        "revision" : "b2558777feb23aec0d73ef62c8fad480345631fa",
+        "version" : "1.0.0"
       }
     },
     {
