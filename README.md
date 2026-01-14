@@ -85,7 +85,7 @@ Definery follows **Clean Architecture** with modular frameworks:
 
 ### Three Pillars Pattern (ScreenStateKit)
 
-Each feature follows the State + ViewModel + View pattern:
+Each feature follows the State + ViewStore + View pattern:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -93,7 +93,7 @@ Each feature follows the State + ViewModel + View pattern:
 │                        (SwiftUI)                                │
 │  ┌───────────────────────────────────────────────────────────┐  │
 │  │  @State viewState: FeatureViewState                       │  │
-│  │  @State viewModel: FeatureViewModel                       │  │
+│  │  @State viewStore: FeatureViewStore                       │  │
 │  │                                                           │  │
 │  │  .onShowLoading($viewState.isLoading)                     │  │
 │  │  .onShowError($viewState.displayError)                    │  │
@@ -104,7 +104,7 @@ Each feature follows the State + ViewModel + View pattern:
          │                         │
          ▼                         ▼
 ┌─────────────────┐      ┌─────────────────────┐
-│     State       │◄─────│     ViewModel       │
+│     State       │◄─────│     ViewStore       │
 │ (ScreenState)   │      │ (ScreenActionStore) │
 ├─────────────────┤      ├─────────────────────┤
 │ @Observable     │      │ actor               │
