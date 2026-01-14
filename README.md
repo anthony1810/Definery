@@ -1,6 +1,6 @@
 # Definery
 
-![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)
+![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)
 ![iOS](https://img.shields.io/badge/iOS-17+-blue.svg)
 ![macOS](https://img.shields.io/badge/macOS-14+-purple.svg)
 ![Architecture](https://img.shields.io/badge/Architecture-Clean-green.svg)
