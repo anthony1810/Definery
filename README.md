@@ -83,8 +83,41 @@ Definery follows **Clean Architecture** with modular frameworks:
         └────────────┘
 ```
 
+### Three Pillars Pattern (ScreenStateKit)
+
+Each feature follows the State + ViewModel + View pattern:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                           View                                  │
+│                        (SwiftUI)                                │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │  @State viewState: FeatureViewState                       │  │
+│  │  @State viewModel: FeatureViewModel                       │  │
+│  │                                                           │  │
+│  │  .onShowLoading($viewState.isLoading)                     │  │
+│  │  .onShowError($viewState.displayError)                    │  │
+│  └───────────────────────────────────────────────────────────┘  │
+└─────────────────────┬───────────────────────────────────────────┘
+                      │
+         ┌────────────┴────────────┐
+         │                         │
+         ▼                         ▼
+┌─────────────────┐      ┌─────────────────────┐
+│     State       │◄─────│     ViewModel       │
+│ (ScreenState)   │      │ (ScreenActionStore) │
+├─────────────────┤      ├─────────────────────┤
+│ @Observable     │      │ actor               │
+│ @MainActor      │      │                     │
+│                 │      │ func binding(state:)│
+│ • isLoading     │      │ func receive(action)│
+│ • displayError  │      │                     │
+│ • domain data   │      │ • Services injected │
+└─────────────────┘      │ • ActionLocker      │
+                         └─────────────────────┘
+```
+
 **Key Patterns:**
-- **Three Pillars**: State + ViewModel + View (via ScreenStateKit)
 - **Offline-First**: Remote with local fallback
 - **Protocol-Driven**: All dependencies injected via protocols
 - **Actor-Based**: Thread-safe ViewModels
