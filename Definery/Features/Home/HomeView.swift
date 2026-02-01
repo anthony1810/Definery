@@ -54,15 +54,12 @@ extension HomeView {
 extension HomeView {
     @ViewBuilder
     private var content: some View {
-        switch viewState.loadState {
-        case .idle:
-            EmptyView()
-        case .loaded(let words) where words.isEmpty:
-            emptyState
-        case .loaded:
-            wordList
-        case .error(let errorMessage):
+        if let errorMessage = viewState.errorMessage {
             errorState(errorMessage)
+        } else if viewState.hasWords {
+            wordList
+        } else if !viewState.isLoading {
+            emptyState
         }
     }
 
@@ -73,7 +70,7 @@ extension HomeView {
                     .listRowSeparator(.hidden)
             }
 
-            if viewState.isLoadingMore {
+            if viewState.canShowLoadmore {
                 ProgressView()
                     .id(UUID())
                     .frame(maxWidth: .infinity)
@@ -89,7 +86,7 @@ extension HomeView {
         }
         .listStyle(.plain)
         .refreshable {
-            try? await viewStore.isolatedReceive(action: .refresh)
+            await viewStore.isolatedReceive(action: .refresh)
         }
     }
 

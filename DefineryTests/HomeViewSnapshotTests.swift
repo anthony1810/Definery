@@ -18,7 +18,7 @@ import WordFeature
 final class HomeViewSnapshotTests {
     @Test("HomeView with words shows word list")
     func homeView_withWords_showsWordList() async throws {
-        let view = makeSUT(result: .success(Word.mocks))
+        let view = makeSUT(words: Word.mocks)
 
         assertHomeViewSnapshot(of: view, named: "light", colorScheme: .light)
         assertHomeViewSnapshot(of: view, named: "dark", colorScheme: .dark)
@@ -26,7 +26,7 @@ final class HomeViewSnapshotTests {
 
     @Test("HomeView with empty words shows empty state")
     func homeView_withEmptyWords_showsEmptyState() async throws {
-        let view = makeSUT(result: .success([]))
+        let view = makeSUT(words: [])
 
         assertHomeViewSnapshot(of: view, named: "light", colorScheme: .light)
         assertHomeViewSnapshot(of: view, named: "dark", colorScheme: .dark)
@@ -34,7 +34,7 @@ final class HomeViewSnapshotTests {
 
     @Test("HomeView with error shows error state")
     func homeView_withError_showsErrorState() async throws {
-        let view = makeSUT(result: .failure(anyNSError()))
+        let view = makeSUT(errorMessage: "Something went wrong")
 
         assertHomeViewSnapshot(of: view, named: "light", colorScheme: .light)
         assertHomeViewSnapshot(of: view, named: "dark", colorScheme: .dark)
@@ -45,41 +45,32 @@ final class HomeViewSnapshotTests {
 
 extension HomeViewSnapshotTests {
     private func makeSUT(
-        result: Result<[Word], Error>,
+        words: [Word] = [],
+        errorMessage: String? = nil,
         selectedLanguage: Locale.LanguageCode = .english
     ) -> some View {
-        let viewState = makeState(result: result, selectedLanguage: selectedLanguage)
-        let loader = makeLoader(result: result)
+        let viewState = makeState(
+            words: words,
+            errorMessage: errorMessage,
+            selectedLanguage: selectedLanguage
+        )
+        let loader = WordLoaderSpy()
+        loader.complete(with: .success(words))
         let viewStore = HomeViewStore(loader: { _ in loader })
 
         return HomeView(viewStore: viewStore, viewState: viewState)
     }
 
     private func makeState(
-        result: Result<[Word], Error>,
+        words: [Word],
+        errorMessage: String?,
         selectedLanguage: Locale.LanguageCode
     ) -> HomeViewState {
         let viewState = HomeViewState()
-
-        switch result {
-        case .success(let words):
-            viewState.tryUpdate(property: \.loadState, newValue: .loaded(words))
-        case .failure(let error):
-            viewState.tryUpdate(property: \.loadState, newValue: .error(error.localizedDescription))
-        }
-        viewState.tryUpdate(property: \.selectedLanguage, newValue: selectedLanguage)
-
+        viewState.words = words
+        viewState.errorMessage = errorMessage
+        viewState.selectedLanguage = selectedLanguage
         return viewState
-    }
-
-    private func makeLoader(result: Result<[Word], Error>) -> WordLoaderSpy {
-        let loader = WordLoaderSpy()
-        loader.complete(with: result)
-        return loader
-    }
-
-    private func anyNSError() -> NSError {
-        NSError(domain: "test", code: 0, userInfo: [NSLocalizedDescriptionKey: "Something went wrong"])
     }
 
     private func assertHomeViewSnapshot<V: View>(

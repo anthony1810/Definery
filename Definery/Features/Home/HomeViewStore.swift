@@ -11,13 +11,10 @@ import WordFeature
 typealias WordLoaderFactory = @Sendable (Locale.LanguageCode) -> WordLoaderProtocol
 
 actor HomeViewStore: ScreenActionStore {
-    public typealias ScreenState = HomeViewState
-  
-    weak var viewState: HomeViewState?
-    
+    private var state: HomeViewState?
     private let actionLocker = ActionLocker()
-    
-    enum Action: ActionLockable, LoadingTrackable, Sendable, Hashable {
+
+    enum Action: ActionLockable, LoadingTrackable, Hashable {
         case loadWords
         case refresh
         case loadMore
@@ -32,30 +29,24 @@ actor HomeViewStore: ScreenActionStore {
             }
         }
     }
-    
+
     private let loaderFactory: WordLoaderFactory
-    
+
     init(loader: @escaping WordLoaderFactory) {
         self.loaderFactory = loader
     }
-    
+
     func binding(state: HomeViewState) {
-        self.viewState = state
+        self.state = state
     }
-    
+
     nonisolated func receive(action: Action) {
-        Task {
-            do {
-                try await isolatedReceive(action: action)
-            } catch {
-                await handleError(error, for: action)
-            }
-        }
+        Task { await isolatedReceive(action: action) }
     }
-    
-    func isolatedReceive(action: Action) async throws {
+
+    func isolatedReceive(action: Action) async {
         guard await actionLocker.canExecute(action) else { return }
-        await viewState?.loadingStarted(action: action)
+        await state?.loadingStarted(action: action)
 
         do {
             switch action {
@@ -66,14 +57,12 @@ actor HomeViewStore: ScreenActionStore {
             case .selectLanguage(let language):
                 try await selectLanguage(language)
             }
-
-            await actionLocker.unlock(action)
-            await viewState?.loadingFinished(action: action)
         } catch {
-            await actionLocker.unlock(action)
-            await viewState?.loadingFinished(action: action)
-            throw error
+            await handleError(error, for: action)
         }
+
+        await actionLocker.unlock(action)
+        await state?.loadingFinished(action: action)
     }
 }
 
@@ -81,46 +70,56 @@ actor HomeViewStore: ScreenActionStore {
 
 extension HomeViewStore {
     private func loadWords() async throws {
-        let selectedLanguage = await viewState?.selectedLanguage ?? .english
+        let selectedLanguage = await state?.selectedLanguage ?? .english
         let loader = loaderFactory(selectedLanguage)
         let words = try await loader.load()
-        await viewState?.tryUpdate(property: \.loadState, newValue: .loaded(words))
-    }
-    
-    private func loadMore() async throws {
-        await viewState?.tryUpdate(property: \.isLoadingMore, newValue: true)
 
-        let selectedLanguage = await viewState?.selectedLanguage ?? .english
+        await state?.updateState { state in
+            state.words = words
+            state.errorMessage = nil
+        }
+    }
+
+    private func loadMore() async throws {
+        let selectedLanguage = await state?.selectedLanguage ?? .english
         let loader = loaderFactory(selectedLanguage)
         let newWords = try await loader.load()
-        let currentWords = await viewState?.words ?? []
+        let currentWords = await state?.words ?? []
         let uniqueNewWords = newWords.filter { !currentWords.contains($0) }
-        
-        await viewState?.tryUpdate(property: \.isLoadingMore, newValue: false)
-        await viewState?.tryUpdate(property: \.loadState, newValue: .loaded(currentWords + uniqueNewWords))
+
+        await state?.updateState { state in
+            state.words = currentWords + uniqueNewWords
+        }
     }
-    
+
     private func selectLanguage(_ language: Locale.LanguageCode) async throws {
-        await viewState?.tryUpdate(property: \.selectedLanguage, newValue: language)
-        await viewState?.tryUpdate(property: \.loadState, newValue: .idle)
-        
+        await state?.updateState { state in
+            state.selectedLanguage = language
+            state.words = []
+            state.errorMessage = nil
+        }
+
         let loader = loaderFactory(language)
         let words = try await loader.load()
-        await viewState?.tryUpdate(property: \.loadState, newValue: .loaded(words))
+
+        await state?.updateState { state in
+            state.words = words
+        }
     }
 }
 
-// MARK: - Helpers
+// MARK: - Error Handling
 
 extension HomeViewStore {
     private func handleError(_ error: Error, for action: Action) async {
         switch action {
         case .loadWords, .refresh, .selectLanguage:
-            await viewState?.tryUpdate(property: \.loadState, newValue: .error(error.localizedDescription))
+            await state?.updateState { state in
+                state.errorMessage = error.localizedDescription
+            }
         case .loadMore:
-            // Keep existing words on loadMore error, only show alert
-            break
+            await state?.ternimateLoadmoreView()
         }
-        await viewState?.showError(AppError.abnormalState(error.localizedDescription))
+        await state?.showError(AppError.abnormalState(error.localizedDescription))
     }
 }
