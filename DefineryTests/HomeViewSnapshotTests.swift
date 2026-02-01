@@ -20,21 +20,24 @@ final class HomeViewSnapshotTests {
     func homeView_withWords_showsWordList() async throws {
         let view = makeSUT(result: .success(Word.mocks))
 
-        assertHomeViewSnapshot(of: view)
+        assertHomeViewSnapshot(of: view, named: "light", colorScheme: .light)
+        assertHomeViewSnapshot(of: view, named: "dark", colorScheme: .dark)
     }
 
     @Test("HomeView with empty words shows empty state")
     func homeView_withEmptyWords_showsEmptyState() async throws {
         let view = makeSUT(result: .success([]))
 
-        assertHomeViewSnapshot(of: view)
+        assertHomeViewSnapshot(of: view, named: "light", colorScheme: .light)
+        assertHomeViewSnapshot(of: view, named: "dark", colorScheme: .dark)
     }
 
     @Test("HomeView with error shows error state")
     func homeView_withError_showsErrorState() async throws {
         let view = makeSUT(result: .failure(anyNSError()))
 
-        assertHomeViewSnapshot(of: view)
+        assertHomeViewSnapshot(of: view, named: "light", colorScheme: .light)
+        assertHomeViewSnapshot(of: view, named: "dark", colorScheme: .dark)
     }
 }
 
@@ -81,6 +84,8 @@ extension HomeViewSnapshotTests {
 
     private func assertHomeViewSnapshot<V: View>(
         of view: V,
+        named name: String,
+        colorScheme: ColorScheme,
         file: StaticString = #filePath,
         testName: String = #function,
         line: UInt = #line
@@ -91,13 +96,17 @@ extension HomeViewSnapshotTests {
             file: file
         )
 
+        let themedView = view
+            .environment(\.colorScheme, colorScheme)
+
         let failure = verifySnapshot(
-            of: view,
+            of: themedView,
             as: .image(
                 precision: 0.93,
                 perceptualPrecision: 0.93,
                 layout: .device(config: .iPhone13)
             ),
+            named: name,
             snapshotDirectory: snapshotDirectory,
             file: file,
             testName: testName,

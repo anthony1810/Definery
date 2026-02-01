@@ -17,7 +17,7 @@ actor HomeViewStore: ScreenActionStore {
     
     private let actionLocker = ActionLocker()
     
-    enum Action: ActionLockable, LoadingTrackable, Sendable {
+    enum Action: ActionLockable, LoadingTrackable, Sendable, Hashable {
         case loadWords
         case refresh
         case loadMore

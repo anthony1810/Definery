@@ -94,23 +94,33 @@ extension HomeView {
     }
 
     private var emptyState: some View {
-        ContentUnavailableView(
-            String(localized: "empty.title", table: "Home"),
-            systemImage: "book.closed",
-            description: Text("empty.description", tableName: "Home")
-        )
+        GeometryReader { geometry in
+            ScrollView {
+                ContentUnavailableView(
+                    String(localized: "empty.title", table: "Home"),
+                    systemImage: "book.closed",
+                    description: Text("empty.description", tableName: "Home")
+                )
+                .frame(maxWidth: .infinity, minHeight: geometry.size.height)
+            }
+        }
     }
 
     private func errorState(_ message: String) -> some View {
-        ContentUnavailableView {
-            Label(String(localized: "error.title", table: "Home"), systemImage: "exclamationmark.triangle")
-        } description: {
-            Text(message)
-        } actions: {
-            Button(String(localized: "error.tryAgain", table: "Home")) {
-                viewStore.receive(action: .loadWords)
+        GeometryReader { geometry in
+            ScrollView {
+                ContentUnavailableView {
+                    Label(String(localized: "error.title", table: "Home"), systemImage: "exclamationmark.triangle")
+                } description: {
+                    Text(message)
+                } actions: {
+                    Button(String(localized: "error.tryAgain", table: "Home")) {
+                        viewStore.receive(action: .loadWords)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .frame(maxWidth: .infinity, minHeight: geometry.size.height)
             }
-            .buttonStyle(.borderedProminent)
         }
     }
 }
