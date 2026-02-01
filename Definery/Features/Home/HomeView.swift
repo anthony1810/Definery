@@ -70,23 +70,24 @@ extension HomeView {
                     .listRowSeparator(.hidden)
             }
 
-            if viewState.canShowLoadmore {
-                ProgressView()
-                    .id(UUID())
-                    .frame(maxWidth: .infinity)
-                    .listRowSeparator(.hidden)
-            } else {
-                Color.clear
-                    .frame(height: 1)
-                    .listRowSeparator(.hidden)
-                    .onAppear {
-                        viewStore.receive(action: .loadMore)
-                    }
-            }
+            loadMoreSection
         }
         .listStyle(.plain)
         .refreshable {
             await viewStore.isolatedReceive(action: .refresh)
+        }
+    }
+
+    @ViewBuilder
+    private var loadMoreSection: some View {
+        if !viewState.words.isEmpty && viewState.canShowLoadmore {
+            RMLoadmoreView(states: viewState)
+                .id(UUID())
+                .frame(maxWidth: .infinity)
+                .listRowSeparator(.hidden)
+                .onAppear {
+                    viewStore.receive(action: .loadMore)
+                }
         }
     }
 

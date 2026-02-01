@@ -46,6 +46,7 @@ actor HomeViewStore: ScreenActionStore {
 
     func isolatedReceive(action: Action) async {
         guard await actionLocker.canExecute(action) else { return }
+
         await state?.loadingStarted(action: action)
 
         do {
@@ -78,18 +79,27 @@ extension HomeViewStore {
             state.words = words
             state.errorMessage = nil
         }
+
+        /// sometimes free apis return less than needed words
+        /// for progress view to show again
+        await state?.canExecuteLoadmore()
     }
 
     private func loadMore() async throws {
         let selectedLanguage = await state?.selectedLanguage ?? .english
+        let currentWords = await state?.words ?? []
+
         let loader = loaderFactory(selectedLanguage)
         let newWords = try await loader.load()
-        let currentWords = await state?.words ?? []
+
         let uniqueNewWords = newWords.filter { !currentWords.contains($0) }
 
         await state?.updateState { state in
             state.words = currentWords + uniqueNewWords
         }
+
+        // We will never load all words in this app
+        await state?.updateDidLoadAllData(false)
     }
 
     private func selectLanguage(_ language: Locale.LanguageCode) async throws {
