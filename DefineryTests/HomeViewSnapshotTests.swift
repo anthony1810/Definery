@@ -40,6 +40,22 @@ final class HomeViewSnapshotTests {
         assertHomeViewSnapshot(of: view, named: "light", colorScheme: .light)
         assertHomeViewSnapshot(of: view, named: "dark", colorScheme: .dark)
     }
+
+    @Test("HomeView with placeholder shows skeleton loading")
+    func homeView_withPlaceholder_showsSkeletonLoading() async throws {
+        let view = makeSUT(isPlaceholder: true)
+
+        assertHomeViewSnapshot(of: view, named: "light", colorScheme: .light)
+        assertHomeViewSnapshot(of: view, named: "dark", colorScheme: .dark)
+    }
+
+    @Test("HomeView with few words shows load more progress")
+    func homeView_withFewWords_showsLoadMoreProgress() async throws {
+        let view = makeSUT(words: [Word.mocks[0]], canShowLoadmore: true)
+
+        assertHomeViewSnapshot(of: view, named: "light", colorScheme: .light)
+        assertHomeViewSnapshot(of: view, named: "dark", colorScheme: .dark)
+    }
 }
 
 // MARK: - Helpers
@@ -48,12 +64,16 @@ extension HomeViewSnapshotTests {
     private func makeSUT(
         words: [Word] = [],
         errorMessage: String? = nil,
-        selectedLanguage: Locale.LanguageCode = .english
+        selectedLanguage: Locale.LanguageCode = .english,
+        isPlaceholder: Bool = false,
+        canShowLoadmore: Bool = false
     ) -> some View {
         let viewState = makeState(
             words: words,
             errorMessage: errorMessage,
-            selectedLanguage: selectedLanguage
+            selectedLanguage: selectedLanguage,
+            isPlaceholder: isPlaceholder,
+            canShowLoadmore: canShowLoadmore
         )
         let loader = WordLoaderSpy()
         loader.complete(with: .success(words))
@@ -65,12 +85,21 @@ extension HomeViewSnapshotTests {
     private func makeState(
         words: [Word],
         errorMessage: String?,
-        selectedLanguage: Locale.LanguageCode
+        selectedLanguage: Locale.LanguageCode,
+        isPlaceholder: Bool = false,
+        canShowLoadmore: Bool = false
     ) -> HomeViewState {
         let viewState = HomeViewState()
-        viewState.snapshot = HomeSnapshot(words: words, selectedLanguage: selectedLanguage)
+        if isPlaceholder {
+            viewState.snapshot = .placeholder
+        } else {
+            viewState.snapshot = HomeSnapshot(words: words, selectedLanguage: selectedLanguage)
+        }
         if let errorMessage = errorMessage {
             viewState.displayError = RMDisplayableError(message: errorMessage)
+        }
+        if canShowLoadmore {
+            viewState.canExecuteLoadmore()
         }
         return viewState
     }
