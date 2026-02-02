@@ -27,7 +27,7 @@ struct WordCardView: View {
                 }
             }
 
-            ForEach(word.meanings.prefix(2), id: \.definition) { meaning in
+            ForEach(word.meanings.prefix(2), id: \.self) { meaning in
                 MeaningRow(meaning: meaning)
             }
 

@@ -69,7 +69,7 @@ extension HomeView {
                 WordCardView(word: word)
                     .listRowSeparator(.hidden)
             }
-            .redacted(reason: viewState.snapshot.isPlaceholder ? .placeholder : [])
+            .placeholder(viewState.snapshot)
             .shimmering(active: viewState.snapshot.isPlaceholder)
 
             loadMoreSection
