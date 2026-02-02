@@ -11,6 +11,7 @@ import Testing
 
 import SnapshotTesting
 import WordFeature
+import ScreenStateKit
 
 @testable import Definery
 
@@ -67,9 +68,10 @@ extension HomeViewSnapshotTests {
         selectedLanguage: Locale.LanguageCode
     ) -> HomeViewState {
         let viewState = HomeViewState()
-        viewState.words = words
-        viewState.errorMessage = errorMessage
-        viewState.selectedLanguage = selectedLanguage
+        viewState.snapshot = HomeSnapshot(words: words, selectedLanguage: selectedLanguage)
+        if let errorMessage = errorMessage {
+            viewState.displayError = RMDisplayableError(message: errorMessage)
+        }
         return viewState
     }
 

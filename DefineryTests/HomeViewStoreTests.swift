@@ -36,7 +36,7 @@ final class HomeViewStoreTests {
         sut.loader.complete(with: .success([]))
         await sut.store.isolatedReceive(action: .loadWords)
 
-        #expect(sut.state.words.isEmpty)
+        #expect(sut.state.snapshot.words.isEmpty)
     }
 
     @Test func loadWords_deliversErrorToViewStateOnLoaderError() async {
@@ -50,20 +50,6 @@ final class HomeViewStoreTests {
             await Task.megaYield()
 
             #expect(sut.state.displayError != nil)
-        }
-    }
-
-    @Test func loadWords_setsErrorMessageOnLoaderError() async {
-        await withMainSerialExecutor {
-            let sut = await makeSUT()
-            let expectedError = anyNSError()
-
-            sut.loader.complete(with: .failure(expectedError))
-            sut.store.receive(action: .loadWords)
-
-            await Task.megaYield()
-
-            #expect(sut.state.errorMessage == expectedError.localizedDescription)
         }
     }
 
@@ -87,7 +73,7 @@ final class HomeViewStoreTests {
         sut.loader.complete(with: .success(expectedWords))
         await sut.store.isolatedReceive(action: .loadWords)
 
-        #expect(sut.state.words == expectedWords)
+        #expect(sut.state.snapshot.words == expectedWords)
     }
 
     @Test func loadWords_clearsErrorOnSuccess() async {
@@ -99,14 +85,14 @@ final class HomeViewStoreTests {
             sut.store.receive(action: .loadWords)
             await Task.megaYield()
 
-            #expect(sut.state.errorMessage != nil)
+            #expect(sut.state.displayError != nil)
 
             // Then load successfully
             sut.loader.complete(with: .success([]))
             sut.store.receive(action: .loadWords)
             await Task.megaYield()
 
-            #expect(sut.state.errorMessage == nil)
+            #expect(sut.state.displayError == nil)
         }
     }
 
@@ -150,7 +136,7 @@ final class HomeViewStoreTests {
             sut.store.receive(action: .loadMore)
             await Task.megaYield()
 
-            #expect(sut.state.words == initialWords + newWords)
+            #expect(sut.state.snapshot.words == initialWords + newWords)
         }
     }
 
@@ -168,7 +154,7 @@ final class HomeViewStoreTests {
             sut.store.receive(action: .loadMore)
             await Task.megaYield()
 
-            #expect(sut.state.words == [existingWord, newWord])
+            #expect(sut.state.snapshot.words == [existingWord, newWord])
         }
     }
 
@@ -181,18 +167,6 @@ final class HomeViewStoreTests {
             await Task.megaYield()
 
             #expect(sut.state.displayError != nil)
-        }
-    }
-
-    @Test func loadMore_doesNotSetErrorMessageOnLoaderError() async {
-        await withMainSerialExecutor {
-            let sut = await makeSUT()
-
-            sut.loader.complete(with: .failure(anyNSError()))
-            sut.store.receive(action: .loadMore)
-            await Task.megaYield()
-
-            #expect(sut.state.errorMessage == nil)
         }
     }
 
@@ -239,7 +213,7 @@ final class HomeViewStoreTests {
             sut.store.receive(action: .loadMore)
             await Task.megaYield()
 
-            #expect(sut.state.words == initialWords)
+            #expect(sut.state.snapshot.words == initialWords)
         }
     }
 
@@ -249,13 +223,13 @@ final class HomeViewStoreTests {
         await withMainSerialExecutor {
             let sut = await makeSUT()
 
-            #expect(sut.state.selectedLanguage == .english)
+            #expect(sut.state.snapshot.selectedLanguage == .english)
 
             sut.loader.complete(with: .success([]))
             sut.store.receive(action: .selectLanguage(.spanish))
             await Task.megaYield()
 
-            #expect(sut.state.selectedLanguage == .spanish)
+            #expect(sut.state.snapshot.selectedLanguage == .spanish)
         }
     }
 
@@ -270,14 +244,14 @@ final class HomeViewStoreTests {
             sut.store.receive(action: .loadWords)
             await Task.megaYield()
 
-            #expect(sut.state.words == englishWords)
+            #expect(sut.state.snapshot.words == englishWords)
 
             // change language - should clear and reload
             sut.loader.complete(with: .success(spanishWords))
             sut.store.receive(action: .selectLanguage(.spanish))
             await Task.megaYield()
 
-            #expect(sut.state.words == spanishWords)
+            #expect(sut.state.snapshot.words == spanishWords)
             #expect(sut.loader.loadCallCount == 2)
         }
     }
@@ -310,7 +284,7 @@ final class HomeViewStoreTests {
             sut.store.receive(action: .selectLanguage(.spanish))
             await Task.megaYield()
 
-            #expect(sut.state.words == expectedWords)
+            #expect(sut.state.snapshot.words == expectedWords)
         }
     }
 }

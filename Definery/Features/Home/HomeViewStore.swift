@@ -57,6 +57,10 @@ actor HomeViewStore: ScreenActionStore {
             case .selectLanguage(let language):
                 try await selectLanguage(language)
             }
+            // Clear error on success for main actions
+            if case .loadWords = action {
+                await state?.updateState { $0.displayError = nil }
+            }
         } catch {
             await handleError(error, for: action)
         }
