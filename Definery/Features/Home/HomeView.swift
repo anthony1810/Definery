@@ -5,6 +5,7 @@
 //  Created by Anthony on 3/1/26.
 //
 
+import Shimmer
 import SwiftUI
 import ScreenStateKit
 import WordFeature
@@ -24,7 +25,6 @@ struct HomeView: View {
                 .navigationTitle(String(localized: "navigation.title", table: "Home"))
                 .toolbar { toolbarContent }
         }
-        .onShowLoading($viewState.isLoading)
         .onShowError($viewState.displayError)
         .task {
             await viewStore.binding(state: viewState)
@@ -40,7 +40,7 @@ extension HomeView {
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             LanguagePickerView(
-                selected: viewState.selectedLanguage,
+                selected: viewState.snapshot.selectedLanguage,
                 onSelect: { language in
                     viewStore.receive(action: .selectLanguage(language))
                 }
@@ -54,21 +54,23 @@ extension HomeView {
 extension HomeView {
     @ViewBuilder
     private var content: some View {
-        if let errorMessage = viewState.errorMessage {
-            errorState(errorMessage)
-        } else if viewState.hasWords {
+        if viewState.hasError {
+            errorState
+        } else if viewState.snapshot.isPlaceholder || viewState.hasWords {
             wordList
-        } else if !viewState.isLoading {
+        } else {
             emptyState
         }
     }
 
     private var wordList: some View {
         List {
-            ForEach(viewState.words) { word in
+            ForEach(viewState.snapshot.words) { word in
                 WordCardView(word: word)
                     .listRowSeparator(.hidden)
             }
+            .redacted(reason: viewState.snapshot.isPlaceholder ? .placeholder : [])
+            .shimmering(active: viewState.snapshot.isPlaceholder)
 
             loadMoreSection
         }
@@ -76,11 +78,14 @@ extension HomeView {
         .refreshable {
             await viewStore.isolatedReceive(action: .refresh)
         }
+        .disabled(viewState.snapshot.isPlaceholder)
     }
 
     @ViewBuilder
     private var loadMoreSection: some View {
-        if !viewState.words.isEmpty && viewState.canShowLoadmore {
+        if !viewState.snapshot.words.isEmpty
+            && viewState.canShowLoadmore
+            && !viewState.snapshot.isPlaceholder {
             RMLoadmoreView(states: viewState)
                 .id(UUID())
                 .frame(maxWidth: .infinity)
@@ -104,13 +109,13 @@ extension HomeView {
         }
     }
 
-    private func errorState(_ message: String) -> some View {
+    private var errorState: some View {
         GeometryReader { geometry in
             ScrollView {
                 ContentUnavailableView {
                     Label(String(localized: "error.title", table: "Home"), systemImage: "exclamationmark.triangle")
                 } description: {
-                    Text(message)
+                    Text(viewState.displayError?.errorDescription ?? "")
                 } actions: {
                     Button(String(localized: "error.tryAgain", table: "Home")) {
                         viewStore.receive(action: .loadWords)

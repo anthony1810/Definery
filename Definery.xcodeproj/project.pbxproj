@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9213309C2F3032B8003F0F05 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = 9213309B2F3032B8003F0F05 /* Shimmer */; };
 		922E56F12F060DA20069C8CC /* ci_post_xcodebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 922E56EF2F060DA20069C8CC /* ci_post_xcodebuild.sh */; };
 		922E57002F06136D0069C8CC /* WordCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; };
 		922E570A2F06136D0069C8CC /* WordCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E56F72F06136D0069C8CC /* WordCache.framework */; };
@@ -266,6 +267,7 @@
 				92A75F182F04C99D008DC78C /* WordFeature.framework in Frameworks */,
 				922E93032F07E8970069C8CC /* ScreenStateKit in Frameworks */,
 				922E66262F07581E0069C8CC /* WordCacheInfrastructure.framework in Frameworks */,
+				9213309C2F3032B8003F0F05 /* Shimmer in Frameworks */,
 				92A75F392F04C9B7008DC78C /* WordAPI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -519,6 +521,7 @@
 			packageProductDependencies = (
 				922E93022F07E8970069C8CC /* ScreenStateKit */,
 				922E93072F07F7570069C8CC /* ConcurrencyExtras */,
+				9213309B2F3032B8003F0F05 /* Shimmer */,
 			);
 			productName = Definery;
 			productReference = 92A75ED62F04C904008DC78C /* Definery.app */;
@@ -700,6 +703,7 @@
 				922E93012F07E8970069C8CC /* XCRemoteSwiftPackageReference "ScreenStateKit" */,
 				922E93062F07F7570069C8CC /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */,
 				922E94642F090E9C0069C8CC /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+				9213309A2F3032B8003F0F05 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 92A75ED72F04C904008DC78C /* Products */;
@@ -1855,6 +1859,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		9213309A2F3032B8003F0F05 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.1;
+			};
+		};
 		922E93012F07E8970069C8CC /* XCRemoteSwiftPackageReference "ScreenStateKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/anthony1810/ScreenStateKit";
@@ -1882,6 +1894,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		9213309B2F3032B8003F0F05 /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9213309A2F3032B8003F0F05 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
+		};
 		922E93022F07E8970069C8CC /* ScreenStateKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 922E93012F07E8970069C8CC /* XCRemoteSwiftPackageReference "ScreenStateKit" */;

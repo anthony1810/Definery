@@ -12,10 +12,8 @@ import ScreenStateKit
 
 @MainActor @Observable
 final class HomeViewState: LoadmoreScreenState, StateUpdatable {
-    var words: [Word] = []
-    var selectedLanguage: Locale.LanguageCode = .english
-    var errorMessage: String?
+    var snapshot: HomeSnapshot = .placeholder
 
-    var hasWords: Bool { !words.isEmpty }
-    var hasError: Bool { errorMessage != nil }
+    var hasWords: Bool { snapshot.hasWords }
+    var hasError: Bool { displayError?.errorDescription != nil }
 }
