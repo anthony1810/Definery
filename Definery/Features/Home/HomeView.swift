@@ -21,30 +21,23 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
-            content
-                .navigationTitle(String(localized: "navigation.title", table: "Home"))
-                .toolbar { toolbarContent }
+            VStack(spacing: 0) {
+                LanguageSegmentedPicker(
+                    selected: viewState.snapshot.selectedLanguage
+                ) { language in
+                    viewStore.receive(action: .selectLanguage(language))
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 12)
+
+                content
+            }
+            .navigationTitle("Definery")
         }
         .onShowError($viewState.displayError)
         .task {
             await viewStore.binding(state: viewState)
             viewStore.receive(action: .loadWords)
-        }
-    }
-}
-
-// MARK: - Toolbar
-
-extension HomeView {
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            LanguagePickerView(
-                selected: viewState.snapshot.selectedLanguage,
-                onSelect: { language in
-                    viewStore.receive(action: .selectLanguage(language))
-                }
-            )
         }
     }
 }
