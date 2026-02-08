@@ -21,23 +21,27 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                LanguageSegmentedPicker(
-                    selected: viewState.snapshot.selectedLanguage
-                ) { language in
-                    viewStore.receive(action: .selectLanguage(language))
-                }
-                .padding(.horizontal)
-                .padding(.bottom, 12)
-
-                content
-            }
-            .navigationTitle("Definery")
+            contentBody
+                .navigationTitle("Definery")
         }
         .onShowError($viewState.displayError)
         .task {
             await viewStore.binding(state: viewState)
             viewStore.receive(action: .loadWords)
+        }
+    }
+
+    var contentBody: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            LanguageSegmentedPicker(
+                selected: viewState.snapshot.selectedLanguage
+            ) { language in
+                viewStore.receive(action: .selectLanguage(language))
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 12)
+
+            content
         }
     }
 }

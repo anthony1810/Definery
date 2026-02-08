@@ -79,7 +79,17 @@ extension HomeViewSnapshotTests {
         loader.complete(with: .success(words))
         let viewStore = HomeViewStore(loader: { _ in loader })
 
-        return HomeView(viewStore: viewStore, viewState: viewState)
+        let homeView = HomeView(viewStore: viewStore, viewState: viewState)
+
+        return VStack(alignment: .leading, spacing: 0) {
+            Text("Definery")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding(.horizontal)
+                .padding(.top, 16)
+
+            homeView.contentBody
+        }
     }
 
     private func makeState(
@@ -120,15 +130,17 @@ extension HomeViewSnapshotTests {
 
         let themedView = view
             .environment(\.colorScheme, colorScheme)
+            .background(colorScheme == .dark ? Color.black : Color.white)
 
         let failure = verifySnapshot(
             of: themedView,
             as: .image(
                 precision: 0.93,
                 perceptualPrecision: 0.93,
-                layout: .device(config: .iPhone13)
+                layout: .fixed(width: 390, height: 844)
             ),
             named: name,
+            record: true,
             snapshotDirectory: snapshotDirectory,
             file: file,
             testName: testName,

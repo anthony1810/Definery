@@ -30,6 +30,7 @@ struct LanguageSegmentedPicker: View {
             }
             .padding(.horizontal, 4)
         }
+        .fixedSize(horizontal: false, vertical: true)
         .animation(.easeInOut(duration: 0.2), value: selected)
     }
 
@@ -48,7 +49,7 @@ struct LanguageSegmentedPicker: View {
             .lineLimit(1)
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
-            .background(isSelected ? Color.accentColor : Color(.secondarySystemBackground))
+            .background(isSelected ? Color.accentColor : Color(UIColor.secondarySystemBackground))
             .foregroundStyle(isSelected ? Color.white : Color.secondary)
             .clipShape(Capsule())
         }
