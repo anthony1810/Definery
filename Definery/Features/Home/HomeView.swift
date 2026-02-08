@@ -39,6 +39,7 @@ struct HomeView: View {
                 viewStore.receive(action: .selectLanguage(language))
             }
             .padding(.horizontal)
+            .padding(.top, 8)
             .padding(.bottom, 12)
 
             content
