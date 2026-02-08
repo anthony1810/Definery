@@ -40,6 +40,10 @@ extension HomeSnapshot: PlaceholderRepresentable {
         HomeSnapshot(words: Word.mocks, selectedLanguage: .english, isPlaceholder: true)
     }
 
+    static func placeholder(for language: Locale.LanguageCode) -> HomeSnapshot {
+        HomeSnapshot(words: Word.mocks, selectedLanguage: language, isPlaceholder: true)
+    }
+
     var isPlaceholder: Bool {
         _isPlaceholder
     }

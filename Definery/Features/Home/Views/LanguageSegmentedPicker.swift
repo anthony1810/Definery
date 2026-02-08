@@ -11,6 +11,8 @@ struct LanguageSegmentedPicker: View {
     let selected: Locale.LanguageCode
     let onSelect: (Locale.LanguageCode) -> Void
 
+    @Namespace private var pickerNamespace
+
     private let supportedLanguages: [(code: Locale.LanguageCode, name: String, flag: String)] = [
         (.english, "English", "🇺🇸"),
         (.spanish, "Spanish", "🇪🇸"),
@@ -31,7 +33,6 @@ struct LanguageSegmentedPicker: View {
             .padding(.horizontal, 4)
         }
         .fixedSize(horizontal: false, vertical: true)
-        .animation(.easeInOut(duration: 0.2), value: selected)
     }
 
     private func pillButton(for language: (code: Locale.LanguageCode, name: String, flag: String)) -> some View {
@@ -49,11 +50,24 @@ struct LanguageSegmentedPicker: View {
             .lineLimit(1)
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
-            .background(isSelected ? Color.accentColor : Color(UIColor.secondarySystemBackground))
+            .background {
+                if isSelected {
+                    Capsule()
+                        .fill(Color.accentColor)
+                        .matchedGeometryEffect(id: "selection", in: pickerNamespace)
+                }
+            }
+            .background {
+                if !isSelected {
+                    Capsule()
+                        .fill(Color(UIColor.secondarySystemBackground))
+                }
+            }
             .foregroundStyle(isSelected ? Color.white : Color.secondary)
             .clipShape(Capsule())
         }
         .buttonStyle(.plain)
+        .animation(.snappy(duration: 0.25), value: selected)
     }
 }
 

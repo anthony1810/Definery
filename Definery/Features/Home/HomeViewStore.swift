@@ -109,9 +109,9 @@ extension HomeViewStore {
     }
 
     private func selectLanguage(_ language: Locale.LanguageCode) async throws {
-        // Show placeholder while loading new language
+        // Show placeholder with new language selected immediately
         await state?.updateState { state in
-            state.snapshot = .placeholder
+            state.snapshot = .placeholder(for: language)
         }
 
         let loader = loaderFactory(language)
