@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct LocalWord: Equatable {
+public struct LocalWord: Equatable, Sendable {
     public let id: UUID
     public let text: String
     public let language: String

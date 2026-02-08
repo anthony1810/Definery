@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct LocalMeaning: Equatable {
+public struct LocalMeaning: Equatable, Sendable {
     public let partOfSpeech: String
     public let definition: String
     public let example: String?

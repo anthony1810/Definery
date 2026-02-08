@@ -8,36 +8,35 @@ import Foundation
 import SwiftData
 import WordCache
 
-public final class SwiftDataWordStore: WordStorageProtocol, @unchecked Sendable {
-    private let container: ModelContainer
-    private let context: ModelContext
+@ModelActor
+public actor SwiftDataWordStore: WordStorageProtocol {
 
     public init(inMemory: Bool = false) throws {
         let schema = Schema([ManagedWord.self, ManagedMeaning.self])
         let config = ModelConfiguration(isStoredInMemoryOnly: inMemory)
+        let container = try ModelContainer(for: schema, configurations: config)
 
-        container = try ModelContainer(for: schema, configurations: config)
-        context = ModelContext(container)
+        self.init(modelContainer: container)
     }
 
-    public func deleteCachedWords() async throws {
-        try context.delete(model: ManagedWord.self)
-        try context.save()
+    public func deleteCachedWords() throws {
+        try modelContext.delete(model: ManagedWord.self)
+        try modelContext.save()
     }
 
-    public func insertCache(words: [LocalWord]) async throws {
-        try context.delete(model: ManagedWord.self)
+    public func insertCache(words: [LocalWord]) throws {
+        try modelContext.delete(model: ManagedWord.self)
 
         words
             .map(ManagedWord.init)
-            .forEach(context.insert)
+            .forEach(modelContext.insert)
 
-        try context.save()
+        try modelContext.save()
     }
 
-    public func retrieveWords() async throws -> [LocalWord] {
+    public func retrieveWords() throws -> [LocalWord] {
         let descriptor = FetchDescriptor<ManagedWord>()
-        let managedWords = try context.fetch(descriptor)
+        let managedWords = try modelContext.fetch(descriptor)
         return managedWords.map { $0.toLocal() }
     }
 }
