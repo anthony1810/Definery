@@ -68,9 +68,9 @@ extension HomeView {
             ForEach(viewState.snapshot.words) { word in
                 WordCardView(word: word)
                     .listRowSeparator(.hidden)
+                    .placeholder(viewState.snapshot)
+                    .shimmering(active: viewState.snapshot.isPlaceholder)
             }
-            .placeholder(viewState.snapshot)
-            .shimmering(active: viewState.snapshot.isPlaceholder)
 
             loadMoreSection
         }
