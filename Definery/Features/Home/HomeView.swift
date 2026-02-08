@@ -131,17 +131,21 @@ extension HomeView {
 #if DEBUG
 #Preview("With Words") {
     HomeView(viewStore: .preview, viewState: HomeViewState())
+        .preferredColorScheme(.dark)
 }
 
 #Preview("Empty State") {
     HomeView(viewStore: .previewEmpty, viewState: HomeViewState())
+        .preferredColorScheme(.dark)
 }
 
 #Preview("Loading") {
     HomeView(viewStore: .previewLoading, viewState: HomeViewState())
+        .preferredColorScheme(.dark)
 }
 
 #Preview("Error") {
     HomeView(viewStore: .previewError, viewState: HomeViewState())
+        .preferredColorScheme(.dark)
 }
 #endif

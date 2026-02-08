@@ -9,14 +9,15 @@ import SwiftUI
 import WordFeature
 
 struct WordCardView: View {
+    @Environment(\.colorScheme) private var colorScheme
     let word: Word
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
                 Text(word.text)
-                    .font(.title2)
-                    .fontWeight(.semibold)
+                    .font(.title3)
+                    .fontWeight(.bold)
 
                 Spacer()
 
@@ -34,51 +35,79 @@ struct WordCardView: View {
             if word.meanings.count > 2 {
                 Text("+\(word.meanings.count - 2) more")
                     .font(.caption)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.secondary)
             }
         }
-        .padding()
-        .background(.background, in: RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.secondarySystemBackground))
+        )
+        .shadow(
+            color: colorScheme == .light ? .black.opacity(0.08) : .clear,
+            radius: 8,
+            y: 4
+        )
     }
 }
+
+// MARK: - MeaningRow
 
 private struct MeaningRow: View {
     let meaning: Meaning
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(meaning.partOfSpeech)
+            Text(meaning.partOfSpeech.capitalized)
                 .font(.caption)
-                .fontWeight(.medium)
-                .foregroundStyle(.secondary)
+                .fontWeight(.semibold)
+                .foregroundStyle(badgeColor(for: meaning.partOfSpeech))
                 .padding(.horizontal, 8)
-                .padding(.vertical, 2)
-                .background(.secondary.opacity(0.1), in: Capsule())
+                .padding(.vertical, 3)
+                .background(
+                    badgeColor(for: meaning.partOfSpeech).opacity(0.12),
+                    in: Capsule()
+                )
 
             Text(meaning.definition)
-                .font(.body)
+                .font(.callout)
                 .foregroundStyle(.primary)
 
             if let example = meaning.example {
                 Text("\"\(example)\"")
                     .font(.caption)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.secondary)
                     .italic()
             }
         }
     }
+
+    private func badgeColor(for partOfSpeech: String) -> Color {
+        switch partOfSpeech.lowercased() {
+        case "noun": .blue
+        case "verb": .orange
+        case "adjective": .green
+        case "adverb": .purple
+        case "pronoun": .teal
+        case "preposition": .indigo
+        default: .gray
+        }
+    }
 }
+
+// MARK: - Preview
 
 #if DEBUG
 #Preview("Single Word") {
     WordCardView(word: .ephemeral)
         .padding()
+        .preferredColorScheme(.dark)
 }
 
 #Preview("Multiple Meanings") {
     WordCardView(word: .melancholy)
         .padding()
+        .preferredColorScheme(.dark)
 }
 
 #Preview("Word List") {
@@ -90,5 +119,6 @@ private struct MeaningRow: View {
         }
         .padding()
     }
+    .preferredColorScheme(.dark)
 }
 #endif

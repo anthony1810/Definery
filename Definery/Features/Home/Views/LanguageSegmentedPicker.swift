@@ -92,5 +92,6 @@ struct LanguageSegmentedPicker: View {
     }
 
     return PreviewWrapper()
+        .preferredColorScheme(.dark)
 }
 #endif
