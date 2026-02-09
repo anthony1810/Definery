@@ -19,6 +19,11 @@ jobs:
       - name: Xcode version
         run: /usr/bin/xcodebuild -version
 
+      - name: Create iPhone 13 Simulator
+        run: |
+          RUNTIME=$(xcrun simctl list runtimes iOS -j | plutil -extract runtimes.0.identifier raw -)
+          xcrun simctl create "iPhone 13" "iPhone 13" "$RUNTIME"
+
       - name: Build and Test (iOS)
         run: |
           xcodebuild build test \
@@ -26,5 +31,5 @@ jobs:
             -scheme "Definery-iOS" \
             -testPlan Definery-iOS \
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
-            -destination "platform=iOS Simulator,name=iPhone 13,OS=18.5" \
+            -destination "platform=iOS Simulator,name=iPhone 13" \
             ONLY_ACTIVE_ARCH=YES
