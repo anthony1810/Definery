@@ -21,8 +21,12 @@ jobs:
 
       - name: Create iPhone 13 Simulator
         run: |
-          RUNTIME=$(xcrun simctl list runtimes iOS -j | plutil -extract runtimes.0.identifier raw -)
-          xcrun simctl create "iPhone 13" "iPhone 13" "$RUNTIME"
+          xcrun simctl list runtimes
+          xcrun simctl list devicetypes | grep -i "iphone 13"
+          RUNTIME=$(xcrun simctl list runtimes iOS | tail -1 | grep -oE 'com\.apple\.[^ ]+')
+          echo "Using runtime: $RUNTIME"
+          xcrun simctl create "iPhone 13" "com.apple.CoreSimulator.SimDeviceType.iPhone-13" "$RUNTIME"
+          xcrun simctl list devices | grep "iPhone 13"
 
       - name: Build and Test (iOS)
         run: |
