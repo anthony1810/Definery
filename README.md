@@ -149,10 +149,11 @@ Each feature follows the State + ViewStore + View pattern:
 
 ```
 Definery/
-├── WordFeature/                     # Domain layer SPM package (models, protocols)
-├── WordAPI/                         # API layer SPM package + tests
-├── WordCache/                       # Cache layer SPM package + tests
-├── WordCacheInfrastructure/         # SwiftData infrastructure SPM package + tests
+├── Modules/
+│   ├── WordFeature/                 # Domain layer SPM package (models, protocols)
+│   ├── WordAPI/                     # API layer SPM package + tests
+│   ├── WordCache/                   # Cache layer SPM package + tests
+│   └── WordCacheInfrastructure/     # SwiftData infrastructure SPM package + tests
 ├── Definery/                        # Main app (composition, UI)
 └── DefineryTests/                   # App-level tests (snapshots, integration)
 ```
@@ -165,9 +166,9 @@ Run tests via Xcode or command line:
 
 ```bash
 # Core modules (macOS via swift test)
-swift test --package-path WordAPI
-swift test --package-path WordCache
-swift test --package-path WordCacheInfrastructure
+swift test --package-path Modules/WordAPI
+swift test --package-path Modules/WordCache
+swift test --package-path Modules/WordCacheInfrastructure
 
 # iOS app tests (snapshots, integration)
 xcodebuild test -project Definery.xcodeproj -scheme Definery-iOS -testPlan Definery-iOS

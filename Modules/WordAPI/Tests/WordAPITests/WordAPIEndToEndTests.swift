@@ -11,10 +11,10 @@ import WordAPI
 import WordFeature
 
 final class WordAPIEndToEndTests {
-    private var sutTracker: MemoryLeakTracker<SUT>?
-    
+    private var leakTrackers: [MemoryLeakTracker] = []
+
     deinit {
-        sutTracker?.verify()
+        leakTrackers.forEach { $0.verify() }
     }
     
     // MARK: - Random Word API End-to-End Tests
@@ -23,7 +23,7 @@ final class WordAPIEndToEndTests {
         let url = WordsEndpoint.randomWords(count: 5, language: "en")
             .url(baseURL: URL(string: "https://random-word-api.herokuapp.com")!)
         
-        let (data, response) = try await sut.client.get(from: url)
+        let (data, response) = try await sut.get(from: url)
         
         let words = try RandomWordMapper.map(data, from: response)
         
@@ -37,7 +37,7 @@ final class WordAPIEndToEndTests {
         let url = WordsEndpoint.definition(word: "hello", language: "en")
             .url(baseURL: URL(string: "https://en.wiktionary.org")!)
         
-        let (data, response) = try await sut.client.get(from: url)
+        let (data, response) = try await sut.get(from: url)
         
         let word = try DefinitionMapper.map(data, from: response, word: "hello", language: "en")
         
@@ -51,7 +51,7 @@ final class WordAPIEndToEndTests {
         let url = WordsEndpoint.definition(word: "asdfghjklzxcvbnm", language: "en")
             .url(baseURL: URL(string: "https://en.wiktionary.org")!)
 
-        let (data, response) = try await sut.client.get(from: url)
+        let (data, response) = try await sut.get(from: url)
 
         #expect(throws: DefinitionMapper.Error.wordNotFound) {
             try DefinitionMapper.map(data, from: response, word: "asdfghjklzxcvbnm", language: "en")
@@ -67,7 +67,7 @@ final class WordAPIEndToEndTests {
         let url = WordsEndpoint.randomWords(count: 3, language: language)
             .url(baseURL: URL(string: "https://random-word-api.herokuapp.com")!)
 
-        let (data, response) = try await sut.client.get(from: url)
+        let (data, response) = try await sut.get(from: url)
 
         let words = try RandomWordMapper.map(data, from: response)
 
@@ -81,7 +81,7 @@ final class WordAPIEndToEndTests {
         let url = WordsEndpoint.definition(word: testCase.word, language: testCase.language)
             .url(baseURL: URL(string: "https://en.wiktionary.org")!)
 
-        let (data, response) = try await sut.client.get(from: url)
+        let (data, response) = try await sut.get(from: url)
 
         let word = try DefinitionMapper.map(data, from: response, word: testCase.word, language: testCase.language)
 
@@ -112,34 +112,19 @@ private let wiktionaryTestWords: [(language: String, word: String)] = [
 // MARK: - Helpers
 
 extension WordAPIEndToEndTests {
-    final class SUT {
-        let client: URLSessionHTTPClient
-
-        init(client: URLSessionHTTPClient) {
-            self.client = client
-        }
+    private func trackForMemoryLeaks(
+        _ instance: AnyObject,
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) {
+        leakTrackers.append(MemoryLeakTracker(instance: instance, sourceLocation: sourceLocation))
     }
 
     private func makeSUT(
-        fileId: String = #fileID,
-        filePath: String = #filePath,
-        line: Int = #line,
-        column: Int = #column
-    ) -> SUT {
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) -> URLSessionHTTPClient {
         let configuration = URLSessionConfiguration.ephemeral
         let client = URLSessionHTTPClient(session: URLSession(configuration: configuration))
-        let sut = SUT(client: client)
-
-        sutTracker = MemoryLeakTracker(
-            instance: sut,
-            sourceLocation: SourceLocation(
-                fileID: fileId,
-                filePath: filePath,
-                line: line,
-                column: column
-            )
-        )
-
-        return sut
+        trackForMemoryLeaks(client, sourceLocation: sourceLocation)
+        return client
     }
 }

@@ -12,10 +12,10 @@ import WordFeature
 @testable import WordCache
 
 final class CacheWordUseCaseTests {
-    private var sutTracker: MemoryLeakTracker<SUT>?
+    private var leakTrackers: [MemoryLeakTracker] = []
 
     deinit {
-        sutTracker?.verify()
+        leakTrackers.forEach { $0.verify() }
     }
 
     @Test func init_doesNotMessageCacheUponCreation() {
@@ -86,36 +86,19 @@ final class CacheWordUseCaseTests {
 // MARK: - Helpers
 
 extension CacheWordUseCaseTests {
-    final class SUT {
-        let loader: LocalWordLoader
-        let store: WordStorageSpy
-
-        init(loader: LocalWordLoader, store: WordStorageSpy) {
-            self.loader = loader
-            self.store = store
-        }
+    private func trackForMemoryLeaks(
+        _ instance: AnyObject,
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) {
+        leakTrackers.append(MemoryLeakTracker(instance: instance, sourceLocation: sourceLocation))
     }
 
     private func makeSUT(
-        fileId: String = #fileID,
-        filePath: String = #filePath,
-        line: Int = #line,
-        column: Int = #column
-    ) -> SUT {
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) -> (loader: LocalWordLoader, store: WordStorageSpy) {
         let store = WordStorageSpy()
         let loader = LocalWordLoader(store: store)
-        let sut = SUT(loader: loader, store: store)
-
-        sutTracker = MemoryLeakTracker(
-            instance: sut,
-            sourceLocation: SourceLocation(
-                fileID: fileId,
-                filePath: filePath,
-                line: line,
-                column: column
-            )
-        )
-
-        return sut
+        trackForMemoryLeaks(store, sourceLocation: sourceLocation)
+        return (loader, store)
     }
 }

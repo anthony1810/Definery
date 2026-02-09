@@ -9,10 +9,10 @@ import Testing
 import WordCacheInfrastructure
 
 final class SwiftDataWordStoreTests {
-    private var sutTracker: MemoryLeakTracker<SwiftDataWordStore>?
-    
+    private var leakTrackers: [MemoryLeakTracker] = []
+
     deinit {
-        sutTracker?.verify()
+        leakTrackers.forEach { $0.verify() }
     }
     
     @Test func retrieve_deliversEmptyOnEmptyCache() async throws {
@@ -120,24 +120,18 @@ final class SwiftDataWordStoreTests {
 // MARK: - Helpers
 
 extension SwiftDataWordStoreTests {
+    private func trackForMemoryLeaks(
+        _ instance: AnyObject,
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) {
+        leakTrackers.append(MemoryLeakTracker(instance: instance, sourceLocation: sourceLocation))
+    }
+
     private func makeSUT(
-        fileId: String = #fileID,
-        filePath: String = #filePath,
-        line: Int = #line,
-        column: Int = #column
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws -> SwiftDataWordStore {
         let sut = try SwiftDataWordStore(inMemory: true)
-        
-        sutTracker = MemoryLeakTracker(
-            instance: sut,
-            sourceLocation: SourceLocation(
-                fileID: fileId,
-                filePath: filePath,
-                line: line,
-                column: column
-            )
-        )
-        
+        trackForMemoryLeaks(sut, sourceLocation: sourceLocation)
         return sut
     }
 }

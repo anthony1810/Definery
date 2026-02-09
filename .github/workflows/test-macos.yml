@@ -14,7 +14,7 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -switch /Applications/Xcode_16.4.app
       - name: Build WordFeature
-        run: swift build --package-path WordFeature
+        run: swift build --package-path Modules/WordFeature
 
   test-word-api:
     runs-on: macos-15
@@ -24,7 +24,7 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -switch /Applications/Xcode_16.4.app
       - name: Test WordAPI
-        run: swift test --package-path WordAPI
+        run: swift test --package-path Modules/WordAPI
 
   test-word-cache:
     runs-on: macos-15
@@ -34,7 +34,7 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -switch /Applications/Xcode_16.4.app
       - name: Test WordCache
-        run: swift test --package-path WordCache
+        run: swift test --package-path Modules/WordCache
 
   test-word-cache-infrastructure:
     runs-on: macos-15
@@ -44,4 +44,4 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -switch /Applications/Xcode_16.4.app
       - name: Test WordCacheInfrastructure
-        run: swift test --package-path WordCacheInfrastructure
+        run: swift test --package-path Modules/WordCacheInfrastructure

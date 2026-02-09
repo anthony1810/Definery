@@ -7,15 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		652E5D273686BDBED005EFE7 /* WordFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 1F32430B2B0D1B0D74684103 /* WordFeature */; };
 		9213309C2F3032B8003F0F05 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = 9213309B2F3032B8003F0F05 /* Shimmer */; };
 		922E93032F07E8970069C8CC /* ScreenStateKit in Frameworks */ = {isa = PBXBuildFile; productRef = 922E93022F07E8970069C8CC /* ScreenStateKit */; };
 		922E93082F07F7570069C8CC /* ConcurrencyExtras in Frameworks */ = {isa = PBXBuildFile; productRef = 922E93072F07F7570069C8CC /* ConcurrencyExtras */; };
 		922E94662F090E9C0069C8CC /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 922E94652F090E9C0069C8CC /* SnapshotTesting */; };
 		924D29AF2F050392007FFEFF /* Definery-iOS.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */; };
-		9281994E2F39D48D004B5E65 /* WordAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 9281994D2F39D48D004B5E65 /* WordAPI */; };
-		928199512F39D4A3004B5E65 /* WordCache in Frameworks */ = {isa = PBXBuildFile; productRef = 928199502F39D4A3004B5E65 /* WordCache */; };
-		928199542F39D4C3004B5E65 /* WordCacheInfrastructure in Frameworks */ = {isa = PBXBuildFile; productRef = 928199532F39D4C3004B5E65 /* WordCacheInfrastructure */; };
+		92819CD62F3A09C8004B5E65 /* WordFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 92819CD52F3A09C8004B5E65 /* WordFeature */; };
+		92819CD92F3A09EE004B5E65 /* WordCacheInfrastructure in Frameworks */ = {isa = PBXBuildFile; productRef = 92819CD82F3A09EE004B5E65 /* WordCacheInfrastructure */; };
+		92819CDC2F3A09FC004B5E65 /* WordCache in Frameworks */ = {isa = PBXBuildFile; productRef = 92819CDB2F3A09FC004B5E65 /* WordCache */; };
+		92819CDF2F3A0A0A004B5E65 /* WordAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 92819CDE2F3A0A0A004B5E65 /* WordAPI */; };
+		92819D2C2F3A0B60004B5E65 /* WordFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 92819D2B2F3A0B60004B5E65 /* WordFeature */; };
+		92819D2F2F3A0B6D004B5E65 /* WordCacheInfrastructure in Frameworks */ = {isa = PBXBuildFile; productRef = 92819D2E2F3A0B6D004B5E65 /* WordCacheInfrastructure */; };
+		92819D322F3A0B79004B5E65 /* WordCache in Frameworks */ = {isa = PBXBuildFile; productRef = 92819D312F3A0B79004B5E65 /* WordCache */; };
+		92819D352F3A0B87004B5E65 /* WordAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 92819D342F3A0B87004B5E65 /* WordAPI */; };
 		92A75F602F04CBF6008DC78C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 92A75F5F2F04CBF6008DC78C /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -54,13 +58,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92819D2F2F3A0B6D004B5E65 /* WordCacheInfrastructure in Frameworks */,
+				92819CDF2F3A0A0A004B5E65 /* WordAPI in Frameworks */,
+				92819CD92F3A09EE004B5E65 /* WordCacheInfrastructure in Frameworks */,
 				922E93082F07F7570069C8CC /* ConcurrencyExtras in Frameworks */,
+				92819D2C2F3A0B60004B5E65 /* WordFeature in Frameworks */,
+				92819D352F3A0B87004B5E65 /* WordAPI in Frameworks */,
+				92819D322F3A0B79004B5E65 /* WordCache in Frameworks */,
 				922E93032F07E8970069C8CC /* ScreenStateKit in Frameworks */,
 				9213309C2F3032B8003F0F05 /* Shimmer in Frameworks */,
-				652E5D273686BDBED005EFE7 /* WordFeature in Frameworks */,
-				9281994E2F39D48D004B5E65 /* WordAPI in Frameworks */,
-				928199512F39D4A3004B5E65 /* WordCache in Frameworks */,
-				928199542F39D4C3004B5E65 /* WordCacheInfrastructure in Frameworks */,
+				92819CD62F3A09C8004B5E65 /* WordFeature in Frameworks */,
+				92819CDC2F3A09FC004B5E65 /* WordCache in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,10 +126,14 @@
 				922E93022F07E8970069C8CC /* ScreenStateKit */,
 				922E93072F07F7570069C8CC /* ConcurrencyExtras */,
 				9213309B2F3032B8003F0F05 /* Shimmer */,
-				1F32430B2B0D1B0D74684103 /* WordFeature */,
-				9281994D2F39D48D004B5E65 /* WordAPI */,
-				928199502F39D4A3004B5E65 /* WordCache */,
-				928199532F39D4C3004B5E65 /* WordCacheInfrastructure */,
+				92819CD52F3A09C8004B5E65 /* WordFeature */,
+				92819CD82F3A09EE004B5E65 /* WordCacheInfrastructure */,
+				92819CDB2F3A09FC004B5E65 /* WordCache */,
+				92819CDE2F3A0A0A004B5E65 /* WordAPI */,
+				92819D2B2F3A0B60004B5E65 /* WordFeature */,
+				92819D2E2F3A0B6D004B5E65 /* WordCacheInfrastructure */,
+				92819D312F3A0B79004B5E65 /* WordCache */,
+				92819D342F3A0B87004B5E65 /* WordAPI */,
 			);
 			productName = Definery;
 			productReference = 92A75ED62F04C904008DC78C /* Definery.app */;
@@ -184,10 +196,10 @@
 				922E93062F07F7570069C8CC /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */,
 				922E94642F090E9C0069C8CC /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 				9213309A2F3032B8003F0F05 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
-				928199552F39D500004B5E65 /* XCLocalSwiftPackageReference "WordFeature" */,
-				9281994C2F39D48D004B5E65 /* XCLocalSwiftPackageReference "WordAPI" */,
-				9281994F2F39D4A3004B5E65 /* XCLocalSwiftPackageReference "WordCache" */,
-				928199522F39D4C3004B5E65 /* XCLocalSwiftPackageReference "WordCacheInfrastructure" */,
+				92819D2A2F3A0B60004B5E65 /* XCLocalSwiftPackageReference "Modules/WordFeature" */,
+				92819D2D2F3A0B6D004B5E65 /* XCLocalSwiftPackageReference "Modules/WordCacheInfrastructure" */,
+				92819D302F3A0B79004B5E65 /* XCLocalSwiftPackageReference "Modules/WordCache" */,
+				92819D332F3A0B87004B5E65 /* XCLocalSwiftPackageReference "Modules/WordAPI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 92A75ED72F04C904008DC78C /* Products */;
@@ -525,21 +537,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		9281994C2F39D48D004B5E65 /* XCLocalSwiftPackageReference "WordAPI" */ = {
+		92819D2A2F3A0B60004B5E65 /* XCLocalSwiftPackageReference "Modules/WordFeature" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = WordAPI;
+			relativePath = Modules/WordFeature;
 		};
-		9281994F2F39D4A3004B5E65 /* XCLocalSwiftPackageReference "WordCache" */ = {
+		92819D2D2F3A0B6D004B5E65 /* XCLocalSwiftPackageReference "Modules/WordCacheInfrastructure" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = WordCache;
+			relativePath = Modules/WordCacheInfrastructure;
 		};
-		928199522F39D4C3004B5E65 /* XCLocalSwiftPackageReference "WordCacheInfrastructure" */ = {
+		92819D302F3A0B79004B5E65 /* XCLocalSwiftPackageReference "Modules/WordCache" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = WordCacheInfrastructure;
+			relativePath = Modules/WordCache;
 		};
-		928199552F39D500004B5E65 /* XCLocalSwiftPackageReference "WordFeature" */ = {
+		92819D332F3A0B87004B5E65 /* XCLocalSwiftPackageReference "Modules/WordAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = WordFeature;
+			relativePath = Modules/WordAPI;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -579,11 +591,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1F32430B2B0D1B0D74684103 /* WordFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 928199552F39D500004B5E65 /* XCLocalSwiftPackageReference "WordFeature" */;
-			productName = WordFeature;
-		};
 		9213309B2F3032B8003F0F05 /* Shimmer */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9213309A2F3032B8003F0F05 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
@@ -604,20 +611,37 @@
 			package = 922E94642F090E9C0069C8CC /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
 			productName = SnapshotTesting;
 		};
-		9281994D2F39D48D004B5E65 /* WordAPI */ = {
+		92819CD52F3A09C8004B5E65 /* WordFeature */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9281994C2F39D48D004B5E65 /* XCLocalSwiftPackageReference "WordAPI" */;
-			productName = WordAPI;
+			productName = WordFeature;
 		};
-		928199502F39D4A3004B5E65 /* WordCache */ = {
+		92819CD82F3A09EE004B5E65 /* WordCacheInfrastructure */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9281994F2F39D4A3004B5E65 /* XCLocalSwiftPackageReference "WordCache" */;
+			productName = WordCacheInfrastructure;
+		};
+		92819CDB2F3A09FC004B5E65 /* WordCache */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = WordCache;
 		};
-		928199532F39D4C3004B5E65 /* WordCacheInfrastructure */ = {
+		92819CDE2F3A0A0A004B5E65 /* WordAPI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 928199522F39D4C3004B5E65 /* XCLocalSwiftPackageReference "WordCacheInfrastructure" */;
+			productName = WordAPI;
+		};
+		92819D2B2F3A0B60004B5E65 /* WordFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WordFeature;
+		};
+		92819D2E2F3A0B6D004B5E65 /* WordCacheInfrastructure */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = WordCacheInfrastructure;
+		};
+		92819D312F3A0B79004B5E65 /* WordCache */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WordCache;
+		};
+		92819D342F3A0B87004B5E65 /* WordAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WordAPI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

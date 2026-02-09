@@ -30,10 +30,10 @@ run_test() {
 echo "${BOLD}Running all Definery tests...${RESET}"
 
 # SPM package tests (macOS)
-run_test "WordFeature (build)" "swift build --package-path '$PROJECT_DIR/WordFeature'"
-run_test "WordAPI" "swift test --package-path '$PROJECT_DIR/WordAPI'"
-run_test "WordCache" "swift test --package-path '$PROJECT_DIR/WordCache'"
-run_test "WordCacheInfrastructure" "swift test --package-path '$PROJECT_DIR/WordCacheInfrastructure'"
+run_test "WordFeature (build)" "swift build --package-path '$PROJECT_DIR/Modules/WordFeature'"
+run_test "WordAPI" "swift test --package-path '$PROJECT_DIR/Modules/WordAPI'"
+run_test "WordCache" "swift test --package-path '$PROJECT_DIR/Modules/WordCache'"
+run_test "WordCacheInfrastructure" "swift test --package-path '$PROJECT_DIR/Modules/WordCacheInfrastructure'"
 
 # iOS app tests
 run_test "Definery-iOS" "xcodebuild test \

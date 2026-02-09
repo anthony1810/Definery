@@ -16,10 +16,10 @@ import ConcurrencyExtras
 
 @MainActor
 final class HomeViewStoreTests {
-    private var sutTracker: MemoryLeakTracker<SUT>?
+    private nonisolated(unsafe) var leakTrackers: [MemoryLeakTracker] = []
 
     deinit {
-        sutTracker?.verify()
+        leakTrackers.forEach { $0.verify() }
     }
 
     // MARK: - Load
@@ -292,43 +292,27 @@ final class HomeViewStoreTests {
 // MARK: - Helpers
 
 extension HomeViewStoreTests {
-    final class SUT: Sendable {
-        let store: HomeViewStore
-        let loader: WordLoaderSpy
-        let state: HomeViewState
-
-        init(store: HomeViewStore, loader: WordLoaderSpy, state: HomeViewState) {
-            self.store = store
-            self.loader = loader
-            self.state = state
-        }
+    private func trackForMemoryLeaks(
+        _ instance: AnyObject,
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) {
+        leakTrackers.append(MemoryLeakTracker(instance: instance, sourceLocation: sourceLocation))
     }
 
     @MainActor
     private func makeSUT(
-        fileId: String = #fileID,
-        filePath: String = #filePath,
-        line: Int = #line,
-        column: Int = #column
-    ) async -> SUT {
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) async -> (store: HomeViewStore, loader: WordLoaderSpy, state: HomeViewState) {
         let loader = WordLoaderSpy()
         let state = HomeViewState()
         let store = HomeViewStore(loader: { _ in loader })
 
         await store.binding(state: state)
 
-        let sut = SUT(store: store, loader: loader, state: state)
+        trackForMemoryLeaks(store, sourceLocation: sourceLocation)
+        trackForMemoryLeaks(loader, sourceLocation: sourceLocation)
+        trackForMemoryLeaks(state, sourceLocation: sourceLocation)
 
-        sutTracker = MemoryLeakTracker(
-            instance: sut,
-            sourceLocation: SourceLocation(
-                fileID: fileId,
-                filePath: filePath,
-                line: line,
-                column: column
-            )
-        )
-
-        return sut
+        return (store, loader, state)
     }
 }

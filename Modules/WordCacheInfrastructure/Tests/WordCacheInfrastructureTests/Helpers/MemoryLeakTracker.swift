@@ -1,15 +1,14 @@
 //
 //  MemoryLeakTracker.swift
-//  WordCacheTests
+//  WordCacheInfrastructureTests
 //
-//  Created by Anthony on 1/1/26.
+//  Created by Anthony on 2/1/26.
 //
 
 import Testing
-import Foundation
 
-struct MemoryLeakTracker<T: AnyObject> {
-    weak var instance: T?
+struct MemoryLeakTracker {
+    weak var instance: AnyObject?
     var sourceLocation: SourceLocation
 
     func verify() {

@@ -11,10 +11,10 @@ import Foundation
 import WordFeature
 
 final class RemoteWordLoaderTests {
-    private var sutTracker: MemoryLeakTracker<SUT>?
+    private var leakTrackers: [MemoryLeakTracker] = []
 
     deinit {
-        sutTracker?.verify()
+        leakTrackers.forEach { $0.verify() }
     }
 
     // MARK: - Init Tests
@@ -139,25 +139,19 @@ final class RemoteWordLoaderTests {
 // MARK: - Helpers
 
 extension RemoteWordLoaderTests {
-    final class SUT {
-        let loader: RemoteWordLoader
-        let client: HTTPClientSpy
-
-        init(loader: RemoteWordLoader, client: HTTPClientSpy) {
-            self.loader = loader
-            self.client = client
-        }
+    private func trackForMemoryLeaks(
+        _ instance: AnyObject,
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) {
+        leakTrackers.append(MemoryLeakTracker(instance: instance, sourceLocation: sourceLocation))
     }
 
     private func makeSUT(
         randomWordsURL: URL = anyURL(),
         definitionBaseURL: URL = anyURL(),
         language: String = anyLanguageCode(),
-        fileId: String = #fileID,
-        filePath: String = #filePath,
-        line: Int = #line,
-        column: Int = #column
-    ) -> SUT {
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) -> (loader: RemoteWordLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
         let loader = RemoteWordLoader(
             client: client,
@@ -167,19 +161,9 @@ extension RemoteWordLoaderTests {
             },
             language: language
         )
-        let sut = SUT(loader: loader, client: client)
-
-        sutTracker = MemoryLeakTracker(
-            instance: sut,
-            sourceLocation: SourceLocation(
-                fileID: fileId,
-                filePath: filePath,
-                line: line,
-                column: column
-            )
-        )
-
-        return sut
+        trackForMemoryLeaks(client, sourceLocation: sourceLocation)
+        trackForMemoryLeaks(loader, sourceLocation: sourceLocation)
+        return (loader, client)
     }
 
     // MARK: - JSON Helpers (Wiktionary format)
