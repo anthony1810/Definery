@@ -16,18 +16,18 @@ run_test() {
     local name="$1"
     local cmd="$2"
 
-    echo ""
-    echo "${BOLD}=== $name ===${RESET}"
+    printf "\n"
+    printf "${BOLD}=== %s ===${RESET}\n" "$name"
     if eval "$cmd"; then
-        echo "${GREEN}PASSED${RESET}: $name"
-        ((PASSED++))
+        printf "${GREEN}PASSED${RESET}: %s\n" "$name"
+        ((PASSED++)) || true
     else
-        echo "${RED}FAILED${RESET}: $name"
-        ((FAILED++))
+        printf "${RED}FAILED${RESET}: %s\n" "$name"
+        ((FAILED++)) || true
     fi
 }
 
-echo "${BOLD}Running all Definery tests...${RESET}"
+printf "${BOLD}Running all Definery tests...${RESET}\n"
 
 # SPM package tests (macOS)
 run_test "WordFeature (build)" "swift build --package-path '$PROJECT_DIR/Modules/WordFeature'"
@@ -44,9 +44,9 @@ run_test "Definery-iOS" "xcodebuild test \
     CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=YES \
     2>&1 | tail -20"
 
-echo ""
-echo "${BOLD}=============================${RESET}"
-echo "${GREEN}Passed: $PASSED${RESET}  ${RED}Failed: $FAILED${RESET}"
+printf "\n"
+printf "${BOLD}=============================${RESET}\n"
+printf "${GREEN}Passed: %d${RESET}  ${RED}Failed: %d${RESET}\n" "$PASSED" "$FAILED"
 
 if [ "$FAILED" -gt 0 ]; then
     exit 1
