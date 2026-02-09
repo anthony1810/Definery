@@ -6,9 +6,9 @@
 ![Architecture](https://img.shields.io/badge/Architecture-Clean-green.svg)
 ![State](https://img.shields.io/badge/State-ScreenStateKit-red.svg)
 
-![Release Status](https://github.com/anthony1810/Definery/actions/workflows/xcc-release.yml/badge.svg)
-![iOS Tests](https://github.com/anthony1810/Definery/actions/workflows/xcc-test-ios.yml/badge.svg)
-![macOS Tests](https://github.com/anthony1810/Definery/actions/workflows/xcc-test-macos.yml/badge.svg)
+[![iOS Tests](https://github.com/anthony1810/Definery/actions/workflows/test-ios.yml/badge.svg)](https://github.com/anthony1810/Definery/actions/workflows/test-ios.yml)
+[![macOS Tests](https://github.com/anthony1810/Definery/actions/workflows/test-macos.yml/badge.svg)](https://github.com/anthony1810/Definery/actions/workflows/test-macos.yml)
+[![TestFlight](https://github.com/anthony1810/Definery/actions/workflows/testflight.yml/badge.svg)](https://github.com/anthony1810/Definery/actions/workflows/testflight.yml)
 
 Your personal dictionary companion for language learning. Definery helps you discover, save, and master new vocabulary with an intuitive interface and smart quiz features.
 
