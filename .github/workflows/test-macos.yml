@@ -1,45 +1,31 @@
-name: macOS Tests
+name: CI-macOS
 
 on:
   pull_request:
     branches: [main, develop]
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  test-macos:
-    name: macOS Tests
+  build-and-test-macOS:
     runs-on: macos-15
+    timeout-minutes: 8
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.4.app
+        run: sudo xcode-select -switch /Applications/Xcode_16.4.app
 
-      - name: Resolve packages
-        run: xcodebuild -resolvePackageDependencies -project Definery.xcodeproj -scheme Definery-macOS
+      - name: Xcode version
+        run: /usr/bin/xcodebuild -version
 
-      - name: Run macOS tests
+      - name: Build and Test (macOS)
         run: |
-          xcodebuild test \
+          xcodebuild clean build test \
             -project Definery.xcodeproj \
-            -scheme Definery-macOS \
+            -scheme "Definery-macOS" \
             -testPlan Definery-macOS \
-            -destination 'platform=macOS' \
-            -resultBundlePath TestResults-macOS.xcresult \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            IPHONEOS_DEPLOYMENT_TARGET=17.0 \
-            MACOSX_DEPLOYMENT_TARGET=14.0 \
-            | xcpretty --color && exit ${PIPESTATUS[0]}
-
-      - name: Upload test results
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: TestResults-macOS
-          path: TestResults-macOS.xcresult
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
+            -sdk macosx \
+            -destination "platform=macOS" \
+            ONLY_ACTIVE_ARCH=YES

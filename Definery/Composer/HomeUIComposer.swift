@@ -8,6 +8,7 @@
 import SwiftUI
 import WordFeature
 
+@MainActor
 enum HomeUIComposer {
     static func homeComposedWith(
         loader: @escaping WordLoaderFactory
