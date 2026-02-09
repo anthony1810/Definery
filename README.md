@@ -61,14 +61,14 @@ Your personal dictionary companion for language learning. Definery helps you dis
 
 ## Architecture
 
-Definery follows **Clean Architecture** with modular frameworks:
+Definery follows **Clean Architecture** with local SPM packages:
 
 ```
 ┌─────────────────────────────────────────────┐
 │              Definery (Main App)            │
 │         Composition Root + UI Layer         │
 └──────────────┬──────────────────────────────┘
-               │
+               │ (local SPM packages)
     ┌──────────┼──────────┐
     ▼          ▼          ▼
 ┌────────┐ ┌────────┐ ┌────────────────────┐
@@ -149,15 +149,12 @@ Each feature follows the State + ViewStore + View pattern:
 
 ```
 Definery/
-├── WordFeature/              # Domain layer (models, protocols)
-├── WordAPI/                  # API layer (remote loaders, mappers)
-├── WordAPITests/
-├── WordCache/                # Cache layer (local loader, DTOs)
-├── WordCacheTests/
-├── WordCacheInfrastructure/  # Infrastructure (SwiftData store)
-├── WordCacheInfrastructureTests/
-├── Definery/                 # Main app (composition, UI)
-└── DefineryTests/
+├── WordFeature/                     # Domain layer SPM package (models, protocols)
+├── WordAPI/                         # API layer SPM package + tests
+├── WordCache/                       # Cache layer SPM package + tests
+├── WordCacheInfrastructure/         # SwiftData infrastructure SPM package + tests
+├── Definery/                        # Main app (composition, UI)
+└── DefineryTests/                   # App-level tests (snapshots, integration)
 ```
 
 ---
@@ -167,11 +164,13 @@ Definery/
 Run tests via Xcode or command line:
 
 ```bash
-# iOS
-xcodebuild test -project Definery.xcodeproj -scheme Definery-iOS -testPlan Definery-iOS
+# Core modules (macOS via swift test)
+swift test --package-path WordAPI
+swift test --package-path WordCache
+swift test --package-path WordCacheInfrastructure
 
-# macOS
-xcodebuild test -project Definery.xcodeproj -scheme Definery-macOS -testPlan Definery-macOS
+# iOS app tests (snapshots, integration)
+xcodebuild test -project Definery.xcodeproj -scheme Definery-iOS -testPlan Definery-iOS
 ```
 
 **Testing Approach:**
