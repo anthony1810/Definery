@@ -32,7 +32,6 @@
 
 /* Begin PBXFileReference section */
 		922E56EF2F060DA20069C8CC /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
-		924D29AD2F05034A007FFEFF /* Definery-macOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Definery-macOS.xctestplan"; sourceTree = "<group>"; };
 		924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Definery-iOS.xctestplan"; sourceTree = "<group>"; };
 		92A75ED62F04C904008DC78C /* Definery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Definery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75EE32F04C905008DC78C /* DefineryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DefineryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,7 +90,6 @@
 			children = (
 				922E56F02F060DA20069C8CC /* ci_scripts */,
 				924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */,
-				924D29AD2F05034A007FFEFF /* Definery-macOS.xctestplan */,
 				92A75F5F2F04CBF6008DC78C /* README.md */,
 				92A75ED82F04C904008DC78C /* Definery */,
 				92A75EE62F04C905008DC78C /* DefineryTests */,
@@ -539,10 +537,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		928199552F39D500004B5E65 /* XCLocalSwiftPackageReference "WordFeature" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = WordFeature;
-		};
 		9281994C2F39D48D004B5E65 /* XCLocalSwiftPackageReference "WordAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = WordAPI;
@@ -554,6 +548,10 @@
 		928199522F39D4C3004B5E65 /* XCLocalSwiftPackageReference "WordCacheInfrastructure" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = WordCacheInfrastructure;
+		};
+		928199552F39D500004B5E65 /* XCLocalSwiftPackageReference "WordFeature" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = WordFeature;
 		};
 /* End XCLocalSwiftPackageReference section */
 

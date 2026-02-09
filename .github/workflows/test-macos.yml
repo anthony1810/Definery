@@ -6,27 +6,42 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-test-macOS:
+  test-word-feature:
     runs-on: macos-15
-    timeout-minutes: 8
-
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-
       - name: Select Xcode
         run: sudo xcode-select -switch /Applications/Xcode_16.4.app
-
-      - name: Swift version
-        run: swift --version
-
       - name: Build WordFeature
         run: swift build --package-path WordFeature
 
+  test-word-api:
+    runs-on: macos-15
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_16.4.app
       - name: Test WordAPI
         run: swift test --package-path WordAPI
 
+  test-word-cache:
+    runs-on: macos-15
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_16.4.app
       - name: Test WordCache
         run: swift test --package-path WordCache
 
+  test-word-cache-infrastructure:
+    runs-on: macos-15
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_16.4.app
       - name: Test WordCacheInfrastructure
         run: swift test --package-path WordCacheInfrastructure
