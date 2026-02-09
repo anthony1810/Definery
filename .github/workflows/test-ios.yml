@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-test-iOS:
     runs-on: macos-15
-    timeout-minutes: 8
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
@@ -16,15 +16,29 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -switch /Applications/Xcode_16.4.app
 
-      - name: Xcode version
-        run: /usr/bin/xcodebuild -version
+      - name: Cache SPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Developer/Xcode/DerivedData/**/SourcePackages
+          key: spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: spm-
 
-      - name: Build and Test (iOS)
+      - name: Build for Testing
         run: |
-          xcodebuild build test \
+          xcodebuild build-for-testing \
             -project Definery.xcodeproj \
             -scheme "Definery-iOS" \
             -testPlan Definery-iOS \
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
             -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.5" \
             ONLY_ACTIVE_ARCH=YES
+
+      - name: Run Tests
+        run: |
+          xcodebuild test-without-building \
+            -project Definery.xcodeproj \
+            -scheme "Definery-iOS" \
+            -testPlan Definery-iOS \
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
+            -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.5"
