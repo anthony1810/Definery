@@ -11,13 +11,10 @@ import WordFeature
 typealias WordLoaderFactory = @Sendable (Locale.LanguageCode) -> WordLoaderProtocol
 
 actor HomeViewStore: ScreenActionStore {
-    public typealias ScreenState = HomeViewState
-  
-    weak var viewState: HomeViewState?
-    
-    private let actionLocker = ActionLocker()
-    
-    enum Action: ActionLockable, LoadingTrackable, Sendable {
+    private var state: HomeViewState?
+    private let actionLocker = ActionLocker.isolated
+
+    enum Action: ActionLockable, LoadingTrackable, Hashable {
         case loadWords
         case refresh
         case loadMore
@@ -32,30 +29,24 @@ actor HomeViewStore: ScreenActionStore {
             }
         }
     }
-    
+
     private let loaderFactory: WordLoaderFactory
-    
+
     init(loader: @escaping WordLoaderFactory) {
         self.loaderFactory = loader
     }
-    
+
     func binding(state: HomeViewState) {
-        self.viewState = state
+        self.state = state
     }
-    
+
     nonisolated func receive(action: Action) {
-        Task {
-            do {
-                try await isolatedReceive(action: action)
-            } catch {
-                await handleError(error, for: action)
-            }
-        }
+        Task { await isolatedReceive(action: action) }
     }
-    
-    func isolatedReceive(action: Action) async throws {
+
+    func isolatedReceive(action: Action) async {
         guard await actionLocker.canExecute(action) else { return }
-        await viewState?.loadingStarted(action: action)
+        await state?.loadingStarted(action: action)
 
         do {
             switch action {
@@ -66,14 +57,16 @@ actor HomeViewStore: ScreenActionStore {
             case .selectLanguage(let language):
                 try await selectLanguage(language)
             }
-
-            await actionLocker.unlock(action)
-            await viewState?.loadingFinished(action: action)
+            // Clear error on success for main actions
+            if case .loadWords = action {
+                await state?.updateState { $0.displayError = nil }
+            }
         } catch {
-            await actionLocker.unlock(action)
-            await viewState?.loadingFinished(action: action)
-            throw error
+            await handleError(error, for: action)
         }
+
+        await actionLocker.unlock(action)
+        await state?.loadingFinished(action: action)
     }
 }
 
@@ -81,46 +74,69 @@ actor HomeViewStore: ScreenActionStore {
 
 extension HomeViewStore {
     private func loadWords() async throws {
-        let selectedLanguage = await viewState?.selectedLanguage ?? .english
+        let selectedLanguage = await state?.snapshot.selectedLanguage ?? .english
         let loader = loaderFactory(selectedLanguage)
         let words = try await loader.load()
-        await viewState?.tryUpdate(property: \.loadState, newValue: .loaded(words))
-    }
-    
-    private func loadMore() async throws {
-        await viewState?.tryUpdate(property: \.isLoadingMore, newValue: true)
 
-        let selectedLanguage = await viewState?.selectedLanguage ?? .english
-        let loader = loaderFactory(selectedLanguage)
-        let newWords = try await loader.load()
-        let currentWords = await viewState?.words ?? []
-        let uniqueNewWords = newWords.filter { !currentWords.contains($0) }
-        
-        await viewState?.tryUpdate(property: \.isLoadingMore, newValue: false)
-        await viewState?.tryUpdate(property: \.loadState, newValue: .loaded(currentWords + uniqueNewWords))
+        await state?.updateState { state in
+            state.snapshot = HomeSnapshot(words: words, selectedLanguage: selectedLanguage)
+        }
+
+        /// sometimes free apis return less than needed words
+        /// for progress view to show again
+        await state?.canExecuteLoadmore()
     }
-    
-    private func selectLanguage(_ language: Locale.LanguageCode) async throws {
-        await viewState?.tryUpdate(property: \.selectedLanguage, newValue: language)
-        await viewState?.tryUpdate(property: \.loadState, newValue: .idle)
+
+    private func loadMore() async throws {
+        guard let state = state else { return }
         
+        let currentSnapshot = await state.snapshot
+        let loader = loaderFactory(currentSnapshot.selectedLanguage)
+        let newWords = try await loader.load()
+
+        let uniqueNewWords = newWords.filter { !currentSnapshot.words.contains($0) }
+        let allWords = currentSnapshot.words + uniqueNewWords
+
+        await state.updateState { state in
+            state.snapshot = HomeSnapshot(
+                words: allWords,
+                selectedLanguage: currentSnapshot.selectedLanguage
+            )
+        }
+
+        // We will never load all words in this app
+        await state.updateDidLoadAllData(false)
+    }
+
+    private func selectLanguage(_ language: Locale.LanguageCode) async throws {
+        // Show placeholder with new language selected immediately
+        await state?.updateState { state in
+            state.snapshot = .placeholder(for: language)
+        }
+
         let loader = loaderFactory(language)
         let words = try await loader.load()
-        await viewState?.tryUpdate(property: \.loadState, newValue: .loaded(words))
+
+        await state?.updateState { state in
+            state.snapshot = HomeSnapshot(words: words, selectedLanguage: language)
+        }
     }
 }
 
-// MARK: - Helpers
+// MARK: - Error Handling
 
 extension HomeViewStore {
     private func handleError(_ error: Error, for action: Action) async {
+        let currentLanguage = await state?.snapshot.selectedLanguage ?? .english
+
         switch action {
         case .loadWords, .refresh, .selectLanguage:
-            await viewState?.tryUpdate(property: \.loadState, newValue: .error(error.localizedDescription))
+            await state?.updateState { state in
+                state.snapshot = HomeSnapshot(words: [], selectedLanguage: currentLanguage)
+            }
         case .loadMore:
-            // Keep existing words on loadMore error, only show alert
-            break
+            await state?.ternimateLoadmoreView()
         }
-        await viewState?.showError(AppError.abnormalState(error.localizedDescription))
+        await state?.showError(AppError.abnormalState(error.localizedDescription))
     }
 }

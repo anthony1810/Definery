@@ -5,6 +5,7 @@
 //  Created by Anthony on 3/1/26.
 //
 
+import Shimmer
 import SwiftUI
 import ScreenStateKit
 import WordFeature
@@ -20,31 +21,28 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
-            content
-                .navigationTitle(String(localized: "navigation.title", table: "Home"))
-                .toolbar { toolbarContent }
+            contentBody
+                .navigationTitle("Definery")
         }
-        .onShowLoading($viewState.isLoading)
         .onShowError($viewState.displayError)
         .task {
             await viewStore.binding(state: viewState)
             viewStore.receive(action: .loadWords)
         }
     }
-}
 
-// MARK: - Toolbar
+    var contentBody: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            LanguageSegmentedPicker(
+                selected: viewState.snapshot.selectedLanguage
+            ) { language in
+                viewStore.receive(action: .selectLanguage(language))
+            }
+            .padding(.horizontal)
+            .padding(.top, 8)
+            .padding(.bottom, 12)
 
-extension HomeView {
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            LanguagePickerView(
-                selected: viewState.selectedLanguage,
-                onSelect: { language in
-                    viewStore.receive(action: .selectLanguage(language))
-                }
-            )
+            content
         }
     }
 }
@@ -54,63 +52,76 @@ extension HomeView {
 extension HomeView {
     @ViewBuilder
     private var content: some View {
-        switch viewState.loadState {
-        case .idle:
-            EmptyView()
-        case .loaded(let words) where words.isEmpty:
-            emptyState
-        case .loaded:
+        if viewState.hasError {
+            errorState
+        } else if viewState.snapshot.isPlaceholder || viewState.hasWords {
             wordList
-        case .error(let errorMessage):
-            errorState(errorMessage)
+        } else {
+            emptyState
         }
     }
 
     private var wordList: some View {
         List {
-            ForEach(viewState.words) { word in
+            ForEach(viewState.snapshot.words) { word in
                 WordCardView(word: word)
                     .listRowSeparator(.hidden)
+                    .placeholder(viewState.snapshot)
+                    .shimmering(active: viewState.snapshot.isPlaceholder)
             }
 
-            if viewState.isLoadingMore {
-                ProgressView()
-                    .id(UUID())
-                    .frame(maxWidth: .infinity)
-                    .listRowSeparator(.hidden)
-            } else {
-                Color.clear
-                    .frame(height: 1)
-                    .listRowSeparator(.hidden)
-                    .onAppear {
-                        viewStore.receive(action: .loadMore)
-                    }
-            }
+            loadMoreSection
         }
         .listStyle(.plain)
         .refreshable {
-            try? await viewStore.isolatedReceive(action: .refresh)
+            await viewStore.isolatedReceive(action: .refresh)
+        }
+        .disabled(viewState.snapshot.isPlaceholder)
+    }
+
+    @ViewBuilder
+    private var loadMoreSection: some View {
+        if !viewState.snapshot.words.isEmpty
+            && viewState.canShowLoadmore
+            && !viewState.snapshot.isPlaceholder {
+            RMLoadmoreView(states: viewState)
+                .id(UUID())
+                .frame(maxWidth: .infinity)
+                .listRowSeparator(.hidden)
+                .onAppear {
+                    viewStore.receive(action: .loadMore)
+                }
         }
     }
 
     private var emptyState: some View {
-        ContentUnavailableView(
-            String(localized: "empty.title", table: "Home"),
-            systemImage: "book.closed",
-            description: Text("empty.description", tableName: "Home")
-        )
+        GeometryReader { geometry in
+            ScrollView {
+                ContentUnavailableView(
+                    String(localized: "empty.title", table: "Home"),
+                    systemImage: "book.closed",
+                    description: Text("empty.description", tableName: "Home")
+                )
+                .frame(maxWidth: .infinity, minHeight: geometry.size.height)
+            }
+        }
     }
 
-    private func errorState(_ message: String) -> some View {
-        ContentUnavailableView {
-            Label(String(localized: "error.title", table: "Home"), systemImage: "exclamationmark.triangle")
-        } description: {
-            Text(message)
-        } actions: {
-            Button(String(localized: "error.tryAgain", table: "Home")) {
-                viewStore.receive(action: .loadWords)
+    private var errorState: some View {
+        GeometryReader { geometry in
+            ScrollView {
+                ContentUnavailableView {
+                    Label(String(localized: "error.title", table: "Home"), systemImage: "exclamationmark.triangle")
+                } description: {
+                    Text(viewState.displayError?.errorDescription ?? "")
+                } actions: {
+                    Button(String(localized: "error.tryAgain", table: "Home")) {
+                        viewStore.receive(action: .loadWords)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .frame(maxWidth: .infinity, minHeight: geometry.size.height)
             }
-            .buttonStyle(.borderedProminent)
         }
     }
 }
@@ -120,17 +131,21 @@ extension HomeView {
 #if DEBUG
 #Preview("With Words") {
     HomeView(viewStore: .preview, viewState: HomeViewState())
+        .preferredColorScheme(.dark)
 }
 
 #Preview("Empty State") {
     HomeView(viewStore: .previewEmpty, viewState: HomeViewState())
+        .preferredColorScheme(.dark)
 }
 
 #Preview("Loading") {
     HomeView(viewStore: .previewLoading, viewState: HomeViewState())
+        .preferredColorScheme(.dark)
 }
 
 #Preview("Error") {
     HomeView(viewStore: .previewError, viewState: HomeViewState())
+        .preferredColorScheme(.dark)
 }
 #endif

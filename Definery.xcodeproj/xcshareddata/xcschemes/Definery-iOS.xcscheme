@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "2610"
-   version = "2.1">
+   version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES"
@@ -20,16 +20,6 @@
                BlueprintName = "Definery"
                ReferencedContainer = "container:Definery.xcodeproj">
             </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <TestPlanReference
-               reference = "container:DefineryTests/iOS.xctestplan">
-            </TestPlanReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
@@ -53,61 +43,6 @@
                BlueprintIdentifier = "92A75EE22F04C905008DC78C"
                BuildableName = "DefineryTests.xctest"
                BlueprintName = "DefineryTests"
-               ReferencedContainer = "container:Definery.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92A75EEC2F04C905008DC78C"
-               BuildableName = "DefineryUITests.xctest"
-               BlueprintName = "DefineryUITests"
-               ReferencedContainer = "container:Definery.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92A75F0C2F04C99D008DC78C"
-               BuildableName = "WordFeatureTests.xctest"
-               BlueprintName = "WordFeatureTests"
-               ReferencedContainer = "container:Definery.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92A75F2D2F04C9B7008DC78C"
-               BuildableName = "WordAPITests.xctest"
-               BlueprintName = "WordAPITests"
-               ReferencedContainer = "container:Definery.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "922E56FE2F06136D0069C8CC"
-               BuildableName = "WordCacheTests.xctest"
-               BlueprintName = "WordCacheTests"
-               ReferencedContainer = "container:Definery.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "922E661A2F07581E0069C8CC"
-               BuildableName = "WordCacheInfrastructureTests.xctest"
-               BlueprintName = "WordCacheInfrastructureTests"
                ReferencedContainer = "container:Definery.xcodeproj">
             </BuildableReference>
          </TestableReference>

@@ -11,10 +11,10 @@ import Testing
 @testable import Definery
 
 final class RemoteWithLocalFallbackLoaderTests {
-    private var sutTracker: MemoryLeakTracker<SUT>?
+    private var leakTrackers: [MemoryLeakTracker] = []
 
     deinit {
-        sutTracker?.verify()
+        leakTrackers.forEach { $0.verify() }
     }
 
     @Test func load_deliversRemoteWordsOnRemoteSuccess() async throws {
@@ -84,42 +84,26 @@ final class RemoteWithLocalFallbackLoaderTests {
 // MARK: - Helpers
 
 extension RemoteWithLocalFallbackLoaderTests {
-    final class SUT: Sendable {
-        let loader: RemoteWithLocalFallbackLoader
-        let remote: WordLoaderSpy
-        let local: WordLoaderSpy
-        let cache: WordCacheSpy
-
-        init(loader: RemoteWithLocalFallbackLoader, remote: WordLoaderSpy, local: WordLoaderSpy, cache: WordCacheSpy) {
-            self.loader = loader
-            self.remote = remote
-            self.local = local
-            self.cache = cache
-        }
+    private func trackForMemoryLeaks(
+        _ instance: AnyObject,
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) {
+        leakTrackers.append(MemoryLeakTracker(instance: instance, sourceLocation: sourceLocation))
     }
 
     private func makeSUT(
-        fileId: String = #fileID,
-        filePath: String = #filePath,
-        line: Int = #line,
-        column: Int = #column
-    ) -> SUT {
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) -> (loader: RemoteWithLocalFallbackLoader, remote: WordLoaderSpy, local: WordLoaderSpy, cache: WordCacheSpy) {
         let remote = WordLoaderSpy()
         let local = WordLoaderSpy()
         let cache = WordCacheSpy()
         let loader = RemoteWithLocalFallbackLoader(remote: remote, local: local, cache: cache)
-        let sut = SUT(loader: loader, remote: remote, local: local, cache: cache)
 
-        sutTracker = MemoryLeakTracker(
-            instance: sut,
-            sourceLocation: SourceLocation(
-                fileID: fileId,
-                filePath: filePath,
-                line: line,
-                column: column
-            )
-        )
+        trackForMemoryLeaks(loader, sourceLocation: sourceLocation)
+        trackForMemoryLeaks(remote, sourceLocation: sourceLocation)
+        trackForMemoryLeaks(local, sourceLocation: sourceLocation)
+        trackForMemoryLeaks(cache, sourceLocation: sourceLocation)
 
-        return sut
+        return (loader, remote, local, cache)
     }
 }
