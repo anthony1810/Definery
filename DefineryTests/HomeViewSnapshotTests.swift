@@ -137,10 +137,10 @@ extension HomeViewSnapshotTests {
             as: .image(
                 precision: 0.93,
                 perceptualPrecision: 0.93,
-                layout: .fixed(width: 390, height: 844)
+                layout: .device(config: .iPhone13(.portrait))
             ),
             named: name,
-            record: true,
+            record: false,
             snapshotDirectory: snapshotDirectory,
             file: file,
             testName: testName,
@@ -150,3 +150,4 @@ extension HomeViewSnapshotTests {
         #expect(failure == nil, "\(failure ?? "")")
     }
 }
+

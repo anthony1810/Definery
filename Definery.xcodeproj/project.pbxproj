@@ -94,13 +94,6 @@
 			remoteGlobalIDString = 92A75ED52F04C904008DC78C;
 			remoteInfo = Definery;
 		};
-		92A75EEE2F04C905008DC78C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 92A75ECE2F04C904008DC78C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 92A75ED52F04C904008DC78C;
-			remoteInfo = Definery;
-		};
 		92A75F162F04C99D008DC78C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 92A75ECE2F04C904008DC78C /* Project object */;
@@ -165,7 +158,6 @@
 		924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Definery-iOS.xctestplan"; sourceTree = "<group>"; };
 		92A75ED62F04C904008DC78C /* Definery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Definery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75EE32F04C905008DC78C /* DefineryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DefineryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		92A75EED2F04C905008DC78C /* DefineryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DefineryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75F052F04C99C008DC78C /* WordFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WordFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75F262F04C9B7008DC78C /* WordAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WordAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75F2E2F04C9B7008DC78C /* WordAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WordAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -201,11 +193,6 @@
 		92A75EE62F04C905008DC78C /* DefineryTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = DefineryTests;
-			sourceTree = "<group>";
-		};
-		92A75EF02F04C905008DC78C /* DefineryUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = DefineryUITests;
 			sourceTree = "<group>";
 		};
 		92A75F062F04C99C008DC78C /* WordFeature */ = {
@@ -280,13 +267,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		92A75EEA2F04C905008DC78C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		92A75F022F04C99C008DC78C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -330,7 +310,6 @@
 				92A75F5F2F04CBF6008DC78C /* README.md */,
 				92A75ED82F04C904008DC78C /* Definery */,
 				92A75EE62F04C905008DC78C /* DefineryTests */,
-				92A75EF02F04C905008DC78C /* DefineryUITests */,
 				92A75F062F04C99C008DC78C /* WordFeature */,
 				92A75F272F04C9B7008DC78C /* WordAPI */,
 				92A75F342F04C9B7008DC78C /* WordAPITests */,
@@ -348,7 +327,6 @@
 			children = (
 				92A75ED62F04C904008DC78C /* Definery.app */,
 				92A75EE32F04C905008DC78C /* DefineryTests.xctest */,
-				92A75EED2F04C905008DC78C /* DefineryUITests.xctest */,
 				92A75F052F04C99C008DC78C /* WordFeature.framework */,
 				92A75F262F04C9B7008DC78C /* WordAPI.framework */,
 				92A75F2E2F04C9B7008DC78C /* WordAPITests.xctest */,
@@ -551,29 +529,6 @@
 			productReference = 92A75EE32F04C905008DC78C /* DefineryTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		92A75EEC2F04C905008DC78C /* DefineryUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 92A75EFD2F04C905008DC78C /* Build configuration list for PBXNativeTarget "DefineryUITests" */;
-			buildPhases = (
-				92A75EE92F04C905008DC78C /* Sources */,
-				92A75EEA2F04C905008DC78C /* Frameworks */,
-				92A75EEB2F04C905008DC78C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				92A75EEF2F04C905008DC78C /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				92A75EF02F04C905008DC78C /* DefineryUITests */,
-			);
-			name = DefineryUITests;
-			packageProductDependencies = (
-			);
-			productName = DefineryUITests;
-			productReference = 92A75EED2F04C905008DC78C /* DefineryUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		92A75F042F04C99C008DC78C /* WordFeature */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92A75F1A2F04C99D008DC78C /* Build configuration list for PBXNativeTarget "WordFeature" */;
@@ -675,10 +630,6 @@
 						CreatedOnToolsVersion = 26.1.1;
 						TestTargetID = 92A75ED52F04C904008DC78C;
 					};
-					92A75EEC2F04C905008DC78C = {
-						CreatedOnToolsVersion = 26.1.1;
-						TestTargetID = 92A75ED52F04C904008DC78C;
-					};
 					92A75F042F04C99C008DC78C = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
@@ -712,7 +663,6 @@
 			targets = (
 				92A75ED52F04C904008DC78C /* Definery */,
 				92A75EE22F04C905008DC78C /* DefineryTests */,
-				92A75EEC2F04C905008DC78C /* DefineryUITests */,
 				92A75F042F04C99C008DC78C /* WordFeature */,
 				92A75F252F04C9B7008DC78C /* WordAPI */,
 				92A75F2D2F04C9B7008DC78C /* WordAPITests */,
@@ -764,13 +714,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		92A75EE12F04C905008DC78C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		92A75EEB2F04C905008DC78C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -837,13 +780,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		92A75EDF2F04C905008DC78C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		92A75EE92F04C905008DC78C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -918,11 +854,6 @@
 			isa = PBXTargetDependency;
 			target = 92A75ED52F04C904008DC78C /* Definery */;
 			targetProxy = 92A75EE42F04C905008DC78C /* PBXContainerItemProxy */;
-		};
-		92A75EEF2F04C905008DC78C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 92A75ED52F04C904008DC78C /* Definery */;
-			targetProxy = 92A75EEE2F04C905008DC78C /* PBXContainerItemProxy */;
 		};
 		92A75F172F04C99D008DC78C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1381,8 +1312,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1413,8 +1343,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1473,46 +1402,6 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Definery.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Definery";
-			};
-			name = Release;
-		};
-		92A75EFE2F04C905008DC78C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 48CKAFKWVH;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.viothun.DefineryUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Definery;
-			};
-			name = Debug;
-		};
-		92A75EFF2F04C905008DC78C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 48CKAFKWVH;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.viothun.DefineryUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Definery;
 			};
 			name = Release;
 		};
@@ -1816,15 +1705,6 @@
 			buildConfigurations = (
 				92A75EFB2F04C905008DC78C /* Debug */,
 				92A75EFC2F04C905008DC78C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		92A75EFD2F04C905008DC78C /* Build configuration list for PBXNativeTarget "DefineryUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				92A75EFE2F04C905008DC78C /* Debug */,
-				92A75EFF2F04C905008DC78C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

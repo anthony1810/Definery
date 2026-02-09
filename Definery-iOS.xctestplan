@@ -13,19 +13,6 @@
   },
   "testTargets" : [
     {
-      "skippedTests" : [
-        "DefineryUITests",
-        "DefineryUITests\/testExample()",
-        "DefineryUITests\/testLaunchPerformance()",
-        "DefineryUITestsLaunchTests"
-      ],
-      "target" : {
-        "containerPath" : "container:Definery.xcodeproj",
-        "identifier" : "92A75EEC2F04C905008DC78C",
-        "name" : "DefineryUITests"
-      }
-    },
-    {
       "parallelizable" : false,
       "target" : {
         "containerPath" : "container:Definery.xcodeproj",
