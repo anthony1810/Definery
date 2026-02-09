@@ -50,6 +50,14 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
+      - name: Cache SPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Developer/Xcode/DerivedData/**/SourcePackages
+          key: spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: spm-
+
       - name: Resolve packages
         run: xcodebuild -resolvePackageDependencies -project Definery.xcodeproj -scheme Definery-iOS
 
