@@ -21,8 +21,6 @@ Your personal dictionary companion for language learning. Definery helps you dis
 | Light | Dark |
 |:-----:|:----:|
 | ![Light](DefineryTests/Snapshots/HomeViewSnapshotTests/homeView_withWords_showsWordList.light.png) | ![Dark](DefineryTests/Snapshots/HomeViewSnapshotTests/homeView_withWords_showsWordList.dark.png) |
-| ![Light Empty](DefineryTests/Snapshots/HomeViewSnapshotTests/homeView_withEmptyWords_showsEmptyState.light.png) | ![Dark Empty](DefineryTests/Snapshots/HomeViewSnapshotTests/homeView_withEmptyWords_showsEmptyState.dark.png) |
-| ![Light Error](DefineryTests/Snapshots/HomeViewSnapshotTests/homeView_withError_showsErrorState.light.png) | ![Dark Error](DefineryTests/Snapshots/HomeViewSnapshotTests/homeView_withError_showsErrorState.dark.png) |
 
 ---
 

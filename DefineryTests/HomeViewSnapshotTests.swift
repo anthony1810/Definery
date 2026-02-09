@@ -106,7 +106,7 @@ extension HomeViewSnapshotTests {
             viewState.snapshot = HomeSnapshot(words: words, selectedLanguage: selectedLanguage)
         }
         if let errorMessage = errorMessage {
-            viewState.displayError = RMDisplayableError(message: errorMessage)
+            viewState.displayError = DisplayableError(message: errorMessage)
         }
         if canShowLoadmore {
             viewState.canExecuteLoadmore()

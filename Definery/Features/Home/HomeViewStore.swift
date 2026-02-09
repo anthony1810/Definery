@@ -12,7 +12,7 @@ typealias WordLoaderFactory = @Sendable (Locale.LanguageCode) -> WordLoaderProto
 
 actor HomeViewStore: ScreenActionStore {
     private var state: HomeViewState?
-    private let actionLocker = ActionLocker()
+    private let actionLocker = ActionLocker.isolated
 
     enum Action: ActionLockable, LoadingTrackable, Hashable {
         case loadWords
