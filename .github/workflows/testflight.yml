@@ -48,7 +48,10 @@ jobs:
 
           # Apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          # Extract UUID from the provisioning profile and copy with UUID as filename
+          PP_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(/usr/bin/security cms -D -i $PP_PATH))
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$PP_UUID.mobileprovision
+          echo "PP_UUID=$PP_UUID" >> $GITHUB_ENV
 
       - name: Cache SPM dependencies
         uses: actions/cache@v4
@@ -73,7 +76,10 @@ jobs:
             -scheme Definery-iOS \
             -archivePath $RUNNER_TEMP/Definery.xcarchive \
             -destination 'generic/platform=iOS' \
-            -allowProvisioningUpdates
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            PROVISIONING_PROFILE=$PP_UUID \
+            DEVELOPMENT_TEAM=LL6XGHYGV4
 
       - name: Export & Upload to TestFlight
         env:
