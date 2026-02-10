@@ -139,7 +139,7 @@ extension HomeViewSnapshotTests {
                 layout: .device(config: .iPhone16Pro)
             ),
             named: name,
-            record: false,
+            record: true,
             snapshotDirectory: snapshotDirectory,
             file: file,
             testName: testName,
