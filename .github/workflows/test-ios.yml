@@ -7,14 +7,14 @@ on:
 
 jobs:
   build-and-test-iOS:
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Select Xcode
-        run: sudo xcode-select -switch /Applications/Xcode_16.4.app
+        run: sudo xcode-select -switch /Applications/Xcode_26.2.app
 
       - name: Cache SPM dependencies
         uses: actions/cache@v4
@@ -31,7 +31,7 @@ jobs:
             -scheme "Definery-iOS" \
             -testPlan Definery-iOS \
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
-            -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.5" \
+            -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2" \
             ONLY_ACTIVE_ARCH=YES
 
       - name: Run Tests
@@ -41,4 +41,4 @@ jobs:
             -scheme "Definery-iOS" \
             -testPlan Definery-iOS \
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
-            -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.5"
+            -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2"
