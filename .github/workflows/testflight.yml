@@ -100,8 +100,8 @@ jobs:
           mkdir -p ~/.private_keys
           echo -n "$APP_STORE_CONNECT_API_KEY_BASE64" | base64 --decode > ~/.private_keys/AuthKey_${APP_STORE_CONNECT_API_KEY_ID}.p8
 
-          # Create export options (method + destination = upload directly to App Store Connect)
-          cat > $RUNNER_TEMP/ExportOptions.plist << 'PLIST'
+          # Create export options with provisioning profile
+          cat > $RUNNER_TEMP/ExportOptions.plist << PLIST
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
@@ -110,6 +110,17 @@ jobs:
               <string>app-store-connect</string>
               <key>destination</key>
               <string>upload</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>com.viothun.Definery</key>
+                  <string>$PP_UUID</string>
+              </dict>
+              <key>teamID</key>
+              <string>LL6XGHYGV4</string>
+              <key>signingCertificate</key>
+              <string>iPhone Distribution</string>
           </dict>
           </plist>
           PLIST
