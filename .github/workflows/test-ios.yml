@@ -41,12 +41,4 @@ jobs:
             -scheme "Definery-iOS" \
             -testPlan Definery-iOS \
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
-            -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1" || true
-
-      - name: Upload Snapshot Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: snapshots
-          path: DefineryTests/Snapshots/
-          if-no-files-found: ignore
+            -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1"
