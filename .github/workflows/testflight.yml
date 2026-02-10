@@ -77,7 +77,7 @@ jobs:
             -archivePath $RUNNER_TEMP/Definery.xcarchive \
             -destination 'generic/platform=iOS' \
             CODE_SIGN_STYLE=Manual \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
+            CODE_SIGN_IDENTITY="iPhone Distribution" \
             PROVISIONING_PROFILE=$PP_UUID \
             DEVELOPMENT_TEAM=LL6XGHYGV4
 
