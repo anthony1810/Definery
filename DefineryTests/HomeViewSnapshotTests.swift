@@ -137,7 +137,7 @@ extension HomeViewSnapshotTests {
             as: .image(
                 precision: 0.93,
                 perceptualPrecision: 0.93,
-                layout: .device(config: .iPhone13(.portrait))
+                layout: .device(config: .iPhone16Pro)
             ),
             named: name,
             record: false,
