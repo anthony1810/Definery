@@ -29,7 +29,7 @@ jobs:
           xcodebuild build-for-testing \
             -project Definery.xcodeproj \
             -scheme "Definery-iOS" \
-            -testPlan Definery-iOS \
+            -testPlan Definery-CI \
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
             -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1" \
             ONLY_ACTIVE_ARCH=YES
@@ -39,6 +39,6 @@ jobs:
           xcodebuild test-without-building \
             -project Definery.xcodeproj \
             -scheme "Definery-iOS" \
-            -testPlan Definery-iOS \
+            -testPlan Definery-CI \
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
             -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1"
