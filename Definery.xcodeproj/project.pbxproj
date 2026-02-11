@@ -20,6 +20,7 @@
 		92819D2F2F3A0B6D004B5E65 /* WordCacheInfrastructure in Frameworks */ = {isa = PBXBuildFile; productRef = 92819D2E2F3A0B6D004B5E65 /* WordCacheInfrastructure */; };
 		92819D322F3A0B79004B5E65 /* WordCache in Frameworks */ = {isa = PBXBuildFile; productRef = 92819D312F3A0B79004B5E65 /* WordCache */; };
 		92819D352F3A0B87004B5E65 /* WordAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 92819D342F3A0B87004B5E65 /* WordAPI */; };
+		9281BF882F3C2154004B5E65 /* Definery-CI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 9281BF872F3C2154004B5E65 /* Definery-CI.xctestplan */; };
 		92A75F602F04CBF6008DC78C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 92A75F5F2F04CBF6008DC78C /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,7 @@
 
 /* Begin PBXFileReference section */
 		924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Definery-iOS.xctestplan"; sourceTree = "<group>"; };
+		9281BF872F3C2154004B5E65 /* Definery-CI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Definery-CI.xctestplan"; sourceTree = "<group>"; };
 		92A75ED62F04C904008DC78C /* Definery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Definery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75EE32F04C905008DC78C /* DefineryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DefineryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A75F5F2F04CBF6008DC78C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 		92A75ECD2F04C904008DC78C = {
 			isa = PBXGroup;
 			children = (
+				9281BF872F3C2154004B5E65 /* Definery-CI.xctestplan */,
 				924D29AE2F050392007FFEFF /* Definery-iOS.xctestplan */,
 				92A75F5F2F04CBF6008DC78C /* README.md */,
 				92A75ED82F04C904008DC78C /* Definery */,
@@ -217,6 +220,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9281BF882F3C2154004B5E65 /* Definery-CI.xctestplan in Resources */,
 				92A75F602F04CBF6008DC78C /* README.md in Resources */,
 				924D29AF2F050392007FFEFF /* Definery-iOS.xctestplan in Resources */,
 			);
