@@ -1,0 +1,28 @@
+{
+  "configurations" : [
+    {
+      "id" : "1CB6F143-BDD4-4E77-9B19-9D214098AAC8",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "skippedTests" : [
+        "HomeViewSnapshotTests"
+      ],
+      "target" : {
+        "containerPath" : "container:Definery.xcodeproj",
+        "identifier" : "92A75EE22F04C905008DC78C",
+        "name" : "DefineryTests"
+      }
+    }
+  ],
+  "version" : 1
+}

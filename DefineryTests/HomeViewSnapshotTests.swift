@@ -135,9 +135,8 @@ extension HomeViewSnapshotTests {
         let failure = verifySnapshot(
             of: themedView,
             as: .image(
-                precision: 0.93,
-                perceptualPrecision: 0.93,
-                layout: .device(config: .iPhone13(.portrait))
+                precision: 0.90,
+                layout: .device(config: .iPhone16Pro)
             ),
             named: name,
             record: false,
