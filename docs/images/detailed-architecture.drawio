@@ -5,7 +5,7 @@
 
     <!-- HOME SCENE BOUNDARY -->
     <mxCell id="scene" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#AAAAAA;strokeWidth=2;dashed=1;dashPattern=8 4;arcSize=3;" vertex="1" parent="1">
-      <mxGeometry x="30" y="44" width="750" height="840" as="geometry"/>
+      <mxGeometry x="30" y="44" width="750" height="900" as="geometry"/>
     </mxCell>
     <mxCell id="scene_lbl" value="&lt;font color=&quot;#999999&quot;&gt;&lt;b&gt;Home Scene&lt;/b&gt;&lt;/font&gt;" style="text;html=1;fontSize=18;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;" vertex="1" parent="1">
       <mxGeometry x="320" y="16" width="160" height="30" as="geometry"/>
@@ -34,6 +34,17 @@
       <mxGeometry x="100" y="228" width="180" height="36" as="geometry"/>
     </mxCell>
 
+    <!-- WordAPI internal arrows -->
+    <mxCell id="a_rwl_http" value="" style="endArrow=open;html=1;strokeWidth=1.5;strokeColor=#2E86C1;exitX=0.25;exitY=1;entryX=0.5;entryY=0;endFill=0;" edge="1" parent="1" source="rwl" target="httpc">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="a_rwl_map" value="" style="endArrow=open;html=1;strokeWidth=1.5;strokeColor=#2E86C1;exitX=0.75;exitY=1;entryX=0.5;entryY=0;endFill=0;" edge="1" parent="1" source="rwl" target="mappers">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="a_http_url" value="" style="endArrow=block;html=1;strokeWidth=1.5;strokeColor=#2E86C1;dashed=1;dashPattern=4 3;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endFill=0;" edge="1" parent="1" source="httpc" target="urlsc">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
     <!-- WordCacheInfrastructure Module Box -->
     <mxCell id="wordcache_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#27AE60;strokeWidth=2;dashed=1;dashPattern=8 4;arcSize=6;" vertex="1" parent="1">
       <mxGeometry x="430" y="65" width="330" height="220" as="geometry"/>
@@ -50,6 +61,14 @@
     </mxCell>
     <mxCell id="sdws" value="&lt;font color=&quot;#27AE60&quot;&gt;&lt;b&gt;SwiftDataWordStore&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;@ModelActor&lt;/font&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#27AE60;strokeWidth=2;fontSize=13;" vertex="1" parent="1">
       <mxGeometry x="490" y="228" width="170" height="44" as="geometry"/>
+    </mxCell>
+
+    <!-- WordCacheInfra internal arrows -->
+    <mxCell id="a_lwl_wsp" value="" style="endArrow=open;html=1;strokeWidth=1.5;strokeColor=#C71585;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endFill=0;" edge="1" parent="1" source="lwl" target="wsp">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="a_sdws_wsp" value="" style="endArrow=block;html=1;strokeWidth=1.5;strokeColor=#C71585;dashed=1;dashPattern=4 3;exitX=0.5;exitY=0;entryX=0.5;entryY=1;endFill=0;" edge="1" parent="1" source="sdws" target="wsp">
+      <mxGeometry relative="1" as="geometry"/>
     </mxCell>
 
     <!-- ==================== ROW 2: WordFeature (Domain) ==================== -->
@@ -87,6 +106,11 @@
       <mxGeometry x="400" y="572" width="260" height="44" as="geometry"/>
     </mxCell>
 
+    <!-- Presentation internal arrow -->
+    <mxCell id="a_hvs_hvst" value="&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#008080&quot;&gt;&lt;i&gt;updates&lt;/i&gt;&lt;/font&gt;" style="endArrow=open;html=1;strokeWidth=1.5;strokeColor=#008080;exitX=1;exitY=0.5;entryX=0;entryY=0.5;endFill=0;" edge="1" parent="1" source="hvs" target="hvst">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
     <!-- ==================== ROW 4: UI ==================== -->
 
     <mxCell id="hv" value="&lt;font color=&quot;#8E44AD&quot;&gt;&lt;b&gt;HomeView&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;SwiftUI&lt;/font&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#8E44AD;strokeWidth=2;fontSize=14;" vertex="1" parent="1">
@@ -96,40 +120,36 @@
       <mxGeometry x="330" y="730" width="120" height="32" as="geometry"/>
     </mxCell>
 
-    <!-- ==================== ROW 5: COMPOSITION ROOT ==================== -->
+    <!-- ==================== ROW 5: COMPOSITION ROOT (more space) ==================== -->
 
     <mxCell id="comp" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#E67E22;strokeWidth=2;dashed=1;dashPattern=8 4;arcSize=6;" vertex="1" parent="1">
-      <mxGeometry x="30" y="790" width="750" height="130" as="geometry"/>
+      <mxGeometry x="30" y="790" width="750" height="190" as="geometry"/>
     </mxCell>
     <mxCell id="comp_lbl" value="&lt;font color=&quot;#E67E22&quot;&gt;&lt;b&gt;Composition Root&lt;/b&gt;&lt;/font&gt;" style="text;html=1;fontSize=16;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;" vertex="1" parent="1">
       <mxGeometry x="44" y="794" width="180" height="24" as="geometry"/>
     </mxCell>
-    <mxCell id="da" value="&lt;font color=&quot;#E67E22&quot;&gt;&lt;b&gt;DefineryApp&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;@main SwiftUI App&lt;/font&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#E67E22;strokeWidth=2;dashed=1;dashPattern=6 3;fontSize=14;" vertex="1" parent="1">
-      <mxGeometry x="290" y="860" width="200" height="44" as="geometry"/>
-    </mxCell>
     <mxCell id="huc" value="&lt;font color=&quot;#E67E22&quot;&gt;&lt;b&gt;HomeUIComposer&lt;/b&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#E67E22;strokeWidth=2;dashed=1;dashPattern=6 3;fontSize=14;" vertex="1" parent="1">
-      <mxGeometry x="100" y="824" width="180" height="40" as="geometry"/>
+      <mxGeometry x="100" y="840" width="180" height="40" as="geometry"/>
     </mxCell>
     <mxCell id="rwlf" value="&lt;font color=&quot;#E67E22&quot;&gt;&lt;b&gt;RemoteWithLocal&lt;br&gt;FallbackLoader&lt;/b&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#E67E22;strokeWidth=2;dashed=1;dashPattern=6 3;fontSize=12;" vertex="1" parent="1">
-      <mxGeometry x="500" y="820" width="160" height="48" as="geometry"/>
+      <mxGeometry x="500" y="836" width="180" height="48" as="geometry"/>
+    </mxCell>
+    <mxCell id="da" value="&lt;font color=&quot;#E67E22&quot;&gt;&lt;b&gt;DefineryApp&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;@main SwiftUI App&lt;/font&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#E67E22;strokeWidth=2;dashed=1;dashPattern=6 3;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="280" y="910" width="220" height="48" as="geometry"/>
     </mxCell>
 
-    <!-- ==================== CROSS-MODULE ARROWS (only 2) ==================== -->
-
-    <!-- WordAPI box → WordLoaderProtocol (implements) -->
-    <mxCell id="a_api_wlp" value="" style="endArrow=block;html=1;strokeWidth=1.5;strokeColor=#CC0000;dashed=1;dashPattern=4 3;endFill=0;exitX=0.5;exitY=1;entryX=0;entryY=0.5;" edge="1" parent="1" source="wordapi_box" target="wlp">
+    <!-- Composition Root internal arrows -->
+    <mxCell id="a_da_huc" value="" style="endArrow=open;html=1;strokeWidth=1.5;strokeColor=#E67E22;dashed=1;dashPattern=6 3;exitX=0;exitY=0.5;entryX=0.5;entryY=1;endFill=0;" edge="1" parent="1" source="da" target="huc">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="205" y="392"/>
+          <mxPoint x="190" y="934"/>
         </Array>
       </mxGeometry>
     </mxCell>
-
-    <!-- WordCacheInfra box → WordLoaderProtocol (implements) -->
-    <mxCell id="a_cache_wlp" value="" style="endArrow=block;html=1;strokeWidth=1.5;strokeColor=#CC0000;dashed=1;dashPattern=4 3;endFill=0;exitX=0.5;exitY=1;entryX=1;entryY=0.5;" edge="1" parent="1" source="wordcache_box" target="wlp">
+    <mxCell id="a_da_rwlf" value="" style="endArrow=open;html=1;strokeWidth=1.5;strokeColor=#E67E22;dashed=1;dashPattern=6 3;exitX=1;exitY=0.5;entryX=0.5;entryY=1;endFill=0;" edge="1" parent="1" source="da" target="rwlf">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="595" y="392"/>
+          <mxPoint x="590" y="934"/>
         </Array>
       </mxGeometry>
     </mxCell>
