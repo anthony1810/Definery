@@ -75,6 +75,14 @@ Each feature follows the State + ViewStore + View pattern:
   <img src="docs/images/three-pillars.png" alt="Three Pillars Pattern — ScreenStateKit" width="700"/>
 </p>
 
+### Detailed Architecture
+
+Full module dependency diagram showing protocols, implementations, and the composition root:
+
+<p align="center">
+  <img src="docs/images/detailed-architecture.png" alt="Definery Detailed Architecture" width="900"/>
+</p>
+
 **Key Patterns:**
 - **Offline-First**: Remote with local fallback
 - **Protocol-Driven**: All dependencies injected via protocols
