@@ -1,0 +1,91 @@
+<mxGraphModel background="none">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <!-- Title -->
+    <mxCell id="2" value="Three Pillars Pattern (ScreenStateKit)" style="text;html=1;fontSize=18;fontStyle=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#333333;" vertex="1" parent="1">
+      <mxGeometry x="80" y="10" width="640" height="36" as="geometry"/>
+    </mxCell>
+
+    <!-- View Box (top) -->
+    <mxCell id="3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+      <mxGeometry x="120" y="60" width="560" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="4" value="View (SwiftUI)" style="text;html=1;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#333333;" vertex="1" parent="1">
+      <mxGeometry x="310" y="62" width="180" height="28" as="geometry"/>
+    </mxCell>
+    <mxCell id="5" value="@State viewState: FeatureViewState&#xa;@State viewStore: FeatureViewStore&#xa;.onShowLoading($viewState.isLoading)&#xa;.onShowError($viewState.displayError)" style="text;html=1;fontSize=11;align=left;verticalAlign=top;fillColor=none;strokeColor=none;fontColor=#555555;fontFamily=Courier New;spacingLeft=12;" vertex="1" parent="1">
+      <mxGeometry x="180" y="92" width="420" height="70" as="geometry"/>
+    </mxCell>
+
+    <!-- Arrows from View down -->
+    <mxCell id="6" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#6c8ebf;exitX=0.3;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="3" target="10">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="7" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#6c8ebf;exitX=0.7;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="3" target="16">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- Arrow labels -->
+    <mxCell id="8" value="owns" style="text;html=1;fontSize=10;fontStyle=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="210" y="188" width="50" height="18" as="geometry"/>
+    </mxCell>
+    <mxCell id="9" value="dispatches" style="text;html=1;fontSize=10;fontStyle=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="520" y="188" width="70" height="18" as="geometry"/>
+    </mxCell>
+
+    <!-- State Box (bottom-left) -->
+    <mxCell id="10" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;arcSize=10;" vertex="1" parent="1">
+      <mxGeometry x="80" y="220" width="280" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="11" value="State (ScreenState)" style="text;html=1;fontSize=15;fontStyle=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#333333;" vertex="1" parent="1">
+      <mxGeometry x="120" y="222" width="200" height="28" as="geometry"/>
+    </mxCell>
+    <mxCell id="12" value="@Observable" style="text;html=1;fontSize=10;fontStyle=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#d6b656;fontFamily=Courier New;" vertex="1" parent="1">
+      <mxGeometry x="160" y="250" width="120" height="18" as="geometry"/>
+    </mxCell>
+    <mxCell id="13" value="@MainActor" style="text;html=1;fontSize=10;fontStyle=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#d6b656;fontFamily=Courier New;" vertex="1" parent="1">
+      <mxGeometry x="160" y="268" width="120" height="18" as="geometry"/>
+    </mxCell>
+    <mxCell id="14" value="• isLoading (counter-based)&#xa;• displayError&#xa;• domain-specific data" style="text;html=1;fontSize=11;align=left;verticalAlign=top;fillColor=none;strokeColor=none;fontColor=#555555;spacingLeft=12;" vertex="1" parent="1">
+      <mxGeometry x="100" y="292" width="240" height="60" as="geometry"/>
+    </mxCell>
+
+    <!-- ViewStore Box (bottom-right) -->
+    <mxCell id="16" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;arcSize=10;" vertex="1" parent="1">
+      <mxGeometry x="420" y="220" width="280" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="17" value="ViewStore (ScreenActionStore)" style="text;html=1;fontSize=15;fontStyle=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#333333;" vertex="1" parent="1">
+      <mxGeometry x="430" y="222" width="260" height="28" as="geometry"/>
+    </mxCell>
+    <mxCell id="18" value="actor" style="text;html=1;fontSize=10;fontStyle=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#82b366;fontFamily=Courier New;" vertex="1" parent="1">
+      <mxGeometry x="520" y="250" width="60" height="18" as="geometry"/>
+    </mxCell>
+    <mxCell id="19" value="• func binding(state:)&#xa;• func receive(action:)&#xa;• Services injected via init&#xa;• ActionLocker for dedup" style="text;html=1;fontSize=11;align=left;verticalAlign=top;fillColor=none;strokeColor=none;fontColor=#555555;spacingLeft=12;" vertex="1" parent="1">
+      <mxGeometry x="440" y="274" width="240" height="80" as="geometry"/>
+    </mxCell>
+
+    <!-- Arrow: ViewStore → State (updates) -->
+    <mxCell id="20" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#82b366;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="16" target="10">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="21" value="updates" style="text;html=1;fontSize=11;fontStyle=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="365" y="286" width="55" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- Arrow: State → View (notifies, left side going up) -->
+    <mxCell id="22" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#d6b656;curved=1;exitX=0;exitY=0.3;entryX=0;entryY=0.5;" edge="1" parent="1" source="10" target="3">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="50" y="268"/>
+          <mxPoint x="50" y="120"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="23" value="@Observable&#xa;notifies" style="text;html=1;fontSize=10;fontStyle=2;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#d6b656;" vertex="1" parent="1">
+      <mxGeometry x="2" y="180" width="70" height="30" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

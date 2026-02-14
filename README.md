@@ -63,61 +63,17 @@ Your personal dictionary companion for language learning. Definery helps you dis
 
 Definery follows **Clean Architecture** with local SPM packages:
 
-```
-┌─────────────────────────────────────────────┐
-│              Definery (Main App)            │
-│         Composition Root + UI Layer         │
-└──────────────┬──────────────────────────────┘
-               │ (local SPM packages)
-    ┌──────────┼──────────┐
-    ▼          ▼          ▼
-┌────────┐ ┌────────┐ ┌────────────────────┐
-│WordAPI │ │WordCache│ │WordCacheInfra     │
-│        │ │        │ │(SwiftData)         │
-└───┬────┘ └───┬────┘ └─────────┬──────────┘
-    │          │                │
-    └──────────┴────────────────┘
-               │
-               ▼
-        ┌────────────┐
-        │WordFeature │
-        │ (Domain)   │
-        └────────────┘
-```
+<p align="center">
+  <img src="docs/images/clean-architecture.png" alt="Clean Architecture — Module Dependencies" width="700"/>
+</p>
 
 ### Three Pillars Pattern (ScreenStateKit)
 
 Each feature follows the State + ViewStore + View pattern:
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                           View                                  │
-│                        (SwiftUI)                                │
-│  ┌───────────────────────────────────────────────────────────┐  │
-│  │  @State viewState: FeatureViewState                       │  │
-│  │  @State viewStore: FeatureViewStore                       │  │
-│  │                                                           │  │
-│  │  .onShowLoading($viewState.isLoading)                     │  │
-│  │  .onShowError($viewState.displayError)                    │  │
-│  └───────────────────────────────────────────────────────────┘  │
-└─────────────────────┬───────────────────────────────────────────┘
-                      │
-         ┌────────────┴────────────┐
-         │                         │
-         ▼                         ▼
-┌─────────────────┐      ┌─────────────────────┐
-│     State       │◄─────│     ViewStore       │
-│ (ScreenState)   │      │ (ScreenActionStore) │
-├─────────────────┤      ├─────────────────────┤
-│ @Observable     │      │ actor               │
-│ @MainActor      │      │                     │
-│                 │      │ func binding(state:)│
-│ • isLoading     │      │ func receive(action)│
-│ • displayError  │      │                     │
-│ • domain data   │      │ • Services injected │
-└─────────────────┘      │ • ActionLocker      │
-                         └─────────────────────┘
-```
+<p align="center">
+  <img src="docs/images/three-pillars.png" alt="Three Pillars Pattern — ScreenStateKit" width="700"/>
+</p>
 
 **Key Patterns:**
 - **Offline-First**: Remote with local fallback
